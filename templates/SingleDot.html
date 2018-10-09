@@ -18,6 +18,8 @@
         const webSocketBridgeTickTock = new channels.WebSocketBridge();
         const webSocketBridgeNotific = new channels.WebSocketBridge();
         const webSocketStartNotific = new channels.WebSocketBridge();
+        const webSocketStartNotificWORedis = new channels.WebSocketBridge();
+
 
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -49,6 +51,11 @@
              console.log("RESPONSE_notificationsStart:", action);
           });
 
+          webSocketStartNotificWORedis.connect('/notificationsWORedis/')
+          webSocketStartNotificWORedis.listen(function(action, stream) {
+             console.log("notificationsWORedis:", action);
+          });
+
         })
 
          function sendToPixiConsumer(textIn) {
@@ -61,11 +68,17 @@
            webSocketStartNotific.send(text)
         }
 
+        function sendToStartNotConsumerWORedis(textIn) {
+            text = textIn + 1;
+           webSocketStartNotificWORedis.send(text)
+        }
+
         var text = "eeee"
     </script>
 
     <button onclick="sendToPixiConsumer(text)">pixiConsumer</button>
     <button onclick="sendToStartNotConsumer(text)">startNotConsumer</button>
+    <button onclick="sendToStartNotConsumerWORedis(text)">startNotConsumerWORedis</button>
 
     {# {% render_bundle 'Pixi' %}#}
     <script src="{% static 'lib/pixi.min480.js' %}"></script>

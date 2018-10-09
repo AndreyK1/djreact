@@ -1,6 +1,7 @@
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.urls import path
 from notifier.consumers import EchoConsumer, PixiConsumer, TickTockConsumer, StartNotifConsumer, NoseyConsumer
+from notifier.consumersWORed import StartNotifConsumerWOR
 
 application = ProtocolTypeRouter({
     "websocket": URLRouter([
@@ -9,6 +10,7 @@ application = ProtocolTypeRouter({
         path("tickTockConsumer/", TickTockConsumer),
         path("notificationsStart/", StartNotifConsumer),
         path("notifications/", NoseyConsumer),
+        path("notificationsWORedis/", StartNotifConsumerWOR),
 
     ])
 })
