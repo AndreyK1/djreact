@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^poster/', include(("poster.urls", "poster"), namespace='posts')),
     url(r'^users/', include(("djangorest.urls", "djangorest"), namespace='users')),
     path('notif/', HomeView.as_view()),
+    path('trains/', include(("trainsgame.urls", "djangorest"), namespace='trains')),
 ]
 
 # urlpatterns = [

@@ -3,8 +3,11 @@ from django.urls import path
 from notifier.consumers import EchoConsumer, PixiConsumer, TickTockConsumer, StartNotifConsumer, NoseyConsumer
 from notifier.consumersWORed import StartNotifConsumerWOR
 
+from trainsgame.consumers import FirstConnectConsumer, StartGameConsumer
+
 application = ProtocolTypeRouter({
     "websocket": URLRouter([
+        # тестовые
         path("ws/", EchoConsumer),
         path("pixiConsumer/", PixiConsumer),
         path("tickTockConsumer/", TickTockConsumer),
@@ -12,5 +15,8 @@ application = ProtocolTypeRouter({
         path("notifications/", NoseyConsumer),
         path("notificationsWORedis/", StartNotifConsumerWOR),
 
+        # trains
+        path("trainsBeginOfGAme/", FirstConnectConsumer),
+        path("startGameConsumer/", StartGameConsumer),
     ])
 })
