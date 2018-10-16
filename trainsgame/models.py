@@ -18,8 +18,9 @@ class SingleChannelObjTrains:
 
 @singleton
 class PlayGround:
-    crosses = {}
-    trains = {}
+    initialised = False
+    crosses = []
+    trains = []
 
 
 # перекресток и его координаты
@@ -29,7 +30,7 @@ class Cross:
     coord = {0,0}
 
     upCross = 0
-    dwCross = 0
+    dwCross = 0  # type: int
     leftCross = 0
     rightCross = 0
 

@@ -18,7 +18,7 @@
         const webSocketBridgeStart = new channels.WebSocketBridge();
 
         document.addEventListener('DOMContentLoaded', function() {
-          webSocketBridge.connect('/trainsBeginOfGAme/');
+          webSocketBridge.connect('/trainsFirstConnectToGame/');
           webSocketBridge.listen(function(action, stream) {
             console.log("RESPONSE:", action, stream);
           })

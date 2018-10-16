@@ -16,7 +16,7 @@ application = ProtocolTypeRouter({
         path("notificationsWORedis/", StartNotifConsumerWOR),
 
         # trains
-        path("trainsBeginOfGAme/", FirstConnectConsumer),
+        path("trainsFirstConnectToGame/", FirstConnectConsumer),
         path("startGameConsumer/", StartGameConsumer),
     ])
 })
