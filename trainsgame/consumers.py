@@ -1,4 +1,6 @@
+import asyncio
 import json
+import time
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncJsonWebsocketConsumer, WebsocketConsumer
@@ -33,30 +35,38 @@ class StartGameConsumer(WebsocketConsumer):
 
     def connect(self):
         self.accept()
-        # createPlayGr()
+        createPlayGr()
 
 
     def receive(self, text_data=None, bytes_data=None, **kwargs):
-            # playGround = PlayGround()
+            playGround = PlayGround()
             # rows = len(playGround.crosses)
             # col = len(playGround.crosses[1])
 
             # serialized_obj = serializers.serialize('json', [playGround, ])
-            cross = Cross()
-            cross2 = Cross()
-            cross.rightCross = cross2
+            # cross = Cross()
+            # cross2 = Cross()
+            # cross.rightCross = cross2
+            #
+            # foo = PlayGround()
+            # foo.crosses["1"] = cross
 
-            foo = PlayGround()
-            foo.crosses[0] = cross
-
-            serialized_obj = json.dumps(foo, default=lambda x: x.__dict__)
-
-            print("+++++++++++++++++++++++++++Got fffffff "+text_data+" at " + self.channel_name)
             channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                "trains", {"type": "user.trains",
-                           "event": {"bi":serialized_obj, "ku": "dsfsdf"},
-                           # "text": {"bi":text_data, "ku": str(rows) + " -" + str(col)}
+            i = 0;
+            while i < 10:
+                i = i + 1;
+                # asyncio.sleep(1)
+                time.sleep(1)
+
+                serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
+
+                print("+++++++++++++++++++++++++++Got fffffff "+text_data+" at " + self.channel_name)
+
+                async_to_sync(channel_layer.group_send)(
+                # channel_layer.group_send(
+                    "trains", {"type": "user.trains",
+                               "event": {"bi":serialized_obj, "ku": "dsfsdf"},
+                                "text": {"bi":text_data, "ku": "fdgfdg"}
                            })
 
     # def user_trains(self, event):

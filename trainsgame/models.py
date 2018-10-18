@@ -39,29 +39,33 @@ class PlayGround():
     # trains = []
     def __init__(self):
         self.trains = []
-        self.crosses = [77,88,99]
+        # self.crosses = {"1":77,"2":88,"3":99}
+        self.crosses = {}
+        self.pathes = {}
         self.initialised = False
+        self.croscrossesNum = []
 
 
 # перекресток и его координаты
 class Cross:
     # номер перекрестка
-    numOfCross = 0
-    # coord = {0,0}
-
-    upCross = 0
-    dwCross = 0  # type: int
-    leftCross = 0
-    rightCross = 0
-
-    upPath = 0
-    dwPath = 0
-    leftPath = 0
-    rightPath = 0
+    # numOfCross = 0
+    # coord = []
+    #
+    # upCross = 0
+    # dwCross = 0  # type: int
+    # leftCross = 0
+    # rightCross = 0
+    #
+    # upPath = 0
+    # dwPath = 0
+    # leftPath = 0
+    # rightPath = 0
 
     def __init__(self):
+        # номер перекрестка
         self.numOfCross = 0
-        # self.coord = {0,0}
+        self.coord =[]
 
         self.upCross = 0
         self.dwCross = 0  # type: int
@@ -88,8 +92,12 @@ class Train:
 
 # путь
 class Path:
-    existTrainId = 0
-    lengtOfPx = 0
-    whereNowTrain = 0
+    def __init__(self):
+        # номер перекрестка
+        self.existTrainId = 0
+        self.lengtOfPx = 0
+        self.whereNowTrain = 0
+
+        self.numOfPath = 0
 
 
