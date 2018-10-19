@@ -39,7 +39,31 @@ class StartGameConsumer(WebsocketConsumer):
 
 
     def receive(self, text_data=None, bytes_data=None, **kwargs):
+
+
+            # text_data = "play"
+            text_data = text_data.replace("\"", "")
+
+            print("-text_data-"+text_data)
+
             playGround = PlayGround()
+            if(playGround.started):
+                return ;
+            else:
+                playGround.started = True
+
+            # if (text_data != "play" and text_data == "start"):
+            #     playGround.modeOfGame = "start"
+            # elif (text_data == "stop"):
+            #     playGround.modeOfGame = "stop"
+            #
+            #
+            # if(playGround.modeOfGame != "start"):
+            #     return;
+            # else:
+            #     playGround.modeOfGame = "play"
+
+
             # rows = len(playGround.crosses)
             # col = len(playGround.crosses[1])
 
@@ -53,21 +77,26 @@ class StartGameConsumer(WebsocketConsumer):
 
             channel_layer = get_channel_layer()
             i = 0;
-            while i < 10:
+            # while i < 10:
+            print("-playGround.modeOfGame-" + playGround.modeOfGame)
+            while playGround.modeOfGame == "play":
                 i = i + 1;
+                print("-i-" + str(i) + playGround.modeOfGame)
                 # asyncio.sleep(1)
                 time.sleep(1)
 
                 serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
 
-                print("+++++++++++++++++++++++++++Got fffffff "+text_data+" at " + self.channel_name)
+                print("+++++++++++++++++++++++++++Try send fffffff "+text_data+" at " + self.channel_name)
 
                 async_to_sync(channel_layer.group_send)(
                 # channel_layer.group_send(
                     "trains", {"type": "user.trains",
                                "event": {"bi":serialized_obj, "ku": "dsfsdf"},
-                                "text": {"bi":text_data, "ku": "fdgfdg"}
+                                "text": {"bi":text_data, "ku": str(i)}
                            })
+
+            playGround.started = False
 
     # def user_trains(self, event):
     #     print("+++++++++++++++++++++++++++Got message 333 " + event + " at " + self.channel_name)
@@ -83,3 +112,42 @@ class StartGameConsumer(WebsocketConsumer):
 
 
 
+
+class ControlGameConsumer(WebsocketConsumer):
+
+    def connect(self):
+        self.accept()
+
+
+    def receive(self, text_data=None, bytes_data=None, **kwargs):
+
+            print("ControlGameConsumer")
+
+            # text_data = "play"
+            text_data = text_data.replace("\"", "")
+
+            print("-text_data-"+text_data)
+
+            playGround = PlayGround()
+
+            if (text_data == "play"):
+                playGround.modeOfGame = "play"
+            elif (text_data == "stop"):
+                playGround.modeOfGame = "stop"
+
+
+            # if (text_data != "play" and text_data == "start"):
+            #     playGround.modeOfGame = "start"
+            # elif (text_data == "stop"):
+            #     playGround.modeOfGame = "stop"
+
+
+            # if(playGround.modeOfGame != "start"):
+            #     return;
+            # else:
+            #     playGround.modeOfGame = "play"
+
+
+    def disconnect(self, close_code):
+        # await self.channel_layer.group_discard("gossip", self.channel_name)
+        print("--------------------------Removed")

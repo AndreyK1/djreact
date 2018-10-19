@@ -44,6 +44,8 @@ class PlayGround():
         self.pathes = {}
         self.initialised = False
         self.croscrossesNum = []
+        self.modeOfGame = "stop"
+        self.started = False
 
 
 # перекресток и его координаты
