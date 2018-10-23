@@ -50,13 +50,17 @@
          function changeGame(textIn) {
             {#text = textIn + 1;#}
              console.log(textIn)
-           webSocketBridgeControl.send(textIn)
+           var name =   document.getElementById("player_name").value
+           webSocketBridgeControl.send({"type":textIn, "name":name})
         }
     </script>
 
+    <input id="player_name" type="text" />Имя <br/>
+    <button onclick="changeGame('join')">joinGame</button>
     <button onclick="startGame('start')">startGame</button>
     <button onclick="changeGame('play')">playGame</button>
     <button onclick="changeGame('stop')">stopGame</button>
+
 
 {% render_bundle 'vendors' %}
 {% render_bundle 'Pixi' %}

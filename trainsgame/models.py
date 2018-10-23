@@ -38,7 +38,7 @@ class PlayGround():
     # crosses = []
     # trains = []
     def __init__(self):
-        self.trains = []
+        self.trains = {}
         # self.crosses = {"1":77,"2":88,"3":99}
         self.crosses = {}
         self.pathes = {}

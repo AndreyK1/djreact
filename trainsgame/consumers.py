@@ -2,8 +2,9 @@ import asyncio
 import json
 import time
 
+import django
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import AsyncJsonWebsocketConsumer, WebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer, WebsocketConsumer, JsonWebsocketConsumer
 from channels.layers import get_channel_layer
 
 # первичный коннект, и обработка каждого коннекта из канала
@@ -35,11 +36,12 @@ class StartGameConsumer(WebsocketConsumer):
 
     def connect(self):
         self.accept()
-        createPlayGr()
+        # createPlayGr()
 
 
     def receive(self, text_data=None, bytes_data=None, **kwargs):
 
+            createPlayGr()
 
             # text_data = "play"
             text_data = text_data.replace("\"", "")
@@ -113,22 +115,29 @@ class StartGameConsumer(WebsocketConsumer):
 
 
 
-class ControlGameConsumer(WebsocketConsumer):
+# class ControlGameConsumer(WebsocketConsumer):
+class ControlGameConsumer111(WebsocketConsumer):
 
     def connect(self):
         self.accept()
 
 
+    # def receive(self, text_data=None, bytes_data=None, **kwargs):
     def receive(self, text_data=None, bytes_data=None, **kwargs):
 
             print("ControlGameConsumer")
 
             # text_data = "play"
-            text_data = text_data.replace("\"", "")
+            # text_data = text_data.replace("\"", "")
+            json = django.utils.simplejson.loads(text_data)
 
-            print("-text_data-"+text_data)
+            print("-text_data-"+json)
+            print("-text_data.type-" + json.type)
 
             playGround = PlayGround()
+
+            if (text_data["type"] == "join"):
+                playGround.trains[1] = "sfdfsdf"
 
             if (text_data == "play"):
                 playGround.modeOfGame = "play"
@@ -136,16 +145,40 @@ class ControlGameConsumer(WebsocketConsumer):
                 playGround.modeOfGame = "stop"
 
 
-            # if (text_data != "play" and text_data == "start"):
-            #     playGround.modeOfGame = "start"
-            # elif (text_data == "stop"):
-            #     playGround.modeOfGame = "stop"
+    def disconnect(self, close_code):
+        # await self.channel_layer.group_discard("gossip", self.channel_name)
+        print("--------------------------Removed")
 
 
-            # if(playGround.modeOfGame != "start"):
-            #     return;
-            # else:
-            #     playGround.modeOfGame = "play"
+
+class ControlGameConsumer(JsonWebsocketConsumer):
+
+    def connect(self):
+        self.accept()
+
+
+    # def receive(self, text_data=None, bytes_data=None, **kwargs):
+    def receive_json(self, content):
+
+            print("ControlGameConsumer")
+
+            # text_data = "play"
+            # text_data = text_data.replace("\"", "")
+            # json = django.utils.simplejson.loads(text_data)
+
+            # print("-text_data-"+content)
+            print("-text_data.type-" + content["type"])
+
+            playGround = PlayGround()
+
+            if (content["type"] == "join"):
+                name = content["name"]
+                playGround.trains[name] = name
+
+            if (content["type"] == "play"):
+                playGround.modeOfGame = "play"
+            elif (content["type"] == "stop"):
+                playGround.modeOfGame = "stop"
 
 
     def disconnect(self, close_code):
