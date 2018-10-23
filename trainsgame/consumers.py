@@ -11,7 +11,7 @@ from channels.layers import get_channel_layer
 # from django.core import serializers
 
 from trainsgame.createPlayGround import createPlayGr
-from trainsgame.models import PlayGround, Foo, Cross
+from trainsgame.models import PlayGround, Foo, Cross, Train
 
 
 class FirstConnectConsumer(AsyncJsonWebsocketConsumer):
@@ -114,43 +114,6 @@ class StartGameConsumer(WebsocketConsumer):
 
 
 
-
-# class ControlGameConsumer(WebsocketConsumer):
-class ControlGameConsumer111(WebsocketConsumer):
-
-    def connect(self):
-        self.accept()
-
-
-    # def receive(self, text_data=None, bytes_data=None, **kwargs):
-    def receive(self, text_data=None, bytes_data=None, **kwargs):
-
-            print("ControlGameConsumer")
-
-            # text_data = "play"
-            # text_data = text_data.replace("\"", "")
-            json = django.utils.simplejson.loads(text_data)
-
-            print("-text_data-"+json)
-            print("-text_data.type-" + json.type)
-
-            playGround = PlayGround()
-
-            if (text_data["type"] == "join"):
-                playGround.trains[1] = "sfdfsdf"
-
-            if (text_data == "play"):
-                playGround.modeOfGame = "play"
-            elif (text_data == "stop"):
-                playGround.modeOfGame = "stop"
-
-
-    def disconnect(self, close_code):
-        # await self.channel_layer.group_discard("gossip", self.channel_name)
-        print("--------------------------Removed")
-
-
-
 class ControlGameConsumer(JsonWebsocketConsumer):
 
     def connect(self):
@@ -173,6 +136,7 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
             if (content["type"] == "join"):
                 name = content["name"]
+                # train = Train()
                 playGround.trains[name] = name
 
             if (content["type"] == "play"):

@@ -79,17 +79,21 @@ class Cross:
         self.leftPath = 0
         self.rightPath = 0
 
+        self.isbeasy = False
+        self.train = 0
+
 
 
 # поезд и его движение
 class Train:
-    nextCross = 0
-    lastCross = 0
-    # вверхб низб левоб право
-    nextMove = 0
-    nowMoving = 0
-    # путь по которому движется
-    movingPath = 0
+    def __init__(self):
+        self.nextCross = 0
+        self.lastCross = 0
+        # вверхб низб левоб право
+        self.nextMove = 0
+        self.nowMoving = 0
+        # путь по которому движется
+        self.movingPath = 0
 
 
 # путь

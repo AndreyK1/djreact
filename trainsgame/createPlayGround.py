@@ -1,4 +1,6 @@
-from trainsgame.models import PlayGround, Cross, Path
+import random
+
+from trainsgame.models import PlayGround, Cross, Path, Train
 
 
 def createPlayGr():
@@ -65,8 +67,10 @@ def createPlayGr():
             playGround.crosses[num]=node
 
     playGround.croscrossesNum = crossesNum
-    playGround.initialised=True
 
+    createTrains(playGround)
+
+    playGround.initialised=True
 
 
 def createPath(playGround, lengh, numP):
@@ -77,3 +81,33 @@ def createPath(playGround, lengh, numP):
     path.numOfPath = numPass
     playGround.pathes[numPass] = path
     return numPass;
+
+# создание тележек и добавление их на перекрестки
+def createTrains(playGround):
+    for train in playGround.trains:
+        while randomAddTrainToCross(playGround, train) == False:
+            print("try add train to cross "+ train)
+
+
+
+def randomAddTrainToCross(playGround, trainName):
+    print("train - "+ trainName)
+    # moving = {1:"up",2:"down",3:"left",4:"right"}
+    moving = ["up", "down","left","right"]
+    randCrossKey = random.choice(list(playGround.crosses.keys()))
+    if(playGround.crosses[randCrossKey].train == 0):
+        playGround.crosses[randCrossKey].train = trainName
+
+        train = Train()
+        playGround.trains[trainName] = train
+        train.lastCross = randCrossKey
+
+        nextMove = random.choice(moving);
+        train.nextMove = nextMove
+
+        return True
+    else:
+        return False
+
+
+
