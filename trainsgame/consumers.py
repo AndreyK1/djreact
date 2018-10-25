@@ -11,6 +11,7 @@ from channels.layers import get_channel_layer
 # from django.core import serializers
 
 from trainsgame.createPlayGround import createPlayGr
+from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train
 
 
@@ -52,7 +53,10 @@ class StartGameConsumer(WebsocketConsumer):
             if(playGround.started):
                 return ;
             else:
+                makeFirstMovings()
                 playGround.started = True
+
+
 
             # if (text_data != "play" and text_data == "start"):
             #     playGround.modeOfGame = "start"
@@ -81,6 +85,7 @@ class StartGameConsumer(WebsocketConsumer):
             i = 0;
             # while i < 10:
             print("-playGround.modeOfGame-" + playGround.modeOfGame)
+
             while playGround.modeOfGame == "play":
                 i = i + 1;
                 print("-i-" + str(i) + playGround.modeOfGame)

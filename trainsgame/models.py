@@ -82,6 +82,8 @@ class Cross:
         self.isbeasy = False
         self.train = 0
 
+    def setNextCrossToTrain(self, train, nextCrossNum):
+        train.nextCross = nextCrossNum
 
 
 # поезд и его движение
@@ -94,6 +96,7 @@ class Train:
         self.nowMoving = 0
         # путь по которому движется
         self.movingPath = 0
+        self.pathNum = 0
 
 
 # путь
