@@ -64,6 +64,7 @@ def createPlayGr():
 
 
             crossesNum[i][j]=num
+            node.numOfCross = num
             playGround.crosses[num]=node
 
     playGround.croscrossesNum = crossesNum

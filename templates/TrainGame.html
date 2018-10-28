@@ -21,10 +21,10 @@
 
         document.addEventListener('DOMContentLoaded', function() {
           webSocketBridge.connect('/trainsFirstConnectToGame/');
-          webSocketBridge.listen(function(action, stream) {
-            console.log("RESPONSE:", action, stream);
-            console.log(JSON.parse(action.event.bi))
-          })
+          {#webSocketBridge.listen(function(action, stream) {#}
+          {#  console.log("RESPONSE:", action, stream);#}
+          {#  console.log(JSON.parse(action.event.bi))#}
+          {#})#}
             {#сразу конектимся#}
           {#webSocketBridge.send("hi")#}
 
