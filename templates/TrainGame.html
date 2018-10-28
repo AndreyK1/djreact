@@ -61,9 +61,23 @@
     <button onclick="changeGame('play')">playGame</button>
     <button onclick="changeGame('stop')">stopGame</button>
 
+    {# {% render_bundle 'Pixi' %}#}
+    <script src="{% static 'lib/pixi.min480.js' %}"></script>
+
+
+
+
+    <script type="text/javascript">
+        treasHuntJs = "{% static 'images/treasureHunter.json' %}"
+        animalsJs = "{% static 'images/animals.json' %}"
+        catImg = "{% static 'images/cat.png' %}"
+        tileset = "{% static 'images/tileset.png' %}"
+    </script>
+
+
 
 {% render_bundle 'vendors' %}
-{% render_bundle 'Pixi' %}
+{% render_bundle 'Train' %}
 
 
 

@@ -9,6 +9,7 @@ module.exports = {
     App1: './reactjs/App1',
       // Pixi: './reactjs/lib/pixi.min.js',
       Pixi: './djangorest/pixijs/main',
+      Train: './trainsgame/gamejs/main',
     vendors: ['react'],
   },
 
