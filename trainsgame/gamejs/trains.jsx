@@ -38,20 +38,39 @@ export default function setupTrainsScene(app) {
   webSocketBridge.listen(function(action, stream) {
     console.log("RESPONSE........:", action, stream);
     // console.log(JSON.parse(action.event.bi))
-      drawPlayGround(JSON.parse(action.event.bi))
+      let data = JSON.parse(action.event.bi)
+      drawPlayGround(data)
+      drawTrains(data)
   })
 
 }
 
+//отрисовываем тележки
+function drawTrains(playGround){
+    let trains = playGround['trains']
+    let pathes = playGround['pathes']
+    for(let trainK in trains){
+        let train = trains[trainK]
+        let path = pathes[train['pathNum']]
+
+        //рисуем тележку
+        let trainPic = new Sprite(id["blob.png"]);
+        trainPic.x = path["coordBeg"]["x"];
+        trainPic.y = path["coordBeg"]["y"];
+        console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
+        gameScene.addChild(trainPic);
+    }
+
+
+}
 
 let lastCrossX=0; let lastCrossY=0;
 let offSetX = 20; let offSetY = 10;
 let lastLenghtX = 0; let lastLenghtY = 0;
 
-
-
-
+//отрисовываем сетку дорог
 function drawPlayGround(playGround){
+    //отрисовывается 1 раз
     if(lastCrossX!=0){
         return;
     }
@@ -77,7 +96,7 @@ function drawPlayGround(playGround){
       }
       let crosN = croscrossesNum[i][j]
       let cross = crosses[crosN]
-        console.log(cross);
+        //console.log(cross);
 
         drawCross(cross, playGround['pathes'])
     }
@@ -92,14 +111,14 @@ function  drawCross(cross, pathes) {
   // рсуем линии только направо и вверх
    if(cross['dwPath']!=0){
     let path = pathes[cross['dwPath']]
-      console.log(path)
+      //console.log(path)
       drawPath(path,0,path['lengtOfPx'])
       // lastLenghtY = path['lengtOfPx']
   }
 
     if(cross['rightPath']!=0){
     let path = pathes[cross['rightPath']]
-      console.log(path)
+      //console.log(path)
       drawPath(path,path['lengtOfPx'],0)
       // lastLenghtX = path['lengtOfPx']
   }
@@ -108,9 +127,12 @@ function  drawCross(cross, pathes) {
 }
 
 function drawPath(path, moveX, moveY) {
-    console.log(lastCrossX,lastCrossY)
-    console.log(moveX,moveY)
-    console.log(lastLenghtX,lastLenghtY)
+    // console.log(lastCrossX,lastCrossY)
+    // console.log(moveX,moveY)
+    // console.log(lastLenghtX,lastLenghtY)
+    path["coordBeg"]["x"] = lastCrossX
+    path["coordBeg"]["y"] = lastCrossY
+
     var graphics = new Graphics()
     graphics.lineStyle(5, 0xFF0000);
     // draw a triangle using lines
@@ -119,14 +141,13 @@ function drawPath(path, moveX, moveY) {
     lastCrossY += moveY
 
     graphics.lineTo(lastCrossX,lastCrossY);
+    path["coordEnd"]["x"] = lastCrossX
+    path["coordEnd"]["y"] = lastCrossY
     graphics.endFill();
     gameScene.addChild(graphics);
-    console.log("--",lastCrossX,lastCrossY)
+    //console.log("--",lastCrossX,lastCrossY)
     if(moveY != 0){
         lastLenghtY = moveY
         lastCrossY-=moveY
     }
-
-
-
 }
