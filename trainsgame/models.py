@@ -47,6 +47,8 @@ class PlayGround():
         self.modeOfGame = "stop"
         self.started = False
 
+        self.lastCross = {"x":0, "y":0} #координаты последенего отмеченного в путях перекрестка
+        self.offSet = {"x":10, "y":10}  #первоначальные оординаты отступа путей на площадке
 
 # перекресток и его координаты
 class Cross:
@@ -107,10 +109,28 @@ class Path:
         self.lengtOfPx = 0
         self.whereNowTrain = 0
 
+        # направление
+        self.direction = 0
+
         self.numOfPath = 0
 
         self.type = 0
         self.coordBeg = {"x":0, "y":0}
         self.coordEnd = {"x": 0, "y":0}
+
+
+    def createCoord(self, playGround, moveX, moveY):
+
+        if(moveY == 0):
+            self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
+        else:
+            self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]-moveY} #т.к. мы рисуем снизу вверх
+
+        playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
+        self.coordEnd = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
+
+        # playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
+        # # playGround.lastCross["y"] = playGround.lastCross["y"] + moveY  #мы не передвигаем координату у
+        # self.coordEnd = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]+moveY}
 
 

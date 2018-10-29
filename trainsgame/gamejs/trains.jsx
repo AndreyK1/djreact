@@ -39,6 +39,7 @@ export default function setupTrainsScene(app) {
     console.log("RESPONSE........:", action, stream);
     // console.log(JSON.parse(action.event.bi))
       let data = JSON.parse(action.event.bi)
+      console.log(data)
       drawPlayGround(data)
       drawTrains(data)
   })
@@ -74,7 +75,7 @@ function drawPlayGround(playGround){
     if(lastCrossX!=0){
         return;
     }
-  console.log(playGround);
+  // console.log(playGround);
 
 
   let crosses = playGround['crosses']
@@ -130,19 +131,23 @@ function drawPath(path, moveX, moveY) {
     // console.log(lastCrossX,lastCrossY)
     // console.log(moveX,moveY)
     // console.log(lastLenghtX,lastLenghtY)
-    path["coordBeg"]["x"] = lastCrossX
-    path["coordBeg"]["y"] = lastCrossY
+    // path["coordBeg"]["x"] = lastCrossX
+    // path["coordBeg"]["y"] = lastCrossY
 
     var graphics = new Graphics()
     graphics.lineStyle(5, 0xFF0000);
     // draw a triangle using lines
-    graphics.moveTo(lastCrossX,lastCrossY);
+
+    graphics.moveTo(path["coordBeg"]["x"],path["coordBeg"]["y"]);
+    // graphics.moveTo(lastCrossX,lastCrossY);
     lastCrossX += moveX
     lastCrossY += moveY
 
-    graphics.lineTo(lastCrossX,lastCrossY);
-    path["coordEnd"]["x"] = lastCrossX
-    path["coordEnd"]["y"] = lastCrossY
+
+    graphics.lineTo(path["coordEnd"]["x"],path["coordEnd"]["y"]);
+    // graphics.lineTo(lastCrossX,lastCrossY);
+    // path["coordEnd"]["x"] = lastCrossX
+    // path["coordEnd"]["y"] = lastCrossY
     graphics.endFill();
     gameScene.addChild(graphics);
     //console.log("--",lastCrossX,lastCrossY)

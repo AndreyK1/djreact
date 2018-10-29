@@ -21,32 +21,31 @@ def createPlayGr():
 
     num = 0
     numPass = 0
+
+    # lastCrossX = 0; lastCrossY = 0; #координаты последенего отмеченного в путях перекрестка
+    # offSetX = 20;     offSetY = 10; #первоначальные оординаты отступа путей на площадке
     for i in range(h):
+        # для координат путей
+        playGround.lastCross["x"] = playGround.offSet["x"]
         for j in range(w):
+
+
+
             num = num+1
             playGround.numOfCross = num
             print(" i = " + str(i) + " j = " + str(j))
             node = Cross()
             # node.coord = {i,j}
 
+            # для координат путей
+            if (j == 0):
+                playGround.lastCross["y"] += lenghtVer
 
-            if(i == 0):
-                # nothing
-                print("nothing")
-            else:
-                # добавление перекрестков
-                node.upCross = crossesNum[i-1][j]
-                crossBefore = playGround.crosses[crossesNum[i - 1][j]]
-                crossBefore.dwCross = num
-
-                # создание пути
-                numPass = createPath(playGround, lenghtVer, numPass)
-
-                node.upPath = numPass
-                crossBefore.dwPath = numPass
+            if (i == 0 and j == 0):
+                playGround.lastCross["y"] = playGround.offSet["y"]
 
 
-
+            # горизонтальное отклонение вправо
             if (j == 0):
                 # nothing
                 print("nothing")
@@ -57,10 +56,32 @@ def createPlayGr():
                 crossBefore.rightCross = num
 
                 # создание пути
-                numPass = createPath(playGround, lenghtGor, numPass)
+                numPass = createPath(playGround, lenghtGor, 0, numPass)
 
                 node.leftPath = numPass
                 crossBefore.rightPath = numPass
+
+
+
+            # вертикальное отклонение вверх
+            if(i == 0):
+                # nothing
+                print("nothing")
+            else:
+                # добавление перекрестков
+                node.upCross = crossesNum[i-1][j]
+                crossBefore = playGround.crosses[crossesNum[i - 1][j]]
+                crossBefore.dwCross = num
+
+                # создание пути
+                numPass = createPath(playGround, 0, lenghtVer, numPass)
+
+                node.upPath = numPass
+                crossBefore.dwPath = numPass
+
+
+
+
 
 
             crossesNum[i][j]=num
@@ -74,12 +95,23 @@ def createPlayGr():
     playGround.initialised=True
 
 
-def createPath(playGround, lengh, numP):
+def createPath(playGround, moveX, moveY, numP):
     # создание пути
     path = Path()
-    path.lengtOfPx = lengh
+    if(moveX !=0):
+        path.lengtOfPx = moveX
+        path.direction = "gor"
+    elif(moveY !=0):
+        path.lengtOfPx = moveY
+        path.direction = "ver"
+    else:
+        return
+
     numPass = numP + 1
     path.numOfPath = numPass
+
+    path.createCoord(playGround, moveX, moveY)
+
     playGround.pathes[numPass] = path
     return numPass;
 
