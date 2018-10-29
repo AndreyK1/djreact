@@ -109,4 +109,8 @@ class Path:
 
         self.numOfPath = 0
 
+        self.type = 0
+        self.coordBeg = {"x":0, "y":0}
+        self.coordEnd = {"x": 0, "y":0}
+
 
