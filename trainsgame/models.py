@@ -69,7 +69,7 @@ class Cross:
     def __init__(self):
         # номер перекрестка
         self.numOfCross = 0
-        self.coord =[]
+        self.coord = {"x":0, "y":0}
 
         self.upCross = 0
         self.dwCross = 0  # type: int
@@ -97,8 +97,16 @@ class Train:
         self.nextMove = 0
         self.nowMoving = 0
         # путь по которому движется
-        self.movingPath = 0
+        # self.movingPath = 0
         self.pathNum = 0
+        self.coord = {"x":0, "y":0}
+
+    def makeMove(self, playGround):
+        print("makeMove train")
+        path = playGround.pathes[self.pathNum]
+
+
+
 
 
 # путь
@@ -118,16 +126,30 @@ class Path:
         self.coordBeg = {"x":0, "y":0}
         self.coordEnd = {"x": 0, "y":0}
 
+        self.cross1 = 0;
+        self.cross2 = 0;
 
-    def createCoord(self, playGround, moveX, moveY):
 
-        if(moveY == 0):
-            self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
-        else:
-            self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]-moveY} #т.к. мы рисуем снизу вверх
+    def fillCoord(self, crosses):
+        self.coordBeg = {"x": crosses[self.cross1].coord["x"], "y": crosses[self.cross1].coord["y"]}
+        self.coordEnd = {"x": crosses[self.cross2].coord["x"], "y": crosses[self.cross2].coord["y"]}
 
-        playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
-        self.coordEnd = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
+        # print("numberOfCross " + str(numberOfCross) + " numberOfCrossBefore "+ str(numberOfCrossBefore))
+        # if(moveY == 0):
+        #     self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
+        # else:
+        #     self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]-moveY} #т.к. мы рисуем снизу вверх
+        #
+        # playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
+        # self.coordEnd = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
+
+        # добавление координат к перекресткам
+        # playGround.crosses[numberOfCross].coord["x"] = self.coordBeg["x"]
+        # playGround.crosses[numberOfCross].coord["y"] = self.coordBeg["y"]
+        # print("sfdsfds"+playGround.crosses[numberOfCross].numOfCross)
+
+        # playGround.crosses[numberOfCrossBefore].coord["x"] = 2
+        # playGround.crosses[numberOfCross].coord["y"] = 4
 
         # playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
         # # playGround.lastCross["y"] = playGround.lastCross["y"] + moveY  #мы не передвигаем координату у

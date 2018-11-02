@@ -10,7 +10,7 @@ from channels.layers import get_channel_layer
 # первичный коннект, и обработка каждого коннекта из канала
 # from django.core import serializers
 
-from trainsgame.createPlayGround import createPlayGr
+from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train
 
@@ -43,13 +43,14 @@ class StartGameConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None, **kwargs):
 
             createPlayGr()
+            playGround = PlayGround()
+
 
             # text_data = "play"
             text_data = text_data.replace("\"", "")
 
             print("-text_data-"+text_data)
 
-            playGround = PlayGround()
             if(playGround.started):
                 return ;
             else:
@@ -89,6 +90,9 @@ class StartGameConsumer(WebsocketConsumer):
             while playGround.modeOfGame == "play":
                 i = i + 1;
                 print("-i-" + str(i) + playGround.modeOfGame)
+
+                fillTrainsPositions(playGround)
+
                 # asyncio.sleep(1)
                 time.sleep(1)
 
@@ -116,6 +120,8 @@ class StartGameConsumer(WebsocketConsumer):
             #     "gossip", {"type": "user.gossip",
             #                "event": "New User",
             #                "username": text_data})
+
+
 
 
 

@@ -37,12 +37,17 @@ def createPlayGr():
             node = Cross()
             # node.coord = {i,j}
 
+
             # для координат путей
             if (j == 0):
                 playGround.lastCross["y"] += lenghtVer
+            else:
+                playGround.lastCross["x"] += lenghtGor
 
             if (i == 0 and j == 0):
                 playGround.lastCross["y"] = playGround.offSet["y"]
+
+            node.coord = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
 
 
             # горизонтальное отклонение вправо
@@ -56,7 +61,7 @@ def createPlayGr():
                 crossBefore.rightCross = num
 
                 # создание пути
-                numPass = createPath(playGround, lenghtGor, 0, numPass)
+                numPass = createPath(playGround, lenghtGor, 0, numPass, num, crossesNum[i][j-1])
 
                 node.leftPath = numPass
                 crossBefore.rightPath = numPass
@@ -74,7 +79,7 @@ def createPlayGr():
                 crossBefore.dwCross = num
 
                 # создание пути
-                numPass = createPath(playGround, 0, lenghtVer, numPass)
+                numPass = createPath(playGround, 0, lenghtVer, numPass, num, crossesNum[i - 1][j])
 
                 node.upPath = numPass
                 crossBefore.dwPath = numPass
@@ -88,14 +93,17 @@ def createPlayGr():
             node.numOfCross = num
             playGround.crosses[num]=node
 
+
     playGround.croscrossesNum = crossesNum
 
     createTrains(playGround)
 
+    fillPathes(playGround)
+
     playGround.initialised=True
 
 
-def createPath(playGround, moveX, moveY, numP):
+def createPath(playGround, moveX, moveY, numP, numberOfCross, numberOfCrossBefore):
     # создание пути
     path = Path()
     if(moveX !=0):
@@ -110,10 +118,20 @@ def createPath(playGround, moveX, moveY, numP):
     numPass = numP + 1
     path.numOfPath = numPass
 
-    path.createCoord(playGround, moveX, moveY)
+    path.cross1 = numberOfCrossBefore
+    path.cross2 = numberOfCross
+
+    # path.createCoord(playGround, moveX, moveY, numberOfCross, numberOfCrossBefore)
 
     playGround.pathes[numPass] = path
     return numPass;
+
+# заполняем пути координатами
+def fillPathes(playGround):
+    for path in playGround.pathes:
+        playGround.pathes[path].fillCoord(playGround.crosses)
+
+
 
 # создание тележек и добавление их на перекрестки
 def createTrains(playGround):
@@ -122,7 +140,7 @@ def createTrains(playGround):
             print("try add train to cross "+ train)
 
 
-
+# рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove
 def randomAddTrainToCross(playGround, trainName):
     print("train - "+ trainName)
     # moving = {1:"up",2:"down",3:"left",4:"right"}
@@ -138,9 +156,15 @@ def randomAddTrainToCross(playGround, trainName):
         nextMove = random.choice(moving);
         train.nextMove = nextMove
 
+        train.coord = {"x":playGround.crosses[randCrossKey].coord["x"], "y": playGround.crosses[randCrossKey].coord["y"]}
+
         return True
     else:
         return False
 
 
+# заполняем положения тележек
+def fillTrainsPositions(playGround):
+    for train in playGround.trains:
+        playGround.trains[train].makeMove(playGround)
 

@@ -57,8 +57,8 @@ function drawTrains(playGround){
         //рисуем тележку
         let trainPic = new Sprite(id["blob.png"]);
         console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
-        trainPic.x = path["coordBeg"]["x"];
-        trainPic.y = path["coordBeg"]["y"];
+        trainPic.x = train["coord"]["x"];
+        trainPic.y = train["coord"]["y"];
         console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
         gameScene.addChild(trainPic);
     }
