@@ -258,7 +258,7 @@ function setupTi() {
   appCat.stage.addChild(rocket);
 
   //Render the stage
-  //renderer.render(stage);
+  renderer.render(stage);
 }
 
 

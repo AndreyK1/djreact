@@ -61,6 +61,8 @@ function drawTrains(playGround){
         trainPic.y = train["coord"]["y"];
         console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
         gameScene.addChild(trainPic);
+
+        renderer.render(stage);
     }
 
 

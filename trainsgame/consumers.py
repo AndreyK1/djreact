@@ -45,7 +45,6 @@ class StartGameConsumer(WebsocketConsumer):
             createPlayGr()
             playGround = PlayGround()
 
-
             # text_data = "play"
             text_data = text_data.replace("\"", "")
 
@@ -56,31 +55,6 @@ class StartGameConsumer(WebsocketConsumer):
             else:
                 makeFirstMovings()
                 playGround.started = True
-
-
-
-            # if (text_data != "play" and text_data == "start"):
-            #     playGround.modeOfGame = "start"
-            # elif (text_data == "stop"):
-            #     playGround.modeOfGame = "stop"
-            #
-            #
-            # if(playGround.modeOfGame != "start"):
-            #     return;
-            # else:
-            #     playGround.modeOfGame = "play"
-
-
-            # rows = len(playGround.crosses)
-            # col = len(playGround.crosses[1])
-
-            # serialized_obj = serializers.serialize('json', [playGround, ])
-            # cross = Cross()
-            # cross2 = Cross()
-            # cross.rightCross = cross2
-            #
-            # foo = PlayGround()
-            # foo.crosses["1"] = cross
 
             channel_layer = get_channel_layer()
             i = 0;

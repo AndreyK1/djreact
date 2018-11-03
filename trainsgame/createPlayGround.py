@@ -150,6 +150,7 @@ def randomAddTrainToCross(playGround, trainName):
         playGround.crosses[randCrossKey].train = trainName
 
         train = Train()
+        train.number = trainName
         playGround.trains[trainName] = train
         train.lastCross = randCrossKey
 
@@ -166,5 +167,6 @@ def randomAddTrainToCross(playGround, trainName):
 # заполняем положения тележек
 def fillTrainsPositions(playGround):
     for train in playGround.trains:
+        print("train --- "+train)
         playGround.trains[train].makeMove(playGround)
 

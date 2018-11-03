@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 from djangorest.models import singleton
+from trainsgame.MovingMashine import MovingMashine
 
 
 @singleton
@@ -34,9 +35,6 @@ class Foo():
 @singleton
 class PlayGround():
 
-    # initialised = False
-    # crosses = []
-    # trains = []
     def __init__(self):
         self.trains = {}
         # self.crosses = {"1":77,"2":88,"3":99}
@@ -52,19 +50,6 @@ class PlayGround():
 
 # перекресток и его координаты
 class Cross:
-    # номер перекрестка
-    # numOfCross = 0
-    # coord = []
-    #
-    # upCross = 0
-    # dwCross = 0  # type: int
-    # leftCross = 0
-    # rightCross = 0
-    #
-    # upPath = 0
-    # dwPath = 0
-    # leftPath = 0
-    # rightPath = 0
 
     def __init__(self):
         # номер перекрестка
@@ -100,10 +85,122 @@ class Train:
         # self.movingPath = 0
         self.pathNum = 0
         self.coord = {"x":0, "y":0}
+        self.number = 0
 
     def makeMove(self, playGround):
-        print("makeMove train")
+        print("makeMove train "+ self.number)
+        print( "self.coord " +str(self.coord["x"])+ " --- "+ str(self.coord["y"]))
         path = playGround.pathes[self.pathNum]
+        # pathDiffX = path.coordBeg["x"] - self.coord["x"]
+        # if(pathDiffX==0):
+        #     pathDiffX = path.coordEnd["x"] - self.coord["x"]
+        #
+        # pathDiffY = path.coordBeg["y"] - self.coord["y"]
+        # if(pathDiffY==0):
+        #     pathDiffY = path.coordEnd["y"] - self.coord["y"]
+
+        moveSize = 5
+
+        # if(path.direction == "gor"):
+        #     if(path.coordEnd["x"] > path.coordBeg["x"]):
+        #         self.coord["x"] += moveSize
+        #     else:
+        #         self.coord["x"] -= moveSize
+        #
+        # if(path.direction == "ver"):
+        #     if(path.coordEnd["y"] > path.coordBeg["y"]):
+        #         self.coord["y"] += moveSize
+        #     else:
+        #         self.coord["y"] -= moveSize
+
+        if(path.direction == "gor"):
+            if(self.nextMove == "right"):
+                self.coord["x"] += moveSize
+            elif(self.nextMove == "left"):
+                self.coord["x"] -= moveSize
+            else:
+                raise Exception('path.direction error!')
+
+        elif(path.direction == "ver"):
+            if(self.nextMove == "down"):
+                self.coord["y"] += moveSize
+            elif(self.nextMove == "up"):
+                self.coord["y"] -= moveSize
+            else:
+                raise Exception('path.direction error!')
+        else:
+            raise Exception('path.direction error!')
+
+
+        # print("pathDiffX " + str(pathDiffX) + " --pathDiffY - " + str(pathDiffY))
+
+
+        path.whereNowTrain += moveSize
+
+        # if(pathDiffX != 0):
+        #     if(pathDiffX < 0):
+        #         self.coord["x"] -= moveSize
+        #     else:
+        #         self.coord["x"] += moveSize
+        # elif(pathDiffY != 0):
+        #     if (pathDiffY < 0):
+        #         self.coord["y"] -= moveSize
+        #     else:
+        #         self.coord["y"] += moveSize
+
+        print("self.coord " + str(self.coord["x"]) + " --- " + str(self.coord["y"]))
+        print("path.whereNowTrain " + str(path.whereNowTrain))
+        print("------------------------------------------")
+
+        if(path.whereNowTrain >= path.lengtOfPx):
+            print("clear whereNowTrain" +str(path.whereNowTrain))
+            path.whereNowTrain = 0
+            path.existTrainId = 0
+            self.chhoseDirection(playGround)
+
+
+
+    # выбираем свободное направление движения для тележки
+    def chhoseDirection(self, playGround):
+        print("chhoseDirection - " + str(self.number))
+        # train = playGround.trains[trainName]
+        # print("first move - " + self.nextMove)
+        lastCross = playGround.crosses[self.lastCross]
+        tryAtempts = 0
+        while(self.nowMoving==0 and tryAtempts<6):
+            tryAtempts = tryAtempts+1
+            if(self.nextMove == "up"):
+                nextPathNum = lastCross.upPath
+                nextCrossNum = lastCross.upCross
+            elif(self.nextMove == "down"):
+                nextPathNum = lastCross.dwPath
+                nextCrossNum = lastCross.dwCross
+            elif(self.nextMove == "left"):
+                nextPathNum = lastCross.leftPath
+                nextCrossNum = lastCross.leftCross
+            else:
+                nextPathNum = lastCross.rightPath
+                nextCrossNum = lastCross.rightCross
+
+
+            print("nextPathNum - "+str(nextPathNum))
+
+            nextPath = Path()
+            if(nextPathNum == 0):
+                nextPath.existTrainId = "no"
+            else:
+                nextPath = playGround.pathes[nextPathNum]
+
+
+            if(nextPath.existTrainId == 0):
+                nextPath.existTrainId = self.number
+                self.nowMoving = self.nextMove
+                self.pathNum = nextPath.numOfPath
+                nextCross = lastCross.setNextCrossToTrain(self, nextCrossNum)
+            else:
+                self.nextMove = MovingMashine().nextMove(self.nextMove)
+                print("next move - " + self.nextMove)
+
 
 
 
@@ -134,25 +231,5 @@ class Path:
         self.coordBeg = {"x": crosses[self.cross1].coord["x"], "y": crosses[self.cross1].coord["y"]}
         self.coordEnd = {"x": crosses[self.cross2].coord["x"], "y": crosses[self.cross2].coord["y"]}
 
-        # print("numberOfCross " + str(numberOfCross) + " numberOfCrossBefore "+ str(numberOfCrossBefore))
-        # if(moveY == 0):
-        #     self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
-        # else:
-        #     self.coordBeg = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]-moveY} #т.к. мы рисуем снизу вверх
-        #
-        # playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
-        # self.coordEnd = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
-
-        # добавление координат к перекресткам
-        # playGround.crosses[numberOfCross].coord["x"] = self.coordBeg["x"]
-        # playGround.crosses[numberOfCross].coord["y"] = self.coordBeg["y"]
-        # print("sfdsfds"+playGround.crosses[numberOfCross].numOfCross)
-
-        # playGround.crosses[numberOfCrossBefore].coord["x"] = 2
-        # playGround.crosses[numberOfCross].coord["y"] = 4
-
-        # playGround.lastCross["x"] = playGround.lastCross["x"] + moveX
-        # # playGround.lastCross["y"] = playGround.lastCross["y"] + moveY  #мы не передвигаем координату у
-        # self.coordEnd = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]+moveY}
 
 
