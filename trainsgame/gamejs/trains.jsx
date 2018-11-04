@@ -13,6 +13,7 @@ let gameScene, dungeon, id, treasure
 
 
 export default function setupTrainsScene(app) {
+    console.log("setupTrainsScene");
     //Make the game scene and add it to the stage
   gameScene = new Container();
   app.stage.addChild(gameScene);
@@ -46,8 +47,10 @@ export default function setupTrainsScene(app) {
 
 }
 
+let trainsSprites = {};
 //отрисовываем тележки
 function drawTrains(playGround){
+    console.log("drawTrains");
     let trains = playGround['trains']
     let pathes = playGround['pathes']
     for(let trainK in trains){
@@ -55,14 +58,23 @@ function drawTrains(playGround){
         let path = pathes[train['pathNum']]
 
         //рисуем тележку
-        let trainPic = new Sprite(id["blob.png"]);
+        let trainPic;
+        if(trainsSprites[trainK] == null) {
+            trainPic = new Sprite(id["blob.png"]);
+            gameScene.addChild(trainPic);
+        }else{
+            trainPic = trainsSprites[trainK]
+        }
+
         console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
         trainPic.x = train["coord"]["x"];
         trainPic.y = train["coord"]["y"];
         console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
-        gameScene.addChild(trainPic);
+        // gameScene.addChild(trainPic);
+        trainsSprites[trainK] = trainPic
 
-        renderer.render(stage);
+
+       // renderer.render(stage);
     }
 
 
@@ -72,10 +84,12 @@ let lastCrossX=0;
 
 //отрисовываем сетку дорог
 function drawPlayGround(playGround){
+
     //отрисовывается 1 раз
     if(lastCrossX!=0){
         return;
     }
+    console.log("playGround");
     lastCrossX = 1
   // console.log(playGround);
 
@@ -96,6 +110,7 @@ function drawPlayGround(playGround){
 }
 
 function  drawCross(cross, pathes) {
+    console.log("drawCross");
   // рсуем линии только направо и вверх
    if(cross['dwPath']!=0){
     let path = pathes[cross['dwPath']]
@@ -113,6 +128,7 @@ function  drawCross(cross, pathes) {
 }
 
 function drawPath(path) {
+    console.log("drawPath");
     var graphics = new Graphics()
     graphics.lineStyle(5, 0xFF0000);
 

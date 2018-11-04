@@ -99,7 +99,7 @@ class Train:
         # if(pathDiffY==0):
         #     pathDiffY = path.coordEnd["y"] - self.coord["y"]
 
-        moveSize = 5
+        moveSize = 20
 
         # if(path.direction == "gor"):
         #     if(path.coordEnd["x"] > path.coordBeg["x"]):
@@ -165,22 +165,33 @@ class Train:
         print("chhoseDirection - " + str(self.number))
         # train = playGround.trains[trainName]
         # print("first move - " + self.nextMove)
-        lastCross = playGround.crosses[self.lastCross]
+
+        # выбираем перекресток, если запуск то это нынешний, если нет то новый
+        changeCross = 0
+        if(self.nextCross!=0):
+            changeCross = playGround.crosses[self.nextCross]
+        else:
+            changeCross = playGround.crosses[self.lastCross]
         tryAtempts = 0
+        # сбрасываем
+        self.nowMoving = 0
         while(self.nowMoving==0 and tryAtempts<6):
+            print("tryAtempts "+str(tryAtempts) + " self.nextMove "+str(self.nextMove))
             tryAtempts = tryAtempts+1
+            nextPathNum = 0
+            nextCrossNum = 0
             if(self.nextMove == "up"):
-                nextPathNum = lastCross.upPath
-                nextCrossNum = lastCross.upCross
+                nextPathNum = changeCross.upPath
+                nextCrossNum = changeCross.upCross
             elif(self.nextMove == "down"):
-                nextPathNum = lastCross.dwPath
-                nextCrossNum = lastCross.dwCross
+                nextPathNum = changeCross.dwPath
+                nextCrossNum = changeCross.dwCross
             elif(self.nextMove == "left"):
-                nextPathNum = lastCross.leftPath
-                nextCrossNum = lastCross.leftCross
+                nextPathNum = changeCross.leftPath
+                nextCrossNum = changeCross.leftCross
             else:
-                nextPathNum = lastCross.rightPath
-                nextCrossNum = lastCross.rightCross
+                nextPathNum = changeCross.rightPath
+                nextCrossNum = changeCross.rightCross
 
 
             print("nextPathNum - "+str(nextPathNum))
@@ -191,12 +202,24 @@ class Train:
             else:
                 nextPath = playGround.pathes[nextPathNum]
 
-
+            print("nextPath.existTrainId - " + str(nextPath.existTrainId))
             if(nextPath.existTrainId == 0):
                 nextPath.existTrainId = self.number
                 self.nowMoving = self.nextMove
                 self.pathNum = nextPath.numOfPath
-                nextCross = lastCross.setNextCrossToTrain(self, nextCrossNum)
+                self.nextCross = nextCrossNum
+                if(self.nextCross==0):
+                    print("--self.nextCross==0--")
+                    # nextcross = lastCross.setNextCrossToTrain(self, nextCrossNum)
+                    # self.nextCross = changeCross.numOfCross
+                else:
+                    self.lastCross = changeCross.numOfCross
+                    # ищем новый перекресток для self.nextCross = changeCross.numOfCross
+
+
+                # self.nextCross = nextCross.setNextCrossToTrain(self, nextCrossNum)
+
+
             else:
                 self.nextMove = MovingMashine().nextMove(self.nextMove)
                 print("next move - " + self.nextMove)
