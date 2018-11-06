@@ -10,7 +10,7 @@ from channels.layers import get_channel_layer
 # первичный коннект, и обработка каждого коннекта из канала
 # from django.core import serializers
 
-from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes
+from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train
 
@@ -119,6 +119,8 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
             playGround = PlayGround()
 
+
+            # если управление игрой join/play/stop
             if (content["type"] == "join"):
                 name = content["name"]
                 # train = Train()
@@ -128,6 +130,12 @@ class ControlGameConsumer(JsonWebsocketConsumer):
                 playGround.modeOfGame = "play"
             elif (content["type"] == "stop"):
                 playGround.modeOfGame = "stop"
+
+            # если управление телегой moveTrainChange
+            if (content["type"] == "moveTrainChange"):
+                whereMove = content["whereMove"]
+                name = content["name"]
+                changeTrainDirection(playGround, whereMove, name)
 
 
     def disconnect(self, close_code):

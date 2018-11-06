@@ -114,20 +114,20 @@ class Train:
         #         self.coord["y"] -= moveSize
 
         if(path.direction == "gor"):
-            if(self.nextMove == "right"):
+            if(self.nowMoving == "right"):
                 self.coord["x"] += moveSize
-            elif(self.nextMove == "left"):
+            elif(self.nowMoving == "left"):
                 self.coord["x"] -= moveSize
             else:
-                raise Exception('path.direction error!')
+                raise Exception('path.direction error!' + self.nowMoving)
 
         elif(path.direction == "ver"):
-            if(self.nextMove == "down"):
+            if(self.nowMoving == "down"):
                 self.coord["y"] += moveSize
-            elif(self.nextMove == "up"):
+            elif(self.nowMoving == "up"):
                 self.coord["y"] -= moveSize
             else:
-                raise Exception('path.direction error!')
+                raise Exception('path.direction error!' + self.nowMoving)
         else:
             raise Exception('path.direction error!')
 

@@ -170,3 +170,10 @@ def fillTrainsPositions(playGround):
         print("train --- "+train)
         playGround.trains[train].makeMove(playGround)
 
+def changeTrainDirection(playGround, whereMove, name):
+    for train in playGround.trains:
+        if(train==name):
+            print("train changeTrainDirection --- "+train)
+            playGround.trains[train].nextMove = whereMove
+
+
