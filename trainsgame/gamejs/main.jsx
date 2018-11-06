@@ -26,12 +26,20 @@ let appTrain = new Application({
 document.body.appendChild(appTrain.view);
 
 //load an image and run the `setup` function when it's done
+// loader
+//   .add([
+//       {url: treasHuntJs, onComplete: setupTrainsSceneWrap}
+//       ])
+//       .on("progress", loadProgressHandler)
+//     .load(() => console.log("finish"));
+
 loader
   .add([
-      {url: treasHuntJs, onComplete: setupTrainsSceneWrap}
+      {url: treasHuntJs, onComplete: console.log("finish treasHuntJs")},
+      {url: arrows, onComplete: console.log("finish arrows")}
       ])
       .on("progress", loadProgressHandler)
-    .load(() => console.log("finish"));
+    .load(setupTrainsSceneWrap);
 
 
 function setupTrainsSceneWrap(){

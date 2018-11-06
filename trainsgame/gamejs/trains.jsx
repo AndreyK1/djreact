@@ -5,12 +5,13 @@ let resources = PIXI.loader.resources,
     Text = PIXI.Text,
     TextStyle = PIXI.TextStyle,
     Graphics = PIXI.Graphics,
+    Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache;
 
 
 let gameScene, dungeon, id, treasure
 
-
+let leftArrowTex, rightArrowTex, downArrowTex, upArrowTex
 
 export default function setupTrainsScene(app) {
     console.log("setupTrainsScene");
@@ -26,6 +27,27 @@ export default function setupTrainsScene(app) {
     //3. Create an optional alias called `id` for all the texture atlas
   //frame id textures.
   id = PIXI.loader.resources[treasHuntJs].textures;
+
+    createArrowTextures()
+    let leftArrow = new Sprite(leftArrowTex);
+    let rightArrow = new Sprite(rightArrowTex);
+    let downArrow = new Sprite(downArrowTex);
+    let upArrow = new Sprite(upArrowTex);
+    gameScene.addChild(leftArrow);
+    rightArrow.x = 0
+    rightArrow.y = 20
+    gameScene.addChild(rightArrow);
+    downArrow.x = 0
+    downArrow.y = 40
+    gameScene.addChild(downArrow);
+    upArrow.x = 0
+    upArrow.y = 60
+    gameScene.addChild(upArrow);
+
+    // let leftArrow2 = new Sprite(leftTextureArrows);
+    // leftArrow2.x = 0
+    // leftArrow2.y = 30
+    // // gameScene.addChild(leftArrow2);
 
   //Make the treasure box using the alias
   treasure = new Sprite(id["treasure.png"]);
@@ -47,8 +69,23 @@ export default function setupTrainsScene(app) {
 
 }
 
+function createArrowTextures(){
+      //create arrows texture
+    let mySpriteSheetImage =  PIXI.BaseTexture.fromImage(arrows);
+    let leftRectangle = new Rectangle(3, 22, 15, 10);
+    let rightRectangle = new Rectangle(20, 22, 15, 10);
+    let downRectangle = new Rectangle(40, 21, 10, 15);
+    let upRectangle = new Rectangle(53, 21, 10, 15);
+
+    leftArrowTex = new PIXI.Texture(mySpriteSheetImage, leftRectangle);
+    rightArrowTex = new PIXI.Texture(mySpriteSheetImage, rightRectangle);
+    downArrowTex = new PIXI.Texture(mySpriteSheetImage, downRectangle);
+    upArrowTex = new PIXI.Texture(mySpriteSheetImage, upRectangle);
+}
+
 let trainsSprites = {};
 let trainsTexts = {};
+let trainsArrows = {};
 //отрисовываем тележки
 function drawTrains(playGround){
     console.log("drawTrains");
@@ -61,6 +98,7 @@ function drawTrains(playGround){
         //рисуем тележку
         let trainPic;
         let textPic;
+        let arrowPic;
         if(trainsSprites[trainK] == null) {
             trainPic = new Sprite(id["blob.png"]);
             // textPic = new Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
@@ -72,11 +110,14 @@ function drawTrains(playGround){
               textPic = new Text(train["number"], style);
               textPic.x = 120;
               textPic.y = 120
-            gameScene.addChild(trainPic);
+              arrowPic = createArrowPic(120, 120, train["nextMove"])
+              gameScene.addChild(trainPic);
               gameScene.addChild(textPic);
+              gameScene.addChild(arrowPic);
         }else{
             trainPic = trainsSprites[trainK]
             textPic = trainsTexts[trainK]
+            arrowPic = trainsArrows[trainK]
         }
 
         console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
@@ -84,16 +125,42 @@ function drawTrains(playGround){
         trainPic.y = train["coord"]["y"];
         textPic.x = train["coord"]["x"]+15;
         textPic.y = train["coord"]["y"]+15;
+        arrowPic.x = train["coord"]["x"];
+        arrowPic.y = train["coord"]["y"]-15;
+        if(arrowPic.nextMove != train["nextMove"]){
+            arrowPic.parent.removeChild(arrowPic)
+            arrowPic = createArrowPic(train["coord"]["x"], train["coord"]["y"]-15, train["nextMove"])
+        }
         console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
         // gameScene.addChild(trainPic);
         trainsSprites[trainK] = trainPic
         trainsTexts[trainK] = textPic
+        trainsArrows[trainK] = arrowPic
 
 
        // renderer.render(stage);
     }
 
 
+}
+
+function createArrowPic(posX, posY, trainNextMove){
+    let arrow;
+    if(trainNextMove == "left"){
+      arrow = new Sprite(leftArrowTex);
+    }else if(trainNextMove == "right"){
+        arrow = new Sprite(rightArrowTex);
+    }else if(trainNextMove == "up"){
+        arrow = new Sprite(upArrowTex);
+    }else if(trainNextMove == "down"){
+        arrow = new Sprite(downArrowTex);
+    }
+    arrow.nextMove = trainNextMove
+    // let leftArrow = new Sprite(leftArrowTex);
+    arrow.x = posX
+    arrow.y = posY
+    gameScene.addChild(arrow);
+    return arrow;
 }
 
 let lastCrossX=0;
