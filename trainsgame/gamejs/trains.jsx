@@ -48,6 +48,7 @@ export default function setupTrainsScene(app) {
 }
 
 let trainsSprites = {};
+let trainsTexts = {};
 //отрисовываем тележки
 function drawTrains(playGround){
     console.log("drawTrains");
@@ -59,19 +60,34 @@ function drawTrains(playGround){
 
         //рисуем тележку
         let trainPic;
+        let textPic;
         if(trainsSprites[trainK] == null) {
             trainPic = new Sprite(id["blob.png"]);
+            // textPic = new Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
+              let style = new TextStyle({
+                fontFamily: "Futura",
+                fontSize: 22,
+                fill: "white"
+              });
+              textPic = new Text(train["number"], style);
+              textPic.x = 120;
+              textPic.y = 120
             gameScene.addChild(trainPic);
+              gameScene.addChild(textPic);
         }else{
             trainPic = trainsSprites[trainK]
+            textPic = trainsTexts[trainK]
         }
 
         console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
         trainPic.x = train["coord"]["x"];
         trainPic.y = train["coord"]["y"];
+        textPic.x = train["coord"]["x"]+15;
+        textPic.y = train["coord"]["y"]+15;
         console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
         // gameScene.addChild(trainPic);
         trainsSprites[trainK] = trainPic
+        trainsTexts[trainK] = textPic
 
 
        // renderer.render(stage);
