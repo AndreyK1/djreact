@@ -84,32 +84,28 @@ function drawTrainsBesideSocketResponse(){
     if(timerId){
         return;
     }
-    timerId = setInterval(timeoutDrawTrains, 100)
+     timerId = setInterval(timeoutDrawTrains, 100)
     //timeoutAlreadyRuns = true
 
 }
 
 function  timeoutDrawTrains() {
     for (let trainK in trainsSprites) {
-
-        let trainPic = trainsSprites[trainK]
-        console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
-        // trainPic.x += trainPic.nextX
-        // trainPic.y += trainPic.nextY
+        let trainContainer = trainsContainers[trainK]
+        let trainPic = trainContainer.getChildAt(0)
+        // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
                 //задаем направление движения между сокетными ответами
-        // let nextX =  0
-        // let nextY =  0
         let move = 2;
         if(trainPic.nowMoving == "up"){
-            trainPic.y -=move
+            trainContainer.y -=move
         }else if(trainPic.nowMoving == "down"){
-            trainPic.y +=move
+            trainContainer.y +=move
         }else if(trainPic.nowMoving == "left"){
-            trainPic.x -=move
+            trainContainer.x -=move
         }else if(trainPic.nowMoving == "right"){
-            trainPic.x +=move
+            trainContainer.x +=move
         }
-        console.log("trainPic.x " + trainPic.x + " trainPic.y " + trainPic.y)
+        console.log("trainContainer.x " + trainContainer.x + " trainContainer.y " + trainContainer.y)
 
     }
 }
@@ -132,6 +128,7 @@ function createArrowTextures(){
 let trainsSprites = {};
 let trainsTexts = {};
 let trainsArrows = {};
+let trainsContainers= {}
 //отрисовываем тележки
 function drawTrains(playGround){
     console.log("drawTrains");
@@ -145,8 +142,13 @@ function drawTrains(playGround){
         let trainPic;
         let textPic;
         let arrowPic;
-        if(trainsSprites[trainK] == null) {
-            trainPic = new Sprite(id["blob.png"]);
+
+        let trainContainer;
+        if(trainsContainers[trainK] == null) {
+              trainContainer = new Container();
+              gameScene.addChild(trainContainer);
+
+                trainPic = new Sprite(id["blob.png"]);
             // textPic = new Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
               let style = new TextStyle({
                 fontFamily: "Futura",
@@ -154,16 +156,53 @@ function drawTrains(playGround){
                 fill: "white"
               });
               textPic = new Text(train["number"], style);
-              textPic.x = 120;
-              textPic.y = 120
-              arrowPic = createArrowPic(120, 120, train["nextMove"])
-              gameScene.addChild(trainPic);
-              gameScene.addChild(textPic);
-              gameScene.addChild(arrowPic);
+              // textPic.x = 120;
+              // textPic.y = 120
+              arrowPic = createArrowPic(0, -15, train["nextMove"])
+
+
+
+
+              trainContainer.addChildAt(trainPic,0);
+              trainContainer.addChildAt(textPic,1);
+              trainContainer.addChildAt(arrowPic,2);
+
+
+
+              // console.log("trainContainer")
+              // console.log(trainContainer)
+
+                trainPic.x = 0;
+                trainPic.y = 0;
+
+                textPic.x = 15;
+                textPic.y = 15;
+                arrowPic.x = 0;
+                arrowPic.y = -15;
+
+              // trainPic = trainContainer.getChildAt(0)
+              // console.log("trainPic")
+              // console.log(trainPic)
+              // textPic = trainContainer.getChildAt(1)
+              // console.log("textPic")
+              // console.log(textPic)
+              //  arrowPic = trainContainer.getChildAt(2)
+              // console.log("arrowPic")
+              // console.log(arrowPic)
+              trainsContainers[trainK] = trainContainer
         }else{
-            trainPic = trainsSprites[trainK]
-            textPic = trainsTexts[trainK]
-            arrowPic = trainsArrows[trainK]
+            trainContainer = trainsContainers[trainK]
+            console.log("trainContainer")
+              console.log(trainContainer)
+
+            // console.log("trainContainer")
+            // console.log(trainContainer)
+            // trainPic = trainsSprites[trainK]
+            // textPic = trainsTexts[trainK]
+            // arrowPic = trainsArrows[trainK]
+            trainPic = trainContainer.getChildAt(0)
+            textPic = trainContainer.getChildAt(1)
+            arrowPic = trainContainer.getChildAt(2)
         }
 
         console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
@@ -190,16 +229,21 @@ function drawTrains(playGround){
         // trainPic.nextY = nextY
 
         trainPic.nowMoving = train["nowMoving"]
-        trainPic.x = train["coord"]["x"];
-        trainPic.y = train["coord"]["y"];
-
-        textPic.x = train["coord"]["x"]+15;
-        textPic.y = train["coord"]["y"]+15;
-        arrowPic.x = train["coord"]["x"];
-        arrowPic.y = train["coord"]["y"]-15;
+        trainContainer.x = train["coord"]["x"];
+        trainContainer.y = train["coord"]["y"];
+        // trainPic.x = train["coord"]["x"];
+        // trainPic.y = train["coord"]["y"];
+        //
+        // textPic.x = train["coord"]["x"]+15;
+        // textPic.y = train["coord"]["y"]+15;
+        // arrowPic.x = train["coord"]["x"];
+        // arrowPic.y = train["coord"]["y"]-15;
         if(arrowPic.nextMove != train["nextMove"]){
             arrowPic.parent.removeChild(arrowPic)
-            arrowPic = createArrowPic(train["coord"]["x"], train["coord"]["y"]-15, train["nextMove"])
+            // arrowPic = createArrowPic(train["coord"]["x"], train["coord"]["y"]-15, train["nextMove"])
+            arrowPic = createArrowPic(0, -15, train["nextMove"])
+            trainContainer.addChildAt(arrowPic,2)
+
         }
         console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
         // gameScene.addChild(trainPic);
@@ -229,7 +273,7 @@ function createArrowPic(posX, posY, trainNextMove){
     // let leftArrow = new Sprite(leftArrowTex);
     arrow.x = posX
     arrow.y = posY
-    gameScene.addChild(arrow);
+    //gameScene.addChild(arrow);
     return arrow;
 }
 
