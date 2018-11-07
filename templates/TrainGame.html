@@ -14,6 +14,7 @@
     <script>
 
          var text = "eeee"
+         let gameState = "stop"
         const webSocketBridge = new channels.WebSocketBridge();
         const webSocketBridgeStart = new channels.WebSocketBridge();
         const webSocketBridgeControl = new channels.WebSocketBridge();
@@ -71,6 +72,7 @@
         }
 
          function changeGame(textIn) {
+           gameState = textIn
             {#text = textIn + 1;#}
              console.log(textIn)
            var name =   document.getElementById("player_name").value

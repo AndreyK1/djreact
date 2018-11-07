@@ -65,9 +65,55 @@ export default function setupTrainsScene(app) {
       console.log(data)
       drawPlayGround(data)
       drawTrains(data)
+
+      drawTrainsBesideSocketResponse()
+
   })
 
 }
+
+// let timeoutAlreadyRuns = false
+let timerId = false
+//отрисовка поездов в промежутках м.д сокетными ответами - по инерции
+function drawTrainsBesideSocketResponse(){
+    console.log("gameState "+ gameState)
+    if(gameState != "play"){
+        clearInterval(timerId)
+        return;
+    }
+    if(timerId){
+        return;
+    }
+    timerId = setInterval(timeoutDrawTrains, 100)
+    //timeoutAlreadyRuns = true
+
+}
+
+function  timeoutDrawTrains() {
+    for (let trainK in trainsSprites) {
+
+        let trainPic = trainsSprites[trainK]
+        console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
+        // trainPic.x += trainPic.nextX
+        // trainPic.y += trainPic.nextY
+                //задаем направление движения между сокетными ответами
+        // let nextX =  0
+        // let nextY =  0
+        let move = 2;
+        if(trainPic.nowMoving == "up"){
+            trainPic.y -=move
+        }else if(trainPic.nowMoving == "down"){
+            trainPic.y +=move
+        }else if(trainPic.nowMoving == "left"){
+            trainPic.x -=move
+        }else if(trainPic.nowMoving == "right"){
+            trainPic.x +=move
+        }
+        console.log("trainPic.x " + trainPic.x + " trainPic.y " + trainPic.y)
+
+    }
+}
+
 
 function createArrowTextures(){
       //create arrows texture
@@ -121,8 +167,32 @@ function drawTrains(playGround){
         }
 
         console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
+        //задаем направление движения между сокетными ответами
+        // let nextX =  0
+        // let nextY =  0
+        // if((trainPic.x - train["coord"]["x"])!=0){
+        //     if((trainPic.x - train["coord"]["x"])>0){
+        //         nextX = 1
+        //     }else{
+        //         nextX = -1
+        //     }
+        // }
+        // if((trainPic.y - train["coord"]["y"])!=0){
+        //     if((trainPic.y - train["coord"]["y"])>0){
+        //         nextY = 1
+        //     }else{
+        //         nextY = -1
+        //     }
+        // }
+        // console.log("trainPic.x "+ trainPic.x + " trainPic.y " + trainPic.y + " train[\"coord\"][\"x\"] "+ train["coord"]["x"] + " train[\"coord\"][\"y\"] "+train["coord"]["y"])
+        // console.log("nextX "+ nextX + " nextY "+ nextY)
+        // trainPic.nextX = nextX
+        // trainPic.nextY = nextY
+
+        trainPic.nowMoving = train["nowMoving"]
         trainPic.x = train["coord"]["x"];
         trainPic.y = train["coord"]["y"];
+
         textPic.x = train["coord"]["x"]+15;
         textPic.y = train["coord"]["y"]+15;
         arrowPic.x = train["coord"]["x"];
