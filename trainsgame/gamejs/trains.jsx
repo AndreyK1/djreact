@@ -84,18 +84,23 @@ function drawTrainsBesideSocketResponse(){
     if(timerId){
         return;
     }
-     timerId = setInterval(timeoutDrawTrains, 100)
+    let sleepSec = playGroundGl['sleepSec']
+    let moveSize = playGroundGl['moveSize']
+    let moveInOnePeriod = moveSize/(sleepSec*1000/100)  //сколько пикселей за однут итерацию . кратно 10
+     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod)}, 100)
     //timeoutAlreadyRuns = true
 
 }
 
-function  timeoutDrawTrains() {
+function  timeoutDrawTrains(moveInOnePeriod) {
     for (let trainK in trainsContainers) {
         let trainContainer = trainsContainers[trainK]
         let trainPic = trainContainer.getChildAt(0)
         // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
         //задаем направление движения между сокетными ответами
-        let move = 2;
+        console.log("moveInOnePeriod " +  moveInOnePeriod)
+        let move = moveInOnePeriod
+        // let move = 2;
         if(trainPic.nowMoving == "up"){
             trainContainer.y -=move
         }else if(trainPic.nowMoving == "down"){
@@ -125,9 +130,11 @@ function createArrowTextures(){
     upArrowTex = new PIXI.Texture(mySpriteSheetImage, upRectangle);
 }
 
+let playGroundGl
 let trainsContainers= {}
 //отрисовываем тележки
 function drawTrains(playGround){
+    playGroundGl = playGround
     console.log("drawTrains");
     let trains = playGround['trains']
     let pathes = playGround['pathes']

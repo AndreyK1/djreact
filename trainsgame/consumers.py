@@ -42,8 +42,11 @@ class StartGameConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None, **kwargs):
 
+
             createPlayGr()
             playGround = PlayGround()
+            playGround.sleepSec = 1
+            playGround.moveSize = 20
 
             # text_data = "play"
             text_data = text_data.replace("\"", "")
@@ -68,7 +71,7 @@ class StartGameConsumer(WebsocketConsumer):
                 fillTrainsPositions(playGround)
 
                 # asyncio.sleep(1)
-                time.sleep(1)
+                time.sleep(playGround.sleepSec)
 
                 serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
 

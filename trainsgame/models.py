@@ -44,6 +44,9 @@ class PlayGround():
         self.croscrossesNum = []
         self.modeOfGame = "stop"
         self.started = False
+        self.sleepSec = 0  #секунд между перемещ тележки
+        self.moveSize = 0 #перемещ тележки
+
 
         self.lastCross = {"x":0, "y":0} #координаты последенего отмеченного в путях перекрестка
         self.offSet = {"x":10, "y":10}  #первоначальные оординаты отступа путей на площадке
@@ -99,7 +102,7 @@ class Train:
         # if(pathDiffY==0):
         #     pathDiffY = path.coordEnd["y"] - self.coord["y"]
 
-        moveSize = 20
+        # moveSize = 20
 
         # if(path.direction == "gor"):
         #     if(path.coordEnd["x"] > path.coordBeg["x"]):
@@ -115,17 +118,17 @@ class Train:
 
         if(path.direction == "gor"):
             if(self.nowMoving == "right"):
-                self.coord["x"] += moveSize
+                self.coord["x"] += playGround.moveSize
             elif(self.nowMoving == "left"):
-                self.coord["x"] -= moveSize
+                self.coord["x"] -= playGround.moveSize
             else:
                 raise Exception('path.direction error!' + self.nowMoving)
 
         elif(path.direction == "ver"):
             if(self.nowMoving == "down"):
-                self.coord["y"] += moveSize
+                self.coord["y"] += playGround.moveSize
             elif(self.nowMoving == "up"):
-                self.coord["y"] -= moveSize
+                self.coord["y"] -= playGround.moveSize
             else:
                 raise Exception('path.direction error!' + self.nowMoving)
         else:
@@ -135,7 +138,7 @@ class Train:
         # print("pathDiffX " + str(pathDiffX) + " --pathDiffY - " + str(pathDiffY))
 
 
-        path.whereNowTrain += moveSize
+        path.whereNowTrain += playGround.moveSize
 
         # if(pathDiffX != 0):
         #     if(pathDiffX < 0):
