@@ -63,6 +63,7 @@ export default function setupTrainsScene(app) {
     // console.log(JSON.parse(action.event.bi))
       let data = JSON.parse(action.event.bi)
       console.log(data)
+      gameState = data.modeOfGame
       drawPlayGround(data)
       drawTrains(data)
 
