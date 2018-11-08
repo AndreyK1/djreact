@@ -12,7 +12,7 @@ from channels.layers import get_channel_layer
 
 from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection
 from trainsgame.makeMovings import makeFirstMovings
-from trainsgame.models import PlayGround, Foo, Cross, Train
+from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
 
 
 class FirstConnectConsumer(AsyncJsonWebsocketConsumer):
@@ -42,21 +42,30 @@ class StartGameConsumer(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None, **kwargs):
 
+            text_data = text_data.replace("\"", "")
 
-            createPlayGr()
-            playGround = PlayGround()
+            playGround = PlayGroundList().get(int(text_data))
+
+            createPlayGr(playGround)
+
+            # playGroundList = PlayGroundList()
+            #
+            # playGround = playGroundList.get(1)
+
+
+            # playGround = PlayGround()
             playGround.sleepSec = 1
             playGround.moveSize = 20
 
             # text_data = "play"
-            text_data = text_data.replace("\"", "")
+
 
             print("-text_data-"+text_data)
 
             if(playGround.started):
                 return ;
             else:
-                makeFirstMovings()
+                makeFirstMovings(playGround)
                 playGround.started = True
 
             channel_layer = get_channel_layer()
@@ -120,8 +129,12 @@ class ControlGameConsumer(JsonWebsocketConsumer):
             # print("-text_data-"+content)
             print("-text_data.type-" + content["type"])
 
-            playGround = PlayGround()
+            arena_num = int(content["arena_num"])
 
+            # playGroundList = PlayGroundList()
+            #
+            # playGround = playGroundList.get(1)
+            playGround = PlayGroundList().get(arena_num)
 
             # если управление игрой join/play/stop
             if (content["type"] == "join"):
@@ -139,6 +152,8 @@ class ControlGameConsumer(JsonWebsocketConsumer):
                 whereMove = content["whereMove"]
                 name = content["name"]
                 changeTrainDirection(playGround, whereMove, name)
+
+
 
 
     def disconnect(self, close_code):

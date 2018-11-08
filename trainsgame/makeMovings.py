@@ -1,11 +1,14 @@
 import random
 
 from trainsgame.MovingMashine import MovingMashine
-from trainsgame.models import PlayGround, Train, Cross, Path
+from trainsgame.models import PlayGround, Train, Cross, Path, PlayGroundList
 
 
-def makeFirstMovings():
-    playGround = PlayGround()
+def makeFirstMovings(playGround):
+    # playGround = PlayGround()
+    # playGroundList = PlayGroundList()
+    #
+    # playGround = playGroundList.get(1)
 
     if (playGround.started):
         return;

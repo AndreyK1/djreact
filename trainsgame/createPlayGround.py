@@ -1,10 +1,14 @@
 import random
 
-from trainsgame.models import PlayGround, Cross, Path, Train
+from trainsgame.models import PlayGround, Cross, Path, Train, PlayGroundList
 
 
-def createPlayGr():
-    playGround = PlayGround()
+def createPlayGr(playGround):
+    # playGroundList = PlayGroundList()
+    #
+    # playGround = playGroundList.get(1)
+
+    # playGround = PlayGround()
     if(playGround.initialised):
         print("------playGround already initialised-------!!!!!")
         return;

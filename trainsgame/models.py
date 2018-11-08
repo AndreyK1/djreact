@@ -32,10 +32,11 @@ class Foo():
         self.initialised = False
 
 
-@singleton
+# @singleton
 class PlayGround():
 
     def __init__(self):
+        self.arena = 0
         self.trains = {}
         # self.crosses = {"1":77,"2":88,"3":99}
         self.crosses = {}
@@ -47,9 +48,27 @@ class PlayGround():
         self.sleepSec = 0  #секунд между перемещ тележки
         self.moveSize = 0 #перемещ тележки
 
-
         self.lastCross = {"x":0, "y":0} #координаты последенего отмеченного в путях перекрестка
         self.offSet = {"x":10, "y":10}  #первоначальные оординаты отступа путей на площадке
+
+
+@singleton
+class PlayGroundList():
+
+    def __init__(self):
+        self.PlayGrounds = {}
+
+    def get(self, num):
+        # if self.PlayGrounds[num]:
+        if num in self.PlayGrounds:
+            return self.PlayGrounds[num]
+        else:
+            playGround = PlayGround()
+            playGround.arena = num
+            self.PlayGrounds[num] = playGround
+            return self.PlayGrounds[num]
+
+
 
 # перекресток и его координаты
 class Cross:

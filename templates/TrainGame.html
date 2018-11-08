@@ -62,24 +62,29 @@
                  return;
              }
              var name =   document.getElementById("player_name").value
-           webSocketBridgeControl.send({"type":"moveTrainChange", "name":name, "whereMove":whereMove})
+             var arena_num =   document.getElementById("arena_num").value
+           webSocketBridgeControl.send({"type":"moveTrainChange", "name":name, "whereMove":whereMove, "arena_num":arena_num})
          }
 
          function startGame(textIn) {
             {#text = textIn + 1;#}
              console.log(textIn)
-           webSocketBridgeStart.send(textIn)
+             var arena_num =   document.getElementById("arena_num").value
+           webSocketBridgeStart.send(arena_num)
         }
 
          function changeGame(textIn) {
            gameState = textIn
             {#text = textIn + 1;#}
+             var arena_num =   document.getElementById("arena_num").value
              console.log(textIn)
            var name =   document.getElementById("player_name").value
-           webSocketBridgeControl.send({"type":textIn, "name":name})
+           webSocketBridgeControl.send({"type":textIn, "name":name, "arena_num":arena_num })
         }
     </script>
 
+    <button onclick="changeGame('clear')">clearGame</button><br/>
+    <input id="arena_num" type="text" />Номер арены <br/>
     <input id="player_name" type="text" />Имя <br/>
     <button onclick="changeGame('join')">joinGame</button>
     <button onclick="startGame('start')">startGame</button>

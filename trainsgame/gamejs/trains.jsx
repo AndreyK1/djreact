@@ -77,7 +77,7 @@ export default function setupTrainsScene(app) {
 let timerId = false
 //отрисовка поездов в промежутках м.д сокетными ответами - по инерции
 function drawTrainsBesideSocketResponse(){
-    console.log("gameState "+ gameState)
+    //console.log("gameState "+ gameState)
     if(gameState != "play"){
         clearInterval(timerId)
         return;
@@ -99,7 +99,7 @@ function  timeoutDrawTrains(moveInOnePeriod) {
         let trainPic = trainContainer.getChildAt(0)
         // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
         //задаем направление движения между сокетными ответами
-        console.log("moveInOnePeriod " +  moveInOnePeriod)
+        //console.log("moveInOnePeriod " +  moveInOnePeriod)
         let move = moveInOnePeriod
         // let move = 2;
         if(trainPic.nowMoving == "up"){
@@ -111,7 +111,7 @@ function  timeoutDrawTrains(moveInOnePeriod) {
         }else if(trainPic.nowMoving == "right"){
             trainContainer.x +=move
         }
-        console.log("trainContainer.x " + trainContainer.x + " trainContainer.y " + trainContainer.y)
+        //console.log("trainContainer.x " + trainContainer.x + " trainContainer.y " + trainContainer.y)
 
     }
 }
