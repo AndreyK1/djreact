@@ -79,6 +79,9 @@
              var arena_num =   document.getElementById("arena_num").value
              console.log(textIn)
            var name =   document.getElementById("player_name").value
+             if(textIn =="join"){
+                 webSocketBridge.send(arena_num)
+             }
            webSocketBridgeControl.send({"type":textIn, "name":name, "arena_num":arena_num })
         }
     </script>

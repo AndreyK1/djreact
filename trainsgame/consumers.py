@@ -17,9 +17,15 @@ from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
 
 class FirstConnectConsumer(AsyncJsonWebsocketConsumer):
 
-    async def connect(self):
+    async def connect(self,text_data=None):
         await self.accept()
-        await self.channel_layer.group_add("trains", self.channel_name)
+        # await self.channel_layer.group_add("trains", self.channel_name)
+        # print("----------------------Added " +self.channel_name+" channel to trains")
+
+
+    async def receive(self,text_data=None):
+        text_data = text_data.replace("\"", "")
+        await self.channel_layer.group_add(str(text_data), self.channel_name)
         print("----------------------Added " +self.channel_name+" channel to trains")
 
     async def disconnect(self, close_code):
@@ -88,7 +94,8 @@ class StartGameConsumer(WebsocketConsumer):
 
                 async_to_sync(channel_layer.group_send)(
                 # channel_layer.group_send(
-                    "trains", {"type": "user.trains",
+                #     "trains", {"type": "user.trains",
+                    str(playGround.arena), {"type": "user.trains",
                                "event": {"bi":serialized_obj, "ku": "dsfsdf"},
                                 "text": {"bi":text_data, "ku": str(i)}
                            })
@@ -120,6 +127,10 @@ class ControlGameConsumer(JsonWebsocketConsumer):
     # def receive(self, text_data=None, bytes_data=None, **kwargs):
     def receive_json(self, content):
 
+            # self.channel_layer.group_add("trains", self.channel_name)
+            # self.channel_layer.group_add("trains", self.channel_name)
+            # print("----------------------Added " +self.channel_name+" channel to trains")
+
             print("ControlGameConsumer")
 
             # text_data = "play"
@@ -138,6 +149,8 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
             # если управление игрой join/play/stop
             if (content["type"] == "join"):
+                # self.channel_layer.group_add(str(arena_num), self.channel_name)
+                # print("----------------------Added " +self.channel_name+" channel to trains")
                 name = content["name"]
                 # train = Train()
                 playGround.trains[name] = name
