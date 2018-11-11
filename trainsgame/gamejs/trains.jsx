@@ -54,12 +54,12 @@ export default function setupTrainsScene(app) {
     // // gameScene.addChild(leftArrow2);
 
   //Make the treasure box using the alias
-  treasure = new Sprite(id["treasure.png"]);
+  // treasure = new Sprite(id["treasure.png"]);
 
     //Position the treasure next to the right edge of the canvas
-  treasure.x = app.stage.width - treasure.width - 48;
-  treasure.y = app.stage.height / 2 - treasure.height / 2;
-  gameScene.addChild(treasure);
+  // treasure.x = app.stage.width - treasure.width - 48;
+  // treasure.y = app.stage.height / 2 - treasure.height / 2;
+  // gameScene.addChild(treasure);
 
   // регистрируем отрисовку по сокетному событию
   webSocketBridge.listen(function(action, stream) {
@@ -70,6 +70,7 @@ export default function setupTrainsScene(app) {
       gameState = data.modeOfGame
       drawPlayGround(data)
       drawTrains(data)
+      drawTressures(data)
 
       drawTrainsBesideSocketResponse()
 
@@ -146,7 +147,6 @@ function createArrowTextures(){
 //     redCube = new PIXI.Texture(mySpriteSheetImage, redRectangle);
 //
 // }
-
 
 
 let playGroundGl
@@ -234,6 +234,23 @@ function drawTrains(playGround){
       // renderer.render(stage);
     }
 
+
+}
+
+let tressPictures = {}
+function drawTressures(playGround){
+    let treassures = playGround['treassures']
+
+    let tressPic
+    for(let treassK in treassures){
+        let treassure = treassures[treassK]
+        tressPic = new Sprite(id["treasure.png"]);
+        tressPic.x = treassure["coord"]["x"];
+        tressPic.y = treassure["coord"]["y"];
+
+        gameScene.addChild(tressPic);
+        tressPictures[treassK] = tressPic
+    }
 
 }
 

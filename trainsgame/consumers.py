@@ -51,6 +51,8 @@ class StartGameConsumer(WebsocketConsumer):
             text_data = text_data.replace("\"", "")
 
             playGround = PlayGroundList().get(int(text_data))
+            playGround.sleepSec = 1
+            playGround.moveSize = 20
 
             createPlayGr(playGround)
 
@@ -60,8 +62,7 @@ class StartGameConsumer(WebsocketConsumer):
 
 
             # playGround = PlayGround()
-            playGround.sleepSec = 1
-            playGround.moveSize = 20
+
 
             # text_data = "play"
 

@@ -41,6 +41,7 @@ class PlayGround():
         # self.crosses = {"1":77,"2":88,"3":99}
         self.crosses = {}
         self.pathes = {}
+        self.treassures = {}
         self.initialised = False
         self.croscrossesNum = []
         self.modeOfGame = "stop"
@@ -115,27 +116,6 @@ class Train:
         print("makeMove train "+ self.number)
         print( "self.coord " +str(self.coord["x"])+ " --- "+ str(self.coord["y"]))
         path = playGround.pathes[self.pathNum]
-        # pathDiffX = path.coordBeg["x"] - self.coord["x"]
-        # if(pathDiffX==0):
-        #     pathDiffX = path.coordEnd["x"] - self.coord["x"]
-        #
-        # pathDiffY = path.coordBeg["y"] - self.coord["y"]
-        # if(pathDiffY==0):
-        #     pathDiffY = path.coordEnd["y"] - self.coord["y"]
-
-        # moveSize = 20
-
-        # if(path.direction == "gor"):
-        #     if(path.coordEnd["x"] > path.coordBeg["x"]):
-        #         self.coord["x"] += moveSize
-        #     else:
-        #         self.coord["x"] -= moveSize
-        #
-        # if(path.direction == "ver"):
-        #     if(path.coordEnd["y"] > path.coordBeg["y"]):
-        #         self.coord["y"] += moveSize
-        #     else:
-        #         self.coord["y"] -= moveSize
 
         if(path.direction == "gor"):
             if(self.nowMoving == "right"):
@@ -155,22 +135,8 @@ class Train:
         else:
             raise Exception('path.direction error!')
 
-
-        # print("pathDiffX " + str(pathDiffX) + " --pathDiffY - " + str(pathDiffY))
-
-
         path.whereNowTrain += playGround.moveSize
 
-        # if(pathDiffX != 0):
-        #     if(pathDiffX < 0):
-        #         self.coord["x"] -= moveSize
-        #     else:
-        #         self.coord["x"] += moveSize
-        # elif(pathDiffY != 0):
-        #     if (pathDiffY < 0):
-        #         self.coord["y"] -= moveSize
-        #     else:
-        #         self.coord["y"] += moveSize
 
         print("self.coord " + str(self.coord["x"]) + " --- " + str(self.coord["y"]))
         print("path.whereNowTrain " + str(path.whereNowTrain))
@@ -285,3 +251,12 @@ class Path:
 
 
 
+# бабло
+class Tressure:
+    def __init__(self):
+        # номер перекрестка
+        self.color = 0
+        self.sum = 0
+        self.picked = 0
+        self.collected = 0
+        self.coord  = {"x":0, "y":0}
