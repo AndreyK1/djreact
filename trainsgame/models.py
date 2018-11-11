@@ -108,8 +108,10 @@ class Train:
         self.pathNum = 0
         self.coord = {"x":0, "y":0}
         self.number = 0
+        self.moveByChoise = 0 #сменили путь туда куда выбрали, или пришлось
 
     def makeMove(self, playGround):
+        self.moveByChoise = 0
         print("makeMove train "+ self.number)
         print( "self.coord " +str(self.coord["x"])+ " --- "+ str(self.coord["y"]))
         path = playGround.pathes[self.pathNum]
@@ -230,6 +232,11 @@ class Train:
                 self.nowMoving = self.nextMove
                 self.pathNum = nextPath.numOfPath
                 self.nextCross = nextCrossNum
+                if(tryAtempts ==1):
+                    self.moveByChoise = True
+                else:
+                    self.moveByChoise = False
+
                 if(self.nextCross==0):
                     print("--self.nextCross==0--")
                     # nextcross = lastCross.setNextCrossToTrain(self, nextCrossNum)

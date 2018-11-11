@@ -87,8 +87,8 @@
     </script>
 
     <button onclick="changeGame('clear')">clearGame</button><br/>
-    <input id="arena_num" type="text" />Номер арены <br/>
-    <input id="player_name" type="text" />Имя <br/>
+    <input id="arena_num" type="text" value="1" />Номер арены <br/>
+    <input id="player_name" type="text" value="a1" />Имя <br/>
     <button onclick="changeGame('join')">joinGame</button>
     <button onclick="startGame('start')">startGame</button>
     <button onclick="changeGame('play')">playGame</button>
@@ -106,6 +106,7 @@
         animalsJs = "{% static 'images/animals.json' %}"
         catImg = "{% static 'images/cat.png' %}"
         tileset = "{% static 'images/tileset.png' %}"
+        cubes = "{% static 'images/cubes.jpg' %}"
     </script>
 
 

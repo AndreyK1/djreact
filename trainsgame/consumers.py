@@ -166,7 +166,10 @@ class ControlGameConsumer(JsonWebsocketConsumer):
                 name = content["name"]
                 changeTrainDirection(playGround, whereMove, name)
 
-
+            # очишаем все PlayGrounds
+            # TODO сделать очистку конкретных площадок
+            if (content["type"] == "clear"):
+                PlayGroundList().PlayGrounds = {}
 
 
     def disconnect(self, close_code):

@@ -8,10 +8,13 @@ let resources = PIXI.loader.resources,
     Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache;
 
+var renderer = PIXI.autoDetectRenderer(800, 600);
+
 
 let gameScene, dungeon, id, treasure
 
 let leftArrowTex, rightArrowTex, downArrowTex, upArrowTex
+// let greenCube, redCube
 
 export default function setupTrainsScene(app) {
     console.log("setupTrainsScene");
@@ -29,20 +32,21 @@ export default function setupTrainsScene(app) {
   id = PIXI.loader.resources[treasHuntJs].textures;
 
     createArrowTextures()
-    let leftArrow = new Sprite(leftArrowTex);
-    let rightArrow = new Sprite(rightArrowTex);
-    let downArrow = new Sprite(downArrowTex);
-    let upArrow = new Sprite(upArrowTex);
-    gameScene.addChild(leftArrow);
-    rightArrow.x = 0
-    rightArrow.y = 20
-    gameScene.addChild(rightArrow);
-    downArrow.x = 0
-    downArrow.y = 40
-    gameScene.addChild(downArrow);
-    upArrow.x = 0
-    upArrow.y = 60
-    gameScene.addChild(upArrow);
+    // createColoredCubes()
+    // let leftArrow = new Sprite(leftArrowTex);
+    // let rightArrow = new Sprite(rightArrowTex);
+    // let downArrow = new Sprite(downArrowTex);
+    // let upArrow = new Sprite(upArrowTex);
+    // gameScene.addChild(leftArrow);
+    // rightArrow.x = 0
+    // rightArrow.y = 20
+    // gameScene.addChild(rightArrow);
+    // downArrow.x = 0
+    // downArrow.y = 40
+    // gameScene.addChild(downArrow);
+    // upArrow.x = 0
+    // upArrow.y = 60
+    // gameScene.addChild(upArrow);
 
     // let leftArrow2 = new Sprite(leftTextureArrows);
     // leftArrow2.x = 0
@@ -131,6 +135,20 @@ function createArrowTextures(){
     upArrowTex = new PIXI.Texture(mySpriteSheetImage, upRectangle);
 }
 
+
+// function createColoredCubes(){
+//       //create arrows texture
+//     let mySpriteSheetImage =  PIXI.BaseTexture.fromImage(cubes);
+//     let greenRectangle = new Rectangle(0, 0, 40, 40);
+//     let redRectangle = new Rectangle(160, 0, 40, 40);
+//
+//     greenCube = new PIXI.Texture(mySpriteSheetImage, greenRectangle);
+//     redCube = new PIXI.Texture(mySpriteSheetImage, redRectangle);
+//
+// }
+
+
+
 let playGroundGl
 let trainsContainers= {}
 //отрисовываем тележки
@@ -154,6 +172,9 @@ function drawTrains(playGround){
               gameScene.addChild(trainContainer);
 
                 trainPic = new Sprite(id["blob.png"]);
+                trainPic.tint = 0xFFFFFF;
+                // timerId = setTimeout(()=> {console.log("trainPic.tint"+trainPic.tint); trainPic.tint = 0xff0000; }, 2000)
+
             // textPic = new Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
               let style = new TextStyle({
                 fontFamily: "Futura",
@@ -186,10 +207,27 @@ function drawTrains(playGround){
         trainPic.nowMoving = train["nowMoving"]
         trainContainer.x = train["coord"]["x"];
         trainContainer.y = train["coord"]["y"];
+
+        //проверяемвыбор пути
+        // console.log("moveByChoise " +train["moveByChoise"])
+        // trainPic.tint = 0xff0000;
+        console.log("moveByChoise true -" +train["moveByChoise"])
+        if(train["moveByChoise"] === true){
+            console.log("moveByChoise true -" +train["moveByChoise"])
+          trainPic.tint = 0x008000;
+        }else if(train["moveByChoise"] === false){
+            console.log("moveByChoise false - " +train["moveByChoise"])
+            trainPic.tint = 0xff0000;
+        }
+        setTimeout(()=> {console.log("trainPic.tint"+trainPic.tint); trainPic.tint = 0xFFFFFF; }, 500)
+
         if(arrowPic.nextMove != train["nextMove"]){
             arrowPic.parent.removeChild(arrowPic)
             arrowPic = createArrowPic(0, -15, train["nextMove"])
+
+            // moveByChoise
             trainContainer.addChildAt(arrowPic,2)
+            //проверяемвыбор пути
 
         }
         // console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
