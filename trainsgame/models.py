@@ -110,6 +110,7 @@ class Train:
         self.coord = {"x":0, "y":0}
         self.number = 0
         self.moveByChoise = 0 #сменили путь туда куда выбрали, или пришлось
+        self.pickedTress = 0
 
     def makeMove(self, playGround):
         self.moveByChoise = 0
@@ -141,6 +142,9 @@ class Train:
         print("self.coord " + str(self.coord["x"]) + " --- " + str(self.coord["y"]))
         print("path.whereNowTrain " + str(path.whereNowTrain))
         print("------------------------------------------")
+
+        # проверяем на контакт с деньгами
+        self.checkContactWithTressure(playGround)
 
         if(path.whereNowTrain >= path.lengtOfPx):
             print("clear whereNowTrain" +str(path.whereNowTrain))
@@ -219,7 +223,16 @@ class Train:
                 self.nextMove = MovingMashine().nextMove(self.nextMove)
                 print("next move - " + self.nextMove)
 
+    def checkContactWithTressure(self, playGround):
+        if(self.pickedTress != 0):
+            return   #сейчас можно брать только одно сокровище
 
+        tressures = playGround.treassures
+
+        for tressK in tressures:
+            if(self.coord["x"] == tressures[tressK].coord["x"] and self.coord["y"] == tressures[tressK].coord["y"]):
+                tressures[tressK].picked = self.number
+                self.pickedTress = tressK
 
 
 

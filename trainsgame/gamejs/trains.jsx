@@ -69,8 +69,9 @@ export default function setupTrainsScene(app) {
       console.log(data)
       gameState = data.modeOfGame
       drawPlayGround(data)
+      drawTressuresFirstTime(data)
       drawTrains(data)
-      drawTressures(data)
+
 
       drawTrainsBesideSocketResponse()
 
@@ -151,6 +152,7 @@ function createArrowTextures(){
 
 let playGroundGl
 let trainsContainers= {}
+let tressPictures = {}
 //отрисовываем тележки
 function drawTrains(playGround){
     playGroundGl = playGround
@@ -230,6 +232,18 @@ function drawTrains(playGround){
             //проверяемвыбор пути
 
         }
+
+
+        //проверяем новые сокровища
+        if(train["pickedTress"] != 0){
+            if(!trainPic.pickedTress){
+                console.log("---------pickedTress------------")
+                let tressPic = tressPictures[train["pickedTress"]]
+                tressPic.x = 15
+                tressPic.y = 0
+                trainContainer.addChildAt(tressPic,3);
+            }
+        }
         // console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
       // renderer.render(stage);
     }
@@ -237,14 +251,21 @@ function drawTrains(playGround){
 
 }
 
-let tressPictures = {}
-function drawTressures(playGround){
+
+function drawTressuresFirstTime(playGround){
+
     let treassures = playGround['treassures']
 
     let tressPic
+    // if(tressPictures[] != null) {
+    if(Object.keys(tressPictures).length !== 0){
+        // console.log("----------------tressPictures is not empty----")
+        return;
+    }
     for(let treassK in treassures){
         let treassure = treassures[treassK]
         tressPic = new Sprite(id["treasure.png"]);
+
         tressPic.x = treassure["coord"]["x"];
         tressPic.y = treassure["coord"]["y"];
 
