@@ -42,6 +42,7 @@ class PlayGround():
         self.crosses = {}
         self.pathes = {}
         self.treassures = {}
+        self.depos = {}
         self.initialised = False
         self.croscrossesNum = []
         self.modeOfGame = "stop"
@@ -273,3 +274,12 @@ class Tressure:
         self.picked = 0
         self.collected = 0
         self.coord  = {"x":0, "y":0}
+
+
+# депо куда сокровища тащить
+class Depo:
+    def __init__(self):
+        # номер перекрестка
+        self.color = 0
+        self.coord  = {"x":0, "y":0}
+        self.cross = 0

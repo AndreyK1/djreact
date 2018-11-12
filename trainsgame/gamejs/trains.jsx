@@ -69,8 +69,10 @@ export default function setupTrainsScene(app) {
       console.log(data)
       gameState = data.modeOfGame
       drawPlayGround(data)
+      drawDepos(data)
       drawTressuresFirstTime(data)
       drawTrains(data)
+
 
 
       drawTrainsBesideSocketResponse()
@@ -153,6 +155,7 @@ function createArrowTextures(){
 let playGroundGl
 let trainsContainers= {}
 let tressPictures = {}
+let depoPictures = {}
 //отрисовываем тележки
 function drawTrains(playGround){
     playGroundGl = playGround
@@ -233,7 +236,6 @@ function drawTrains(playGround){
 
         }
 
-
         //проверяем новые сокровища
         if(train["pickedTress"] != 0){
             if(!trainPic.pickedTress){
@@ -251,6 +253,27 @@ function drawTrains(playGround){
 
 }
 
+
+
+function drawDepos(playGround){
+    if(Object.keys(depoPictures).length !== 0){
+        // console.log("----------------tressPictures is not empty----")
+        return;
+    }
+    let depos = playGround['depos']
+    let depoPic
+
+    for(let depoK in depos){
+        let depo = depos[depoK]
+        depoPic = new Sprite(id["door.png"]);
+
+        depoPic.x = depo["coord"]["x"];
+        depoPic.y = depo["coord"]["y"];
+
+        gameScene.addChild(depoPic);
+        depoPictures[depoK] = depoPic
+    }
+}
 
 function drawTressuresFirstTime(playGround){
 

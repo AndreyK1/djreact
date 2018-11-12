@@ -1,5 +1,6 @@
 import random
 
+from trainsgame.createDepo import createDepo
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.models import PlayGround, Cross, Path, Train, PlayGroundList
 
@@ -106,6 +107,8 @@ def createPlayGr(playGround):
     fillPathes(playGround)
 
     createTreasurres(playGround)
+
+    createDepo(playGround)
 
     playGround.initialised=True
 
