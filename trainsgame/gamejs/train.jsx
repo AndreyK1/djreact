@@ -1,4 +1,5 @@
 import getContainers from "./storageTrains";
+import React from "react";
 
 let resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite,
@@ -19,87 +20,87 @@ export function drawTrains(playGround){
     // playGroundGl = playGround
     console.log("drawTrains");
     let trains = playGround['trains']
-    let pathes = playGround['pathes']
+    // let pathes = playGround['pathes']
     for(let trainK in trains){
         let train = trains[trainK]
-        let path = pathes[train['pathNum']]
+        // let path = pathes[train['pathNum']]
 
         //рисуем тележку
-        let trainPic;
-        let textPic;
-        let arrowPic;
-
         let trainContainer;
         if(getContainers().trainsContainers[trainK] == null) {
-              trainContainer = new Container();
-              getContainers().gameScene.addChild(trainContainer);
+              trainContainer = new TrainContainer(trainK, train);
 
-                trainPic = new Sprite(getContainers().id["blob.png"]);
-                trainPic.tint = 0xFFFFFF;
-                // timerId = setTimeout(()=> {console.log("trainPic.tint"+trainPic.tint); trainPic.tint = 0xff0000; }, 2000)
+        }else{
+            trainContainer = getContainers().trainsContainers[trainK]
+        }
 
-            // textPic = new Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
-              let style = new TextStyle({
+        trainContainer.makeMove(train)
+    }
+
+
+}
+
+
+class TrainContainer extends Container {
+
+    constructor(trainK, train) {
+      super()
+
+      this.trainPic = new Sprite(getContainers().id["blob.png"]);
+      this.trainPic.tint = 0xFFFFFF;
+
+      let style = new TextStyle({
                 fontFamily: "Futura",
                 fontSize: 22,
                 fill: "white"
-              });
-              textPic = new Text(train["number"], style);
-              arrowPic = createArrowPic(0, -15, train["nextMove"])
+      });
+      this.textPic = new Text(train["number"], style);
+      this.arrowPic = createArrowPic(0, -15, train["nextMove"])
 
-              trainContainer.addChildAt(trainPic,0);
-              trainContainer.addChildAt(textPic,1);
-              trainContainer.addChildAt(arrowPic,2);
+      this.addChildAt(this.trainPic,0);
+      this.addChildAt(this.textPic,1);
+      this.addChildAt(this.arrowPic,2);
 
-                trainPic.x = 0;
-                trainPic.y = 0;
-                textPic.x = 15;
-                textPic.y = 15;
-                arrowPic.x = 0;
-                arrowPic.y = -15;
-              getContainers().trainsContainers[trainK] = trainContainer
-        }else{
-            trainContainer = getContainers().trainsContainers[trainK]
-            trainPic = trainContainer.getChildAt(0)
-            textPic = trainContainer.getChildAt(1)
-            arrowPic = trainContainer.getChildAt(2)
-        }
+      this.trainPic.x = 0;
+      this.trainPic.y = 0;
+      this.textPic.x = 15;
+      this.textPic.y = 15;
+      this.arrowPic.x = 0;
+      this.arrowPic.y = -15;
+      getContainers().trainsContainers[trainK] = this
+      this.addSelfToGameScene()
+    }
 
-        //console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
-
-        trainPic.nowMoving = train["nowMoving"]
-        trainContainer.x = train["coord"]["x"];
-        trainContainer.y = train["coord"]["y"];
+    makeMove(train){
+        this.trainPic.nowMoving = train["nowMoving"]
+        this.x = train["coord"]["x"];
+        this.y = train["coord"]["y"];
 
         //проверяемвыбор пути
-        // console.log("moveByChoise " +train["moveByChoise"])
-        // trainPic.tint = 0xff0000;
-        //console.log("moveByChoise true -" +train["moveByChoise"])
         if(train["moveByChoise"] === true){
             //console.log("moveByChoise true -" +train["moveByChoise"])
-          trainPic.tint = 0x008000;
+          this.trainPic.tint = 0x008000;
         }else if(train["moveByChoise"] === false){
             //console.log("moveByChoise false - " +train["moveByChoise"])
-            trainPic.tint = 0xff0000;
+            this.trainPic.tint = 0xff0000;
         }
         setTimeout(()=> {
             // console.log("trainPic.tint"+trainPic.tint);
-            trainPic.tint = 0xFFFFFF;
+            this.trainPic.tint = 0xFFFFFF;
             }, 500)
 
-        if(arrowPic.nextMove != train["nextMove"]){
-            arrowPic.parent.removeChild(arrowPic)
-            arrowPic = createArrowPic(0, -15, train["nextMove"])
+        if(this.arrowPic.nextMove != train["nextMove"]){
+            this.arrowPic.parent.removeChild(this.arrowPic)
+            this.arrowPic = createArrowPic(0, -15, train["nextMove"])
 
             // moveByChoise
-            trainContainer.addChildAt(arrowPic,2)
+            this.addChildAt(this.arrowPic,2)
             //проверяемвыбор пути
-
         }
 
         //проверяем новые сокровища
         if(train["pickedTress"] != 0){
-            if(!trainContainer.pickedTress){
+            if(!this.pickedTress){
             // if(!trainContainer.getChildAt(3)){
                 console.log("---------pickedTress------------" + train["pickedTress"])
                 let tressPic = getContainers().tressPictures[train["pickedTress"]]
@@ -107,21 +108,23 @@ export function drawTrains(playGround){
                 tressPic.y = 0
 
                 getContainers().gameScene.removeChild(tressPic)
-                trainContainer.addChildAt(tressPic,3);
-                trainContainer.pickedTress = train["pickedTress"]
-
+                this.addChildAt(tressPic,3);
+                this.pickedTress = train["pickedTress"]
             }
         }
-
-
-
-
-        // console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
-      // renderer.render(stage);
     }
 
 
+    addSelfToGameScene(){
+        getContainers().gameScene.addChild(this);
+    }
+
+    // getDepoPictures(){
+    //     return getContainers().depoPictures
+    // }
 }
+
+
 
 
 function createArrowPic(posX, posY, trainNextMove){
@@ -200,6 +203,10 @@ function  timeoutDrawTrains(moveInOnePeriod, trainsContainers) {
 
     }
 }
+
+
+//trainContainer = new Container();
+
 
 
 
