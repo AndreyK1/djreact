@@ -154,6 +154,49 @@ export function createArrowTextures(){
     upArrowTex = new PIXI.Texture(mySpriteSheetImage, upRectangle);
 }
 
+let timerId = false
+//отрисовка поездов в промежутках м.д сокетными ответами - по инерции
+export function drawTrainsBesideSocketResponse(playGround, trainsContainers){
+    //console.log("gameState "+ gameState)
+    if(gameState != "play"){
+        clearInterval(timerId)
+        return;
+    }
+    if(timerId){
+        return;
+    }
+    let sleepSec = playGround['sleepSec']
+    let moveSize = playGround['moveSize']
+    let moveInOnePeriod = moveSize/(sleepSec*1000/100)  //сколько пикселей за однут итерацию . кратно 10
+     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod, trainsContainers)}, 100)
+    //timeoutAlreadyRuns = true
+
+}
+
+
+function  timeoutDrawTrains(moveInOnePeriod, trainsContainers) {
+    for (let trainK in trainsContainers) {
+        let trainContainer = trainsContainers[trainK]
+        let trainPic = trainContainer.getChildAt(0)
+        // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
+        //задаем направление движения между сокетными ответами
+        //console.log("moveInOnePeriod " +  moveInOnePeriod)
+        let move = moveInOnePeriod
+        // let move = 2;
+        if(trainPic.nowMoving == "up"){
+            trainContainer.y -=move
+        }else if(trainPic.nowMoving == "down"){
+            trainContainer.y +=move
+        }else if(trainPic.nowMoving == "left"){
+            trainContainer.x -=move
+        }else if(trainPic.nowMoving == "right"){
+            trainContainer.x +=move
+        }
+        //console.log("trainContainer.x " + trainContainer.x + " trainContainer.y " + trainContainer.y)
+
+    }
+}
+
 
 
 export default drawTrains

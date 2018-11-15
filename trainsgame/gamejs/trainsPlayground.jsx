@@ -1,5 +1,6 @@
 //Aliases
-import {drawTrains, createArrowTextures} from "./train";
+import {drawTrains, createArrowTextures, drawTrainsBesideSocketResponse} from "./train";
+import {drawDepos} from "./depo";
 // import train from "./train";
 
 let resources = PIXI.loader.resources,
@@ -35,34 +36,6 @@ export default function setupTrainsScene(app) {
   id = PIXI.loader.resources[treasHuntJs].textures;
 
     createArrowTextures()
-    // createColoredCubes()
-    // let leftArrow = new Sprite(leftArrowTex);
-    // let rightArrow = new Sprite(rightArrowTex);
-    // let downArrow = new Sprite(downArrowTex);
-    // let upArrow = new Sprite(upArrowTex);
-    // gameScene.addChild(leftArrow);
-    // rightArrow.x = 0
-    // rightArrow.y = 20
-    // gameScene.addChild(rightArrow);
-    // downArrow.x = 0
-    // downArrow.y = 40
-    // gameScene.addChild(downArrow);
-    // upArrow.x = 0
-    // upArrow.y = 60
-    // gameScene.addChild(upArrow);
-
-    // let leftArrow2 = new Sprite(leftTextureArrows);
-    // leftArrow2.x = 0
-    // leftArrow2.y = 30
-    // // gameScene.addChild(leftArrow2);
-
-  //Make the treasure box using the alias
-  // treasure = new Sprite(id["treasure.png"]);
-
-    //Position the treasure next to the right edge of the canvas
-  // treasure.x = app.stage.width - treasure.width - 48;
-  // treasure.y = app.stage.height / 2 - treasure.height / 2;
-  // gameScene.addChild(treasure);
 
   // регистрируем отрисовку по сокетному событию
   webSocketBridge.listen(function(action, stream) {
@@ -77,242 +50,26 @@ export default function setupTrainsScene(app) {
       playGroundGl = data
 
       drawPlayGround(data)
-      drawDepos(data)
+      drawDepos(data, depoPictures, gameScene, trainsContainers, id)
       drawTressuresFirstTime(data)
       drawTrains(data, trainsContainers, tressPictures, gameScene, id)
 
 
 
-      drawTrainsBesideSocketResponse()
+      drawTrainsBesideSocketResponse(data, trainsContainers)
 
   })
 
 }
-
-// let timeoutAlreadyRuns = false
-let timerId = false
-//отрисовка поездов в промежутках м.д сокетными ответами - по инерции
-function drawTrainsBesideSocketResponse(){
-    //console.log("gameState "+ gameState)
-    if(gameState != "play"){
-        clearInterval(timerId)
-        return;
-    }
-    if(timerId){
-        return;
-    }
-    let sleepSec = playGroundGl['sleepSec']
-    let moveSize = playGroundGl['moveSize']
-    let moveInOnePeriod = moveSize/(sleepSec*1000/100)  //сколько пикселей за однут итерацию . кратно 10
-     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod)}, 100)
-    //timeoutAlreadyRuns = true
-
-}
-
-function  timeoutDrawTrains(moveInOnePeriod) {
-    for (let trainK in trainsContainers) {
-        let trainContainer = trainsContainers[trainK]
-        let trainPic = trainContainer.getChildAt(0)
-        // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
-        //задаем направление движения между сокетными ответами
-        //console.log("moveInOnePeriod " +  moveInOnePeriod)
-        let move = moveInOnePeriod
-        // let move = 2;
-        if(trainPic.nowMoving == "up"){
-            trainContainer.y -=move
-        }else if(trainPic.nowMoving == "down"){
-            trainContainer.y +=move
-        }else if(trainPic.nowMoving == "left"){
-            trainContainer.x -=move
-        }else if(trainPic.nowMoving == "right"){
-            trainContainer.x +=move
-        }
-        //console.log("trainContainer.x " + trainContainer.x + " trainContainer.y " + trainContainer.y)
-
-    }
-}
-
-
-
-
-
-// function createColoredCubes(){
-//       //create arrows texture
-//     let mySpriteSheetImage =  PIXI.BaseTexture.fromImage(cubes);
-//     let greenRectangle = new Rectangle(0, 0, 40, 40);
-//     let redRectangle = new Rectangle(160, 0, 40, 40);
-//
-//     greenCube = new PIXI.Texture(mySpriteSheetImage, greenRectangle);
-//     redCube = new PIXI.Texture(mySpriteSheetImage, redRectangle);
-//
-// }
 
 
 let playGroundGl
 let trainsContainers= {}
 let tressPictures = {}
 let depoPictures = {}
-// //отрисовываем тележки
-// function drawTrains(playGround){
-//     playGroundGl = playGround
-//     //console.log("drawTrains");
-//     let trains = playGround['trains']
-//     let pathes = playGround['pathes']
-//     for(let trainK in trains){
-//         let train = trains[trainK]
-//         let path = pathes[train['pathNum']]
-//
-//         //рисуем тележку
-//         let trainPic;
-//         let textPic;
-//         let arrowPic;
-//
-//         let trainContainer;
-//         if(trainsContainers[trainK] == null) {
-//               trainContainer = new Container();
-//               gameScene.addChild(trainContainer);
-//
-//                 trainPic = new Sprite(id["blob.png"]);
-//                 trainPic.tint = 0xFFFFFF;
-//                 // timerId = setTimeout(()=> {console.log("trainPic.tint"+trainPic.tint); trainPic.tint = 0xff0000; }, 2000)
-//
-//             // textPic = new Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
-//               let style = new TextStyle({
-//                 fontFamily: "Futura",
-//                 fontSize: 22,
-//                 fill: "white"
-//               });
-//               textPic = new Text(train["number"], style);
-//               arrowPic = createArrowPic(0, -15, train["nextMove"])
-//
-//               trainContainer.addChildAt(trainPic,0);
-//               trainContainer.addChildAt(textPic,1);
-//               trainContainer.addChildAt(arrowPic,2);
-//
-//                 trainPic.x = 0;
-//                 trainPic.y = 0;
-//                 textPic.x = 15;
-//                 textPic.y = 15;
-//                 arrowPic.x = 0;
-//                 arrowPic.y = -15;
-//               trainsContainers[trainK] = trainContainer
-//         }else{
-//             trainContainer = trainsContainers[trainK]
-//             trainPic = trainContainer.getChildAt(0)
-//             textPic = trainContainer.getChildAt(1)
-//             arrowPic = trainContainer.getChildAt(2)
-//         }
-//
-//         //console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
-//
-//         trainPic.nowMoving = train["nowMoving"]
-//         trainContainer.x = train["coord"]["x"];
-//         trainContainer.y = train["coord"]["y"];
-//
-//         //проверяемвыбор пути
-//         // console.log("moveByChoise " +train["moveByChoise"])
-//         // trainPic.tint = 0xff0000;
-//         //console.log("moveByChoise true -" +train["moveByChoise"])
-//         if(train["moveByChoise"] === true){
-//             //console.log("moveByChoise true -" +train["moveByChoise"])
-//           trainPic.tint = 0x008000;
-//         }else if(train["moveByChoise"] === false){
-//             //console.log("moveByChoise false - " +train["moveByChoise"])
-//             trainPic.tint = 0xff0000;
-//         }
-//         setTimeout(()=> {
-//             // console.log("trainPic.tint"+trainPic.tint);
-//             trainPic.tint = 0xFFFFFF;
-//             }, 500)
-//
-//         if(arrowPic.nextMove != train["nextMove"]){
-//             arrowPic.parent.removeChild(arrowPic)
-//             arrowPic = createArrowPic(0, -15, train["nextMove"])
-//
-//             // moveByChoise
-//             trainContainer.addChildAt(arrowPic,2)
-//             //проверяемвыбор пути
-//
-//         }
-//
-//         //проверяем новые сокровища
-//         if(train["pickedTress"] != 0){
-//             if(!trainContainer.pickedTress){
-//             // if(!trainContainer.getChildAt(3)){
-//                 console.log("---------pickedTress------------" + train["pickedTress"])
-//                 let tressPic = tressPictures[train["pickedTress"]]
-//                 tressPic.x = 15
-//                 tressPic.y = 0
-//
-//                 gameScene.removeChild(tressPic)
-//                 trainContainer.addChildAt(tressPic,3);
-//                 trainContainer.pickedTress = train["pickedTress"]
-//
-//             }
-//         }
-//
-//
-//
-//
-//         // console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
-//       // renderer.render(stage);
-//     }
-//
-//
-// }
 
 
 
-function drawDepos(playGround){
-    // if(Object.keys(depoPictures).length !== 0){
-    //     // console.log("----------------tressPictures is not empty----")
-    //     return;
-    // }
-    let depos = playGround['depos']
-
-
-    for(let depoK in depos){
-        let depoPic
-        let depo = depos[depoK]
-
-        if(depoPictures[depoK] == null) {
-            depoPic = new Sprite(id["door.png"]);
-
-            depoPic.x = depo["coord"]["x"];
-            depoPic.y = depo["coord"]["y"];
-            depoPic.pickedTress = []
-
-            gameScene.addChild(depoPic);
-            depoPictures[depoK] = depoPic
-        }else{
-            depoPic = depoPictures[depoK]
-            console.log("depo[\"tressures\"]", depo["tressures"])
-            depo["tressures"].forEach(
-                function checkIfAlreadyDrawn(value) {
-                    //console.log("depo value ", value, depoPic.pickedTress, depoPic.pickedTress.indexOf(value))
-                    if(depoPic.pickedTress.indexOf(value)<0){
-                        // let tressPic = tressPictures[train["pickedTress"]]
-                        //console.log("picked",playGround['treassures'][value]["picked"])
-                        let trainContainer = trainsContainers[playGround['treassures'][value]["picked"]]
-                        //console.log("--trainContainer",trainContainer)
-                        let tressPic  = trainContainer.getChildAt(3)
-
-                        trainContainer.removeChild(tressPic)
-                        //console.log("--tressPic",tressPic)
-
-                        gameScene.addChild(tressPic)
-                        tressPic.x = depoPic.x + 10 + depoPic.pickedTress.length*15
-                        tressPic.y = depoPic.y + 25
-
-                        depoPic.pickedTress.push(value)
-                        trainContainer.pickedTress = 0
-                    }
-                }
-            );
-
-        }
-    }
-}
 
 function drawTressuresFirstTime(playGround){
 
