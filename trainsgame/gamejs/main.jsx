@@ -1,6 +1,6 @@
 import setupCatExp from './main_1';
 import setupHunter from './hunter';
-import setupTrainsScene from './trains';
+import setupTrainsScene from './trainsPlayground';
 
 //Aliases
 let Application = PIXI.Application,
