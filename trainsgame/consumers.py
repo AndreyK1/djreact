@@ -53,6 +53,8 @@ class StartGameConsumer(WebsocketConsumer):
             playGround = PlayGroundList().get(int(text_data))
             playGround.sleepSec = 1
             playGround.moveSize = 20
+            playGround.lenghtGor = 8*playGround.moveSize
+            playGround.lenghtVer = 5 * playGround.moveSize
 
             createPlayGr(playGround)
 

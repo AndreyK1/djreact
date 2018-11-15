@@ -17,7 +17,7 @@ let leftArrowTex, rightArrowTex, downArrowTex, upArrowTex
 // let greenCube, redCube
 
 export default function setupTrainsScene(app) {
-    console.log("setupTrainsScene");
+    //console.log("setupTrainsScene");
     //Make the game scene and add it to the stage
   gameScene = new Container();
   app.stage.addChild(gameScene);
@@ -63,10 +63,12 @@ export default function setupTrainsScene(app) {
 
   // регистрируем отрисовку по сокетному событию
   webSocketBridge.listen(function(action, stream) {
-    console.log("RESPONSE........:", action, stream);
+    //console.log("RESPONSE........:", action, stream);
     // console.log(JSON.parse(action.event.bi))
       let data = JSON.parse(action.event.bi)
-      console.log(data)
+      console.log(".......",data)
+      console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
+      console.log(data["treassures"])
       gameState = data.modeOfGame
       drawPlayGround(data)
       drawDepos(data)
@@ -159,7 +161,7 @@ let depoPictures = {}
 //отрисовываем тележки
 function drawTrains(playGround){
     playGroundGl = playGround
-    console.log("drawTrains");
+    //console.log("drawTrains");
     let trains = playGround['trains']
     let pathes = playGround['pathes']
     for(let trainK in trains){
@@ -207,7 +209,7 @@ function drawTrains(playGround){
             arrowPic = trainContainer.getChildAt(2)
         }
 
-        console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
+        //console.log("numOfPath", path["numOfPath"], trainK, path["coordBeg"]["x"], path["coordBeg"]["y"])
 
         trainPic.nowMoving = train["nowMoving"]
         trainContainer.x = train["coord"]["x"];
@@ -216,15 +218,18 @@ function drawTrains(playGround){
         //проверяемвыбор пути
         // console.log("moveByChoise " +train["moveByChoise"])
         // trainPic.tint = 0xff0000;
-        console.log("moveByChoise true -" +train["moveByChoise"])
+        //console.log("moveByChoise true -" +train["moveByChoise"])
         if(train["moveByChoise"] === true){
-            console.log("moveByChoise true -" +train["moveByChoise"])
+            //console.log("moveByChoise true -" +train["moveByChoise"])
           trainPic.tint = 0x008000;
         }else if(train["moveByChoise"] === false){
-            console.log("moveByChoise false - " +train["moveByChoise"])
+            //console.log("moveByChoise false - " +train["moveByChoise"])
             trainPic.tint = 0xff0000;
         }
-        setTimeout(()=> {console.log("trainPic.tint"+trainPic.tint); trainPic.tint = 0xFFFFFF; }, 500)
+        setTimeout(()=> {
+            // console.log("trainPic.tint"+trainPic.tint);
+            trainPic.tint = 0xFFFFFF;
+            }, 500)
 
         if(arrowPic.nextMove != train["nextMove"]){
             arrowPic.parent.removeChild(arrowPic)
@@ -238,14 +243,23 @@ function drawTrains(playGround){
 
         //проверяем новые сокровища
         if(train["pickedTress"] != 0){
-            if(!trainPic.pickedTress){
-                console.log("---------pickedTress------------")
+            if(!trainContainer.pickedTress){
+            // if(!trainContainer.getChildAt(3)){
+                console.log("---------pickedTress------------" + train["pickedTress"])
                 let tressPic = tressPictures[train["pickedTress"]]
                 tressPic.x = 15
                 tressPic.y = 0
+
+                gameScene.removeChild(tressPic)
                 trainContainer.addChildAt(tressPic,3);
+                trainContainer.pickedTress = train["pickedTress"]
+
             }
         }
+
+
+
+
         // console.log("trainPic", trainK, train['pathNum'],  trainPic.x, trainPic.y)
       // renderer.render(stage);
     }
@@ -256,22 +270,53 @@ function drawTrains(playGround){
 
 
 function drawDepos(playGround){
-    if(Object.keys(depoPictures).length !== 0){
-        // console.log("----------------tressPictures is not empty----")
-        return;
-    }
+    // if(Object.keys(depoPictures).length !== 0){
+    //     // console.log("----------------tressPictures is not empty----")
+    //     return;
+    // }
     let depos = playGround['depos']
-    let depoPic
+
 
     for(let depoK in depos){
+        let depoPic
         let depo = depos[depoK]
-        depoPic = new Sprite(id["door.png"]);
 
-        depoPic.x = depo["coord"]["x"];
-        depoPic.y = depo["coord"]["y"];
+        if(depoPictures[depoK] == null) {
+            depoPic = new Sprite(id["door.png"]);
 
-        gameScene.addChild(depoPic);
-        depoPictures[depoK] = depoPic
+            depoPic.x = depo["coord"]["x"];
+            depoPic.y = depo["coord"]["y"];
+            depoPic.pickedTress = []
+
+            gameScene.addChild(depoPic);
+            depoPictures[depoK] = depoPic
+        }else{
+            depoPic = depoPictures[depoK]
+            console.log("depo[\"tressures\"]", depo["tressures"])
+            depo["tressures"].forEach(
+                function checkIfAlreadyDrawn(value) {
+                    //console.log("depo value ", value, depoPic.pickedTress, depoPic.pickedTress.indexOf(value))
+                    if(depoPic.pickedTress.indexOf(value)<0){
+                        // let tressPic = tressPictures[train["pickedTress"]]
+                        //console.log("picked",playGround['treassures'][value]["picked"])
+                        let trainContainer = trainsContainers[playGround['treassures'][value]["picked"]]
+                        //console.log("--trainContainer",trainContainer)
+                        let tressPic  = trainContainer.getChildAt(3)
+
+                        trainContainer.removeChild(tressPic)
+                        //console.log("--tressPic",tressPic)
+
+                        gameScene.addChild(tressPic)
+                        tressPic.x = depoPic.x + 10 + depoPic.pickedTress.length*15
+                        tressPic.y = depoPic.y + 25
+
+                        depoPic.pickedTress.push(value)
+                        trainContainer.pickedTress = 0
+                    }
+                }
+            );
+
+        }
     }
 }
 
@@ -347,7 +392,7 @@ function drawPlayGround(playGround){
 }
 
 function  drawCross(cross, pathes) {
-    console.log("drawCross");
+    //console.log("drawCross");
   // рсуем линии только направо и вверх
    if(cross['dwPath']!=0){
     let path = pathes[cross['dwPath']]
@@ -365,7 +410,7 @@ function  drawCross(cross, pathes) {
 }
 
 function drawPath(path) {
-    console.log("drawPath");
+    //console.log("drawPath");
     var graphics = new Graphics()
     graphics.lineStyle(5, 0xFF0000);
 

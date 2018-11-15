@@ -20,8 +20,8 @@ def createPlayGr(playGround):
     h=3
     w=3
     # длина пути Path между перекрестками (горризонтальная и вертикальная)
-    lenghtGor = 150
-    lenghtVer = 100
+    # lenghtGor = 160
+    # lenghtVer = 100
 
     crossesNum = [[0] * w for i in range(h)]
 
@@ -46,9 +46,9 @@ def createPlayGr(playGround):
 
             # для координат путей
             if (j == 0):
-                playGround.lastCross["y"] += lenghtVer
+                playGround.lastCross["y"] += playGround.lenghtVer
             else:
-                playGround.lastCross["x"] += lenghtGor
+                playGround.lastCross["x"] += playGround.lenghtGor
 
             if (i == 0 and j == 0):
                 playGround.lastCross["y"] = playGround.offSet["y"]
@@ -67,7 +67,7 @@ def createPlayGr(playGround):
                 crossBefore.rightCross = num
 
                 # создание пути
-                numPass = createPath(playGround, lenghtGor, 0, numPass, num, crossesNum[i][j-1])
+                numPass = createPath(playGround, playGround.lenghtGor, 0, numPass, num, crossesNum[i][j-1])
 
                 node.leftPath = numPass
                 crossBefore.rightPath = numPass
@@ -85,7 +85,7 @@ def createPlayGr(playGround):
                 crossBefore.dwCross = num
 
                 # создание пути
-                numPass = createPath(playGround, 0, lenghtVer, numPass, num, crossesNum[i - 1][j])
+                numPass = createPath(playGround, 0, playGround.lenghtVer, numPass, num, crossesNum[i - 1][j])
 
                 node.upPath = numPass
                 crossBefore.dwPath = numPass

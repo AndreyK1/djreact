@@ -49,6 +49,10 @@ class PlayGround():
         self.started = False
         self.sleepSec = 0  #секунд между перемещ тележки
         self.moveSize = 0 #перемещ тележки
+        # длина пути Path между перекрестками (горризонтальная и вертикальная)
+        self.lenghtGor = 0 #длина гориз путей
+        self.lenghtVer = 0 #длина вертик путей
+
 
         self.lastCross = {"x":0, "y":0} #координаты последенего отмеченного в путях перекрестка
         self.offSet = {"x":10, "y":10}  #первоначальные оординаты отступа путей на площадке
@@ -146,6 +150,8 @@ class Train:
 
         # проверяем на контакт с деньгами
         self.checkContactWithTressure(playGround)
+        # проверяем на контакт с депо
+        self.checkContactWithDepo(playGround)
 
         if(path.whereNowTrain >= path.lengtOfPx):
             print("clear whereNowTrain" +str(path.whereNowTrain))
@@ -224,6 +230,7 @@ class Train:
                 self.nextMove = MovingMashine().nextMove(self.nextMove)
                 print("next move - " + self.nextMove)
 
+    # проверяем на контакт с деньгами
     def checkContactWithTressure(self, playGround):
         if(self.pickedTress != 0):
             return   #сейчас можно брать только одно сокровище
@@ -231,10 +238,27 @@ class Train:
         tressures = playGround.treassures
 
         for tressK in tressures:
+            if(tressures[tressK].collected != 0 or tressures[tressK].picked != 0):
+                continue
+
             if(self.coord["x"] == tressures[tressK].coord["x"] and self.coord["y"] == tressures[tressK].coord["y"]):
                 tressures[tressK].picked = self.number
                 self.pickedTress = tressK
 
+    # проверяем на контакт с депо
+    def checkContactWithDepo(self, playGround):
+        if(self.pickedTress == 0):
+            return
+
+        depos = playGround.depos
+        for depoK in depos:
+            if(self.coord["x"] == depos[depoK].coord["x"] and self.coord["y"] == depos[depoK].coord["y"]):
+                # TODO проверить принадлежность команде депо
+                print("----------------append to depo ------------------"+ str(depoK) + " --- " +str(self.pickedTress))
+                depos[depoK].tressures.append(self.pickedTress)
+                playGround.treassures[self.pickedTress].collected = 1
+                # playGround.treassures[self.pickedTress].picked = 0
+                self.pickedTress = 0
 
 
 
@@ -283,3 +307,4 @@ class Depo:
         self.color = 0
         self.coord  = {"x":0, "y":0}
         self.cross = 0
+        self.tressures = []
