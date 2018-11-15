@@ -1,6 +1,7 @@
 //Aliases
 import {drawTrains, createArrowTextures, drawTrainsBesideSocketResponse} from "./train";
 import {drawDepos} from "./depo";
+import getContainers from "./storageTrains";
 // import train from "./train";
 
 let resources = PIXI.loader.resources,
@@ -15,15 +16,26 @@ let resources = PIXI.loader.resources,
 var renderer = PIXI.autoDetectRenderer(800, 600);
 
 
+
 let gameScene, dungeon, id, treasure
 
 let leftArrowTex, rightArrowTex, downArrowTex, upArrowTex
 // let greenCube, redCube
 
 export default function setupTrainsScene(app) {
+
+   // getContainers()
+//     let playGroundGl
+// let trainsContainers= {}
+// let tressPictures = {}
+// let depoPictures = {}
+
+
+
     //console.log("setupTrainsScene");
     //Make the game scene and add it to the stage
   gameScene = new Container();
+  getContainers().gameScene = gameScene
   app.stage.addChild(gameScene);
 
     //1. Access the `TextureCache` directly
@@ -34,6 +46,7 @@ export default function setupTrainsScene(app) {
     //3. Create an optional alias called `id` for all the texture atlas
   //frame id textures.
   id = PIXI.loader.resources[treasHuntJs].textures;
+  getContainers().id = id
 
     createArrowTextures()
 
@@ -43,30 +56,33 @@ export default function setupTrainsScene(app) {
     // console.log(JSON.parse(action.event.bi))
       let data = JSON.parse(action.event.bi)
       console.log(".......",data)
-      console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
+      // console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
       console.log(data["treassures"])
       gameState = data.modeOfGame
 
-      playGroundGl = data
+      getContainers().playGroundGl = data
 
       drawPlayGround(data)
-      drawDepos(data, depoPictures, gameScene, trainsContainers, id)
+      // drawDepos(data, getContainers().depoPictures, getContainers().gameScene, getContainers().trainsContainers, getContainers().id)
+      drawDepos(data)
       drawTressuresFirstTime(data)
-      drawTrains(data, trainsContainers, tressPictures, gameScene, id)
+      drawTrains(data)
+      // drawTrains(data, getContainers().trainsContainers, getContainers().tressPictures, getContainers().gameScene, getContainers().id)
 
 
 
-      drawTrainsBesideSocketResponse(data, trainsContainers)
+      // drawTrainsBesideSocketResponse(data, getContainers().trainsContainers)
+      drawTrainsBesideSocketResponse(data)
 
   })
 
 }
 
-
-let playGroundGl
-let trainsContainers= {}
-let tressPictures = {}
-let depoPictures = {}
+//
+// let playGroundGl
+// let trainsContainers= {}
+// let tressPictures = {}
+// let depoPictures = {}
 
 
 
@@ -77,7 +93,7 @@ function drawTressuresFirstTime(playGround){
 
     let tressPic
     // if(tressPictures[] != null) {
-    if(Object.keys(tressPictures).length !== 0){
+    if(Object.keys(getContainers().tressPictures).length !== 0){
         // console.log("----------------tressPictures is not empty----")
         return;
     }
@@ -88,8 +104,8 @@ function drawTressuresFirstTime(playGround){
         tressPic.x = treassure["coord"]["x"];
         tressPic.y = treassure["coord"]["y"];
 
-        gameScene.addChild(tressPic);
-        tressPictures[treassK] = tressPic
+        getContainers().gameScene.addChild(tressPic);
+        getContainers().tressPictures[treassK] = tressPic
     }
 
 }
@@ -100,6 +116,9 @@ let lastCrossX=0;
 
 //отрисовываем сетку дорог
 function drawPlayGround(playGround){
+
+    // console.log("getContainers().clicks " + getContainers().clicks)
+    // getContainers().clicks++
 
     //отрисовывается 1 раз
     if(lastCrossX!=0){

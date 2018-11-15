@@ -1,3 +1,5 @@
+import getContainers from "./storageTrains";
+
 let resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite,
     Container = PIXI.Container,
@@ -9,8 +11,10 @@ let resources = PIXI.loader.resources,
 
 
 //отрисовываем тележки
-export function drawTrains(playGround, trainsContainers, tressPictures, gameScene, id){
-
+// export function drawTrains(playGround, trainsContainers, tressPictures, gameScene, id){
+export function drawTrains(playGround){
+    // console.log("getContainers().clicks drawTrains " + getContainers().clicks)
+    // getContainers().clicks++
 
     // playGroundGl = playGround
     console.log("drawTrains");
@@ -26,11 +30,11 @@ export function drawTrains(playGround, trainsContainers, tressPictures, gameScen
         let arrowPic;
 
         let trainContainer;
-        if(trainsContainers[trainK] == null) {
+        if(getContainers().trainsContainers[trainK] == null) {
               trainContainer = new Container();
-              gameScene.addChild(trainContainer);
+              getContainers().gameScene.addChild(trainContainer);
 
-                trainPic = new Sprite(id["blob.png"]);
+                trainPic = new Sprite(getContainers().id["blob.png"]);
                 trainPic.tint = 0xFFFFFF;
                 // timerId = setTimeout(()=> {console.log("trainPic.tint"+trainPic.tint); trainPic.tint = 0xff0000; }, 2000)
 
@@ -53,9 +57,9 @@ export function drawTrains(playGround, trainsContainers, tressPictures, gameScen
                 textPic.y = 15;
                 arrowPic.x = 0;
                 arrowPic.y = -15;
-              trainsContainers[trainK] = trainContainer
+              getContainers().trainsContainers[trainK] = trainContainer
         }else{
-            trainContainer = trainsContainers[trainK]
+            trainContainer = getContainers().trainsContainers[trainK]
             trainPic = trainContainer.getChildAt(0)
             textPic = trainContainer.getChildAt(1)
             arrowPic = trainContainer.getChildAt(2)
@@ -98,11 +102,11 @@ export function drawTrains(playGround, trainsContainers, tressPictures, gameScen
             if(!trainContainer.pickedTress){
             // if(!trainContainer.getChildAt(3)){
                 console.log("---------pickedTress------------" + train["pickedTress"])
-                let tressPic = tressPictures[train["pickedTress"]]
+                let tressPic = getContainers().tressPictures[train["pickedTress"]]
                 tressPic.x = 15
                 tressPic.y = 0
 
-                gameScene.removeChild(tressPic)
+                getContainers().gameScene.removeChild(tressPic)
                 trainContainer.addChildAt(tressPic,3);
                 trainContainer.pickedTress = train["pickedTress"]
 
@@ -156,7 +160,7 @@ export function createArrowTextures(){
 
 let timerId = false
 //отрисовка поездов в промежутках м.д сокетными ответами - по инерции
-export function drawTrainsBesideSocketResponse(playGround, trainsContainers){
+export function drawTrainsBesideSocketResponse(playGround){
     //console.log("gameState "+ gameState)
     if(gameState != "play"){
         clearInterval(timerId)
@@ -168,7 +172,7 @@ export function drawTrainsBesideSocketResponse(playGround, trainsContainers){
     let sleepSec = playGround['sleepSec']
     let moveSize = playGround['moveSize']
     let moveInOnePeriod = moveSize/(sleepSec*1000/100)  //сколько пикселей за однут итерацию . кратно 10
-     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod, trainsContainers)}, 100)
+     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod, getContainers().trainsContainers)}, 100)
     //timeoutAlreadyRuns = true
 
 }
