@@ -20,9 +20,15 @@ class DepoContainer extends Container {
         this.depoPic.y = 0;
         this.x = depo["coord"]["x"];
         this.y = depo["coord"]["y"];
-        this.pickedTress = []
-
         this.addChildAt(this.depoPic,0);
+
+        this.pickedTress = []
+        this.containerOfTressuress = new Container();
+        this.containerOfTressuress.x = 10
+        this.containerOfTressuress.y = 25
+         this.addChildAt(this.containerOfTressuress,1);
+
+
         getContainers().depoContainers[depoK] = this
         this.addSelfToGameScene()
      }
@@ -34,16 +40,9 @@ class DepoContainer extends Container {
             //console.log("depo value ", value, depoPic.pickedTress, depoPic.pickedTress.indexOf(value))
             if(this.pickedTress.indexOf(tressK)<0) {
                 let trainContainer = getContainers().trainsContainers[getContainers().playGroundGl['treassures'][tressK]["picked"]]
-                let tressPic = trainContainer.getChildAt(3)
 
-                trainContainer.removeChild(tressPic)
-
-                getContainers().gameScene.addChild(tressPic)
-                tressPic.x = this.x + 10 + this.pickedTress.length * 15
-                tressPic.y = this.y + 25
-
+                trainContainer.moveTressToDepo(this)
                 this.pickedTress.push(tressK)
-                trainContainer.pickedTress = 0
             }
         }
     }

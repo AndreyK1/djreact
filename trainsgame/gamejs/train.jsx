@@ -117,6 +117,17 @@ class TrainContainer extends Container {
         }
     }
 
+    moveTressToDepo(containerDepo){
+        let tressPic = this.getChildAt(3)
+
+        this.removeChild(tressPic)
+        this.pickedTress = 0
+        tressPic.x = containerDepo.pickedTress.length * 15
+        tressPic.y = 0
+
+        containerDepo.containerOfTressuress.addChild(tressPic)
+    }
+
     timeoutDrawTrain(moveInOnePeriod){
         // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
         //задаем направление движения между сокетными ответами
