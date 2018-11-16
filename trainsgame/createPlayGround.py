@@ -1,3 +1,4 @@
+import math
 import random
 
 from trainsgame.createDepo import createDepo
@@ -145,9 +146,27 @@ def fillPathes(playGround):
 
 # создание тележек и добавление их на перекрестки
 def createTrains(playGround):
+
+    # расставляем на перектестках
     for train in playGround.trains:
         while randomAddTrainToCross(playGround, train) == False:
             print("try add train to cross "+ train)
+
+    # присваиваем к разным командам
+    keysTrain = list(playGround.trains.keys())
+    # рандомно перемещиваем
+    random.shuffle(keysTrain)
+    halfSize = math.ceil(len(keysTrain)/2)
+    print("--------halfSize-----" + str(halfSize))
+    k = 0
+    for trainName in keysTrain:
+        # print("r-"+trainName)
+        train = playGround.trains[trainName]
+        k +=1
+        if(k > halfSize):
+            train.command = 1
+        else:
+            train.command = 2
 
 
 # рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove

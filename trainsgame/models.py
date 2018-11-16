@@ -1,3 +1,5 @@
+import random
+
 from django.db import models
 
 # Create your models here.
@@ -116,6 +118,7 @@ class Train:
         self.number = 0
         self.moveByChoise = 0 #сменили путь туда куда выбрали, или пришлось
         self.pickedTress = 0
+        self.command = 0
 
     def makeMove(self, playGround):
         self.moveByChoise = 0
@@ -298,6 +301,22 @@ class Tressure:
         self.picked = 0
         self.collected = 0
         self.coord  = {"x":0, "y":0}
+
+    def putSelfOnPath(self, path, playGround, numbOfPointsOnPathGor, numbOfPointsOnPathVer, numTress):
+        self.sum = random.randint(1, 30)
+
+        if (path.direction == "gor"):
+            # self.coord["x"] += playGround.moveSize
+            self.coord = {"x": int(path.coordBeg["x"]) + random.randint(2, numbOfPointsOnPathGor-3)*playGround.moveSize, "y": path.coordBeg["y"]}
+            # random.randint(1, 101)
+        elif (path.direction == "ver"):
+            self.coord = {"x": path.coordBeg["x"],
+                              "y": int(path.coordBeg["y"]) + random.randint(2, numbOfPointsOnPathVer - 3)*playGround.moveSize}
+        else:
+            raise Exception('path.direction error!')
+
+        playGround.treassures[numTress] = self
+
 
 
 # депо куда сокровища тащить

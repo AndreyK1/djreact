@@ -67,6 +67,25 @@ class TrainContainer extends Container {
       this.textPic.y = 15;
       this.arrowPic.x = 0;
       this.arrowPic.y = -15;
+
+      let comColor = "white"
+      if(train["command"] == 1) {
+          comColor = "red"
+      }else if(train["command"] == 2){
+          comColor = "blue"
+      }
+      let style1 = new TextStyle({
+                fontFamily: "Futura",
+                fontSize: 20,
+                fontWeight: "bold",
+                fill: comColor
+      });
+      this.textComand = new Text(train["command"], style1);
+      this.textComand.x = -7;
+      this.textComand.y = 0;
+      this.addChildAt(this.textComand,3);
+
+
       getContainers().trainsContainers[trainK] = this
       this.addSelfToGameScene()
     }
@@ -111,14 +130,14 @@ class TrainContainer extends Container {
                 tressCont.y = 0
 
                 getContainers().gameScene.removeChild(tressCont)
-                this.addChildAt(tressCont,3);
+                this.addChildAt(tressCont,4);
                 this.pickedTress = train["pickedTress"]
             }
         }
     }
 
     moveTressToDepo(containerDepo){
-        let tressPic = this.getChildAt(3)
+        let tressPic = this.getChildAt(4)
 
         this.removeChild(tressPic)
         this.pickedTress = 0

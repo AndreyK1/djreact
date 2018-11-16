@@ -19,7 +19,19 @@ class TressureContainer extends Container {
         this.tressPic.x = 0;
         this.tressPic.y = 0;
 
+        let style = new TextStyle({
+                    fontFamily: "Futura",
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    fill: "black"
+        });
+        this.textPic = new Text(treassure["sum"], style);
+        this.textPic.x = 8;
+        this.textPic.y = -8;
+
         this.addChildAt(this.tressPic,0);
+        this.addChildAt(this.textPic,1);
+
         // getContainers().gameScene.addChild(tressPic);
         // getContainers().tressPictures[treassK] = tressPic
         this.x = treassure["coord"]["x"];
