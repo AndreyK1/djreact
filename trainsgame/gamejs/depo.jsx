@@ -9,62 +9,65 @@ let resources = PIXI.loader.resources,
     Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache;
 
+
+class DepoContainer extends Container {
+
+     constructor(depoK, depo) {
+         super()
+
+        this.depoPic = new Sprite(getContainers().id["door.png"]);
+        this.depoPic.x = 0;
+        this.depoPic.y = 0;
+        this.x = depo["coord"]["x"];
+        this.y = depo["coord"]["y"];
+        this.pickedTress = []
+
+        this.addChildAt(this.depoPic,0);
+        getContainers().depoContainers[depoK] = this
+        this.addSelfToGameScene()
+     }
+
+     //проверяем все ли сокровища прищедщие с бэка, уже присоединены к депо
+     checkIfAllTressAlreadyDrawn(tressures) {
+         for (var i in tressures) {
+             let tressK = tressures[i]
+            //console.log("depo value ", value, depoPic.pickedTress, depoPic.pickedTress.indexOf(value))
+            if(this.pickedTress.indexOf(tressK)<0) {
+                let trainContainer = getContainers().trainsContainers[getContainers().playGroundGl['treassures'][tressK]["picked"]]
+                let tressPic = trainContainer.getChildAt(3)
+
+                trainContainer.removeChild(tressPic)
+
+                getContainers().gameScene.addChild(tressPic)
+                tressPic.x = this.x + 10 + this.pickedTress.length * 15
+                tressPic.y = this.y + 25
+
+                this.pickedTress.push(tressK)
+                trainContainer.pickedTress = 0
+            }
+        }
+    }
+
+     addSelfToGameScene(){
+        getContainers().gameScene.addChild(this);
+    }
+}
+
 // export function drawDepos(playGround, depoPictures, gameScene, trainsContainers, id){
 export function drawDepos(playGround){
 
-    // console.log("getContainers().clicks drawDepos " + getContainers().clicks)
-    // getContainers().clicks++
-
-    // if(Object.keys(depoPictures).length !== 0){
-    //     // console.log("----------------tressPictures is not empty----")
-    //     return;
-    // }
-
-    // depoPictures = getContainers().depoPictures
-    // trainsContainers = getContainers().trainsContainers
-
     let depos = playGround['depos']
 
-
     for(let depoK in depos){
-        let depoPic
         let depo = depos[depoK]
+        let depoContainer
 
-        if(getContainers().depoPictures[depoK] == null) {
-            depoPic = new Sprite(getContainers().id["door.png"]);
-
-            depoPic.x = depo["coord"]["x"];
-            depoPic.y = depo["coord"]["y"];
-            depoPic.pickedTress = []
-
-            getContainers().gameScene.addChild(depoPic);
-            getContainers().depoPictures[depoK] = depoPic
+        if(getContainers().depoContainers[depoK] == null) {
+            depoContainer = new DepoContainer(depoK, depo)
         }else{
-            depoPic = getContainers().depoPictures[depoK]
-            console.log("depo[\"tressures\"]", depo["tressures"])
-            depo["tressures"].forEach(
-                function checkIfAlreadyDrawn(value) {
-                    //console.log("depo value ", value, depoPic.pickedTress, depoPic.pickedTress.indexOf(value))
-                    if(depoPic.pickedTress.indexOf(value)<0){
-                        // let tressPic = tressPictures[train["pickedTress"]]
-                        //console.log("picked",playGround['treassures'][value]["picked"])
-                        let trainContainer = getContainers().trainsContainers[playGround['treassures'][value]["picked"]]
-                        //console.log("--trainContainer",trainContainer)
-                        let tressPic  = trainContainer.getChildAt(3)
-
-                        trainContainer.removeChild(tressPic)
-                        //console.log("--tressPic",tressPic)
-
-                        getContainers().gameScene.addChild(tressPic)
-                        tressPic.x = depoPic.x + 10 + depoPic.pickedTress.length*15
-                        tressPic.y = depoPic.y + 25
-
-                        depoPic.pickedTress.push(value)
-                        trainContainer.pickedTress = 0
-                    }
-                }
-            );
-
+            depoContainer = getContainers().depoContainers[depoK]
+            // console.log("depo[\"tressures\"]", depo["tressures"])
+            depoContainer.checkIfAllTressAlreadyDrawn(depo["tressures"])
         }
     }
 }

@@ -2,7 +2,8 @@
 
 let allContainers = {
   clicks: 797,
-    depoPictures : {},
+    // depoPictures : {},
+    depoContainers : {},
     playGroundGl: 0,
     trainsContainers : {},
     tressContainers: {},
