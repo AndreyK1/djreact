@@ -99,10 +99,13 @@ class TrainContainer extends Container {
         }
 
         //проверяем новые сокровища
-        if(train["pickedTress"] != 0){
+        this.checkAndAddTreessToSelf(train)
+    }
+
+    //проверяем новые сокровища и добавление контейнера сокровишь в свой контейнер
+    checkAndAddTreessToSelf(train){
+         if(train["pickedTress"] != 0){
             if(!this.pickedTress){
-            // if(!trainContainer.getChildAt(3)){
-                console.log("---------pickedTress------------" + train["pickedTress"])
                 let tressCont = getContainers().tressContainers[train["pickedTress"]]
                 tressCont.x = 15
                 tressCont.y = 0
