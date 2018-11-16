@@ -114,14 +114,27 @@ class TrainContainer extends Container {
         }
     }
 
+    timeoutDrawTrain(moveInOnePeriod){
+        // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
+        //задаем направление движения между сокетными ответами
+
+        let move = moveInOnePeriod
+        // let move = 2;
+        if(this.trainPic.nowMoving == "up"){
+            this.y -=move
+        }else if(this.trainPic.nowMoving == "down"){
+            this.y +=move
+        }else if(this.trainPic.nowMoving == "left"){
+            this.x -=move
+        }else if(this.trainPic.nowMoving == "right"){
+            this.x +=move
+        }
+    }
 
     addSelfToGameScene(){
         getContainers().gameScene.addChild(this);
     }
 
-    // getDepoPictures(){
-    //     return getContainers().depoPictures
-    // }
 }
 
 
@@ -164,7 +177,6 @@ export function createArrowTextures(){
 let timerId = false
 //отрисовка поездов в промежутках м.д сокетными ответами - по инерции
 export function drawTrainsBesideSocketResponse(playGround){
-    //console.log("gameState "+ gameState)
     if(gameState != "play"){
         clearInterval(timerId)
         return;
@@ -175,38 +187,16 @@ export function drawTrainsBesideSocketResponse(playGround){
     let sleepSec = playGround['sleepSec']
     let moveSize = playGround['moveSize']
     let moveInOnePeriod = moveSize/(sleepSec*1000/100)  //сколько пикселей за однут итерацию . кратно 10
-     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod, getContainers().trainsContainers)}, 100)
-    //timeoutAlreadyRuns = true
-
+     timerId = setInterval(()=> {timeoutDrawTrains(moveInOnePeriod)}, 100)
 }
 
 
-function  timeoutDrawTrains(moveInOnePeriod, trainsContainers) {
-    for (let trainK in trainsContainers) {
-        let trainContainer = trainsContainers[trainK]
-        let trainPic = trainContainer.getChildAt(0)
-        // console.log("trainPic.nowMoving " + trainPic.nowMoving + "trainPic.nextX "+trainPic.nextX + " trainPic.nextY " +trainPic.nextY)
-        //задаем направление движения между сокетными ответами
-        //console.log("moveInOnePeriod " +  moveInOnePeriod)
-        let move = moveInOnePeriod
-        // let move = 2;
-        if(trainPic.nowMoving == "up"){
-            trainContainer.y -=move
-        }else if(trainPic.nowMoving == "down"){
-            trainContainer.y +=move
-        }else if(trainPic.nowMoving == "left"){
-            trainContainer.x -=move
-        }else if(trainPic.nowMoving == "right"){
-            trainContainer.x +=move
-        }
-        //console.log("trainContainer.x " + trainContainer.x + " trainContainer.y " + trainContainer.y)
-
+function  timeoutDrawTrains(moveInOnePeriod) {
+    for (let trainK in getContainers().trainsContainers) {
+        let trainContainer = getContainers().trainsContainers[trainK]
+        trainContainer.timeoutDrawTrain(moveInOnePeriod)
     }
 }
-
-
-//trainContainer = new Container();
-
 
 
 

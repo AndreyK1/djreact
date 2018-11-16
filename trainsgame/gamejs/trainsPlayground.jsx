@@ -15,24 +15,10 @@ let resources = PIXI.loader.resources,
 
 var renderer = PIXI.autoDetectRenderer(800, 600);
 
-
-
 let gameScene, dungeon, id, treasure
-
-let leftArrowTex, rightArrowTex, downArrowTex, upArrowTex
-// let greenCube, redCube
 
 export default function setupTrainsScene(app) {
 
-   // getContainers()
-//     let playGroundGl
-// let trainsContainers= {}
-// let tressPictures = {}
-// let depoPictures = {}
-
-
-
-    //console.log("setupTrainsScene");
     //Make the game scene and add it to the stage
   gameScene = new Container();
   getContainers().gameScene = gameScene
@@ -63,27 +49,14 @@ export default function setupTrainsScene(app) {
       getContainers().playGroundGl = data
 
       drawPlayGround(data)
-      // drawDepos(data, getContainers().depoPictures, getContainers().gameScene, getContainers().trainsContainers, getContainers().id)
-      drawDepos(data)
+       drawDepos(data)
       drawTressuresFirstTime(data)
       drawTrains(data)
-      // drawTrains(data, getContainers().trainsContainers, getContainers().tressPictures, getContainers().gameScene, getContainers().id)
-
-
-
-      // drawTrainsBesideSocketResponse(data, getContainers().trainsContainers)
       drawTrainsBesideSocketResponse(data)
 
   })
 
 }
-
-//
-// let playGroundGl
-// let trainsContainers= {}
-// let tressPictures = {}
-// let depoPictures = {}
-
 
 
 
