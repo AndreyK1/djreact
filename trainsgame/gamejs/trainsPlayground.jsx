@@ -2,6 +2,7 @@
 import {drawTrains, createArrowTextures, drawTrainsBesideSocketResponse} from "./train";
 import {drawDepos} from "./depo";
 import getContainers from "./storageTrains";
+import {drawTressuresFirstTime} from "./Tressure";
 // import train from "./train";
 
 let resources = PIXI.loader.resources,
@@ -60,28 +61,7 @@ export default function setupTrainsScene(app) {
 
 
 
-function drawTressuresFirstTime(playGround){
 
-    let treassures = playGround['treassures']
-
-    let tressPic
-    // if(tressPictures[] != null) {
-    if(Object.keys(getContainers().tressPictures).length !== 0){
-        // console.log("----------------tressPictures is not empty----")
-        return;
-    }
-    for(let treassK in treassures){
-        let treassure = treassures[treassK]
-        tressPic = new Sprite(id["treasure.png"]);
-
-        tressPic.x = treassure["coord"]["x"];
-        tressPic.y = treassure["coord"]["y"];
-
-        getContainers().gameScene.addChild(tressPic);
-        getContainers().tressPictures[treassK] = tressPic
-    }
-
-}
 
 
 

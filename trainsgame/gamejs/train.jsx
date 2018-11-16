@@ -103,12 +103,12 @@ class TrainContainer extends Container {
             if(!this.pickedTress){
             // if(!trainContainer.getChildAt(3)){
                 console.log("---------pickedTress------------" + train["pickedTress"])
-                let tressPic = getContainers().tressPictures[train["pickedTress"]]
-                tressPic.x = 15
-                tressPic.y = 0
+                let tressCont = getContainers().tressContainers[train["pickedTress"]]
+                tressCont.x = 15
+                tressCont.y = 0
 
-                getContainers().gameScene.removeChild(tressPic)
-                this.addChildAt(tressPic,3);
+                getContainers().gameScene.removeChild(tressCont)
+                this.addChildAt(tressCont,3);
                 this.pickedTress = train["pickedTress"]
             }
         }

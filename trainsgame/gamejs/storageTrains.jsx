@@ -5,7 +5,8 @@ let allContainers = {
     depoPictures : {},
     playGroundGl: 0,
     trainsContainers : {},
-    tressPictures : {},
+    tressContainers: {},
+    // tressPictures : {},
     gameScene : 0,
     id : 0
 
