@@ -256,12 +256,14 @@ class Train:
         depos = playGround.depos
         for depoK in depos:
             if(self.coord["x"] == depos[depoK].coord["x"] and self.coord["y"] == depos[depoK].coord["y"]):
-                # TODO проверить принадлежность команде депо
-                print("----------------append to depo ------------------"+ str(depoK) + " --- " +str(self.pickedTress))
-                depos[depoK].tressures.append(self.pickedTress)
-                playGround.treassures[self.pickedTress].collected = 1
-                # playGround.treassures[self.pickedTress].picked = 0
-                self.pickedTress = 0
+                #  проверить принадлежность команде депо
+                if(self.command == depos[depoK].team):
+                    print("----------------append to depo ------------------"+ str(depoK) + " --- " +str(self.pickedTress))
+                    depos[depoK].tressures.append(self.pickedTress)
+                    playGround.treassures[self.pickedTress].collected = 1
+                    # playGround.treassures[self.pickedTress].picked = 0
+                    depos[depoK].sum += int(playGround.treassures[self.pickedTress].sum)
+                    self.pickedTress = 0
 
 
 
@@ -323,7 +325,8 @@ class Tressure:
 class Depo:
     def __init__(self):
         # номер перекрестка
-        self.color = 0
+        self.team = 0
         self.coord  = {"x":0, "y":0}
         self.cross = 0
+        self.sum = 0
         self.tressures = []

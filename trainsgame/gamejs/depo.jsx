@@ -1,4 +1,5 @@
 import getContainers from "./storageTrains";
+import {drawTeamSign} from "./team";
 
 let resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite,
@@ -28,6 +29,22 @@ class DepoContainer extends Container {
         this.containerOfTressuress.y = 25
          this.addChildAt(this.containerOfTressuress,1);
 
+        this.textComand = drawTeamSign(depo["team"])
+      this.textComand.x = -7;
+      this.textComand.y = 0;
+      this.addChildAt(this.textComand,2);
+
+
+      let style1 = new TextStyle({
+            fontFamily: "Futura",
+            fontSize: 20,
+            fontWeight: "bold",
+            fill: "green"
+      });
+      this.textSum = new Text(depo["sum"], style1);
+      this.textSum.x = 0;
+      this.textSum.y = 10;
+      this.addChildAt(this.textSum,3);
 
         getContainers().depoContainers[depoK] = this
         this.addSelfToGameScene()
@@ -45,6 +62,10 @@ class DepoContainer extends Container {
                 this.pickedTress.push(tressK)
             }
         }
+    }
+
+    changeSum(tressPic){
+         this.textSum.text = parseInt(this.textSum.text) + parseInt(tressPic.sum)
     }
 
      addSelfToGameScene(){

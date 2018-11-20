@@ -1,5 +1,6 @@
 import getContainers from "./storageTrains";
 import React from "react";
+import {drawTeamSign} from "./team";
 
 let resources = PIXI.loader.resources,
     Sprite = PIXI.Sprite,
@@ -68,21 +69,24 @@ class TrainContainer extends Container {
       this.arrowPic.x = 0;
       this.arrowPic.y = -15;
 
-      let comColor = "white"
-      if(train["command"] == 1) {
-          comColor = "red"
-      }else if(train["command"] == 2){
-          comColor = "blue"
-      }
-      let style1 = new TextStyle({
-                fontFamily: "Futura",
-                fontSize: 20,
-                fontWeight: "bold",
-                fill: comColor
-      });
-      this.textComand = new Text(train["command"], style1);
+      // let comColor = "white"
+      // if(train["command"] == 1) {
+      //     comColor = "red"
+      // }else if(train["command"] == 2){
+      //     comColor = "blue"
+      // }
+      //
+      // let style1 = new TextStyle({
+      //           fontFamily: "Futura",
+      //           fontSize: 20,
+      //           fontWeight: "bold",
+      //           fill: comColor
+      // });
+      // this.textComand = new Text(train["command"], style1);
+      this.textComand = drawTeamSign(train["command"])
       this.textComand.x = -7;
       this.textComand.y = 0;
+
       this.addChildAt(this.textComand,3);
 
 
@@ -145,6 +149,8 @@ class TrainContainer extends Container {
         tressPic.y = 0
 
         containerDepo.containerOfTressuress.addChild(tressPic)
+        containerDepo.changeSum(tressPic)
+
     }
 
     timeoutDrawTrain(moveInOnePeriod){

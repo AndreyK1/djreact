@@ -3,6 +3,7 @@ import random
 
 from trainsgame.createDepo import createDepo
 from trainsgame.createTreasurres import createTreasurres
+from trainsgame.enums.TeamEnum import Teams
 from trainsgame.models import PlayGround, Cross, Path, Train, PlayGroundList
 
 
@@ -164,9 +165,9 @@ def createTrains(playGround):
         train = playGround.trains[trainName]
         k +=1
         if(k > halfSize):
-            train.command = 1
+            train.command = Teams.TWO.value
         else:
-            train.command = 2
+            train.command = Teams.ONE.value
 
 
 # рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove

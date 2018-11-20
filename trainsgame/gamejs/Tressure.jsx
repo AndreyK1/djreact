@@ -25,6 +25,8 @@ class TressureContainer extends Container {
                     fontSize: 18,
                     fill: "black"
         });
+
+        this.sum = treassure["sum"];
         this.textPic = new Text(treassure["sum"], style);
         this.textPic.x = 8;
         this.textPic.y = -8;
