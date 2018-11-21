@@ -1,4 +1,5 @@
 import random
+from trainsgame.enums.ColorEnum import Colors
 
 from django.db import models
 
@@ -54,6 +55,7 @@ class PlayGround():
         # длина пути Path между перекрестками (горризонтальная и вертикальная)
         self.lenghtGor = 0 #длина гориз путей
         self.lenghtVer = 0 #длина вертик путей
+        self.listOfcolors = []
 
 
         self.lastCross = {"x":0, "y":0} #координаты последенего отмеченного в путях перекрестка
@@ -119,6 +121,7 @@ class Train:
         self.moveByChoise = 0 #сменили путь туда куда выбрали, или пришлось
         self.pickedTress = 0
         self.command = 0
+        self.color = 0
 
     def makeMove(self, playGround):
         self.moveByChoise = 0

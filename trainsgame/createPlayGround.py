@@ -3,6 +3,7 @@ import random
 
 from trainsgame.createDepo import createDepo
 from trainsgame.createTreasurres import createTreasurres
+from trainsgame.enums.ColorEnum import Colors
 from trainsgame.enums.TeamEnum import Teams
 from trainsgame.models import PlayGround, Cross, Path, Train, PlayGroundList
 
@@ -157,17 +158,36 @@ def createTrains(playGround):
     keysTrain = list(playGround.trains.keys())
     # рандомно перемещиваем
     random.shuffle(keysTrain)
-    halfSize = math.ceil(len(keysTrain)/2)
+    halfSize = math.floor(len(keysTrain)/2)
     print("--------halfSize-----" + str(halfSize))
     k = 0
-    for trainName in keysTrain:
+    colors = Colors();
+    playGround.colors = colors.usedColors
+
+    for counter, trainName in enumerate(keysTrain):
         # print("r-"+trainName)
+
         train = playGround.trains[trainName]
-        k +=1
-        if(k > halfSize):
+
+        # colors.usedColors.append(colors.allPossibleColors[counter])
+        # train.color = colors.allPossibleColors[counter]
+
+        # k +=1
+        color = 0
+        print("counter "+ str(counter))
+        if(counter < halfSize):
+            color = colors.allPossibleColors[counter]
+            colors.usedColors.append(color)
             train.command = Teams.TWO.value
         else:
             train.command = Teams.ONE.value
+            if((counter-halfSize) >= halfSize):
+                color = colors.usedColors[1]
+            else:
+                color = colors.usedColors[counter-halfSize]
+
+        train.color = color
+
 
 
 # рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove
