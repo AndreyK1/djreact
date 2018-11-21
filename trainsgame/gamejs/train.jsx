@@ -48,7 +48,8 @@ class TrainContainer extends Container {
       super()
 
       this.trainPic = new Sprite(getContainers().id["blob.png"]);
-      this.trainPic.tint = 0xFFFFFF;
+      // this.trainPic.tint = 0xFFFFFF;
+      this.trainPic.tint = train["color"];
 
       let style = new TextStyle({
                 fontFamily: "Futura",
@@ -100,16 +101,11 @@ class TrainContainer extends Container {
         this.y = train["coord"]["y"];
 
         //проверяемвыбор пути
-        if(train["moveByChoise"] === true){
-            //console.log("moveByChoise true -" +train["moveByChoise"])
-          this.trainPic.tint = 0x008000;
-        }else if(train["moveByChoise"] === false){
-            //console.log("moveByChoise false - " +train["moveByChoise"])
-            this.trainPic.tint = 0xff0000;
-        }
         setTimeout(()=> {
             // console.log("trainPic.tint"+trainPic.tint);
-            this.trainPic.tint = 0xFFFFFF;
+            // this.trainPic.tint = 0xFFFFFF;
+                this.arrowPic.tint = 0xFFFFFF;
+
             }, 500)
 
         if(this.arrowPic.nextMove != train["nextMove"]){
@@ -119,6 +115,16 @@ class TrainContainer extends Container {
             // moveByChoise
             this.addChildAt(this.arrowPic,2)
             //проверяемвыбор пути
+        }
+
+        if(train["moveByChoise"] === true){
+            console.log("moveByChoise true -" +train["moveByChoise"])
+          this.arrowPic.tint = 0x008000;
+        }else if(train["moveByChoise"] === false){
+            console.log("moveByChoise false - " +train["moveByChoise"])
+            // alert("fdgdfgd")
+            // this.arrowPic.tint = 0xFF0000;
+            this.arrowPic.tint = 0xFF0000;
         }
 
         //проверяем новые сокровища
