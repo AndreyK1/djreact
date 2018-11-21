@@ -247,6 +247,10 @@ class Train:
             if(tressures[tressK].collected != 0 or tressures[tressK].picked != 0):
                 continue
 
+            if(tressures[tressK].color != self.color):
+                continue
+
+
             if(self.coord["x"] == tressures[tressK].coord["x"] and self.coord["y"] == tressures[tressK].coord["y"]):
                 tressures[tressK].picked = self.number
                 self.pickedTress = tressK

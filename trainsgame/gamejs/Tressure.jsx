@@ -18,6 +18,7 @@ class TressureContainer extends Container {
 
         this.tressPic.x = 0;
         this.tressPic.y = 0;
+        this.tressPic.tint = treassure["color"]
 
         let style = new TextStyle({
                     fontFamily: "Futura",

@@ -8,13 +8,23 @@ def createTreasurres(playGround):
     tressCount = len(pathes)
 
     numTress = 0
+    numCol = 0
     numbOfPointsOnPathGor = int(round(playGround.lenghtGor/playGround.moveSize))
     numbOfPointsOnPathVer= int(round(playGround.lenghtVer / playGround.moveSize))
     print("numbOfPointsOnPath - " + str(numbOfPointsOnPathGor))
-    for pathNum in playGround.pathes:
+    for counter, pathNum in enumerate(playGround.pathes):
         numTress +=1
+
+
         path = pathes[pathNum]
         tressure = Tressure()
+
+        if(numCol >= len(playGround.colors)):
+            numCol=0
+
+        tressure.color =  playGround.colors[numCol]
+        numCol+=1
+
 
         tressure.putSelfOnPath(path, playGround, numbOfPointsOnPathGor, numbOfPointsOnPathVer, numTress)
 
