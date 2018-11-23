@@ -118,10 +118,10 @@ class TrainContainer extends Container {
         }
 
         if(train["moveByChoise"] === true){
-            console.log("moveByChoise true -" +train["moveByChoise"])
+            // console.log("moveByChoise true -" +train["moveByChoise"])
           this.arrowPic.tint = 0x008000;
         }else if(train["moveByChoise"] === false){
-            console.log("moveByChoise false - " +train["moveByChoise"])
+            // console.log("moveByChoise false - " +train["moveByChoise"])
             // alert("fdgdfgd")
             // this.arrowPic.tint = 0xFF0000;
             this.arrowPic.tint = 0xFF0000;

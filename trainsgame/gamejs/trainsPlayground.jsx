@@ -43,8 +43,8 @@ export default function setupTrainsScene(app) {
     // console.log(JSON.parse(action.event.bi))
       let data = JSON.parse(action.event.bi)
       console.log(".......",data)
-      // console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
-      console.log(data["treassures"])
+      console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
+      // console.log(data["treassures"])
       gameState = data.modeOfGame
 
       getContainers().playGroundGl = data

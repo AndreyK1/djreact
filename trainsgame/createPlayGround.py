@@ -1,7 +1,7 @@
 import math
 import random
 
-from trainsgame.createDepo import createDepo
+from trainsgame.createDepo import createDepo, checkDoesCrossHavePath
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.enums.ColorEnum import Colors
 from trainsgame.enums.TeamEnum import Teams
@@ -9,42 +9,40 @@ from trainsgame.models import PlayGround, Cross, Path, Train, PlayGroundList
 
 
 def createPlayGr(playGround):
-    # playGroundList = PlayGroundList()
-    #
-    # playGround = playGroundList.get(1)
-
-    # playGround = PlayGround()
     if(playGround.initialised):
         print("------playGround already initialised-------!!!!!")
         return;
 
     # crosses = []
     # размеры сетки игровой
-    h=3
-    w=3
-    # длина пути Path между перекрестками (горризонтальная и вертикальная)
-    # lenghtGor = 160
-    # lenghtVer = 100
-
+    h=4
+    w=4
     crossesNum = [[0] * w for i in range(h)]
-
     num = 0
     numPass = 0
 
-    # lastCrossX = 0; lastCrossY = 0; #координаты последенего отмеченного в путях перекрестка
-    # offSetX = 20;     offSetY = 10; #первоначальные оординаты отступа путей на площадке
     for i in range(h):
         # для координат путей
         playGround.lastCross["x"] = playGround.offSet["x"]
         for j in range(w):
 
-
-
             num = num+1
+
+
+
+
+
+
             playGround.numOfCross = num
             print(" i = " + str(i) + " j = " + str(j))
             node = Cross()
             # node.coord = {i,j}
+
+            crossesNum[i][j]=num
+            node.numOfCross = num
+            playGround.crosses[num]=node
+
+
 
 
             # для координат путей
@@ -59,14 +57,30 @@ def createPlayGr(playGround):
             node.coord = {"x": playGround.lastCross["x"], "y": playGround.lastCross["y"]}
 
 
+            # высчитываем перекркстки, которые не войдут в пути (подход сверху)
+            numExclude = random.randint(1, h)
+            print("numExclude "+str(numExclude)+"  num % h " + str(num % h))
+            if((num % h)%4 == numExclude%4):
+                node.exclude = 1
+                continue
+
+
+            # if(num !=1):
+            #     crossBefore = playGround.crosses[crossesNum[i][j - 1]]
+            #     if(crossBefore.exclude == 1):
+            #         continue
+
             # горизонтальное отклонение вправо
             if (j == 0):
                 # nothing
                 print("nothing")
             else:
                 # добавление перекрестков
-                node.leftCross = crossesNum[i][j-1]
                 crossBefore = playGround.crosses[crossesNum[i][j-1]]
+                # if(crossBefore.exclude == 1):
+                #     continue
+                node.leftCross = crossesNum[i][j-1]
+                # crossBefore = playGround.crosses[crossesNum[i][j-1]]
                 crossBefore.rightCross = num
 
                 # создание пути
@@ -83,8 +97,11 @@ def createPlayGr(playGround):
                 print("nothing")
             else:
                 # добавление перекрестков
-                node.upCross = crossesNum[i-1][j]
                 crossBefore = playGround.crosses[crossesNum[i - 1][j]]
+                # if(crossBefore.exclude == 1):
+                #     continue
+                node.upCross = crossesNum[i-1][j]
+                # crossBefore = playGround.crosses[crossesNum[i - 1][j]]
                 crossBefore.dwCross = num
 
                 # создание пути
@@ -94,13 +111,9 @@ def createPlayGr(playGround):
                 crossBefore.dwPath = numPass
 
 
-
-
-
-
-            crossesNum[i][j]=num
-            node.numOfCross = num
-            playGround.crosses[num]=node
+            # crossesNum[i][j]=num
+            # node.numOfCross = num
+            # playGround.crosses[num]=node
 
 
     playGround.croscrossesNum = crossesNum
@@ -151,6 +164,7 @@ def createTrains(playGround):
 
     # расставляем на перектестках
     for train in playGround.trains:
+
         while randomAddTrainToCross(playGround, train) == False:
             print("try add train to cross "+ train)
 
@@ -182,7 +196,7 @@ def createTrains(playGround):
         else:
             train.command = Teams.ONE.value
             if((counter-halfSize) >= halfSize):
-                color = colors.usedColors[1]
+                color = colors.usedColors[0]
             else:
                 color = colors.usedColors[counter-halfSize]
 
@@ -191,12 +205,15 @@ def createTrains(playGround):
 
 
 # рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove
-def randomAddTrainToCross(playGround, trainName):
+def randomAddTrainToCross(playGround, trainName, train = 0):
     print("train - "+ trainName)
     # moving = {1:"up",2:"down",3:"left",4:"right"}
     moving = ["up", "down","left","right"]
     randCrossKey = random.choice(list(playGround.crosses.keys()))
-    if(playGround.crosses[randCrossKey].train == 0):
+    cross = playGround.crosses[randCrossKey]
+    if(cross.train == 0 and cross.exclude !=1):
+        if checkDoesCrossHavePath(cross)== False :
+            return False
         playGround.crosses[randCrossKey].train = trainName
 
         train = Train()

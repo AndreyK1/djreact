@@ -1,4 +1,8 @@
 import random
+
+import json
+
+# from trainsgame.createPlayGround import randomAddTrainToCross
 from trainsgame.enums.ColorEnum import Colors
 
 from django.db import models
@@ -100,6 +104,7 @@ class Cross:
 
         self.isbeasy = False
         self.train = 0
+        self.exclude = 0 #исключить из путей
 
     def setNextCrossToTrain(self, train, nextCrossNum):
         train.nextCross = nextCrossNum
@@ -125,7 +130,9 @@ class Train:
 
     def makeMove(self, playGround):
         self.moveByChoise = 0
-        print("makeMove train "+ self.number)
+        print("makeMove train "+ str(self.number)+ " self.pathNum "+ str(self.pathNum))
+        serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
+        print("serialized_obj " +serialized_obj)
         print( "self.coord " +str(self.coord["x"])+ " --- "+ str(self.coord["y"]))
         path = playGround.pathes[self.pathNum]
 
@@ -135,7 +142,7 @@ class Train:
             elif(self.nowMoving == "left"):
                 self.coord["x"] -= playGround.moveSize
             else:
-                raise Exception('path.direction error!' + self.nowMoving)
+                raise Exception('path.direction error!' + str(self.nowMoving))
 
         elif(path.direction == "ver"):
             if(self.nowMoving == "down"):
@@ -177,12 +184,17 @@ class Train:
         changeCross = 0
         if(self.nextCross!=0):
             changeCross = playGround.crosses[self.nextCross]
-        else:
+        else:                                                                                                                                                                                                                                                                                                                                   
             changeCross = playGround.crosses[self.lastCross]
         tryAtempts = 0
         # сбрасываем
         self.nowMoving = 0
-        while(self.nowMoving==0 and tryAtempts<6):
+        maxAtemps = 10
+        while(self.nowMoving==0 and tryAtempts<=10):
+            # if(tryAtempts == maxAtemps): #если выяснится, что при первоначальном запуске двигаться некуда
+            #     randomAddTrainToCross(playGround, self.number, self)
+            #     self = playGround.trains[self.number]
+            # randomAddTrainToCross(playGround, trainName, train = 0)
             print("tryAtempts "+str(tryAtempts) + " self.nextMove "+str(self.nextMove))
             tryAtempts = tryAtempts+1
             nextPathNum = 0
@@ -209,8 +221,9 @@ class Train:
             else:
                 nextPath = playGround.pathes[nextPathNum]
 
+
             print("nextPath.existTrainId - " + str(nextPath.existTrainId))
-            if(nextPath.existTrainId == 0):
+            if(nextPath.existTrainId == 0 and nextPath.numOfPath != 0):
                 nextPath.existTrainId = self.number
                 self.nowMoving = self.nextMove
                 self.pathNum = nextPath.numOfPath
