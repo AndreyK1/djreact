@@ -29,7 +29,7 @@ def getMaxCros(playGround):
     while (needContinue):
         cross = playGround.crosses[numCross]
 
-        if cross.exclude != 1 and checkDoesCrossHavePath(cross):
+        if cross.exclude != 1 and cross.checkDoesCrossHavePath():
             needContinue = False
         else:
             numCross -= 1
@@ -44,7 +44,7 @@ def getMinCros(playGround):
     while (needContinue):
         cross = playGround.crosses[numCross]
 
-        if cross.exclude != 1 and checkDoesCrossHavePath(cross):
+        if cross.exclude != 1 and cross.checkDoesCrossHavePath():
             needContinue = False
         else:
             numCross += 1
@@ -52,7 +52,3 @@ def getMinCros(playGround):
     return numCross
 
 
-def checkDoesCrossHavePath(cross):
-    if (cross.upPath == 0 and cross.dwPath == 0 and cross.leftPath == 0 and cross.rightPath == 0):
-        return False
-    else:return True

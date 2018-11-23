@@ -109,6 +109,11 @@ class Cross:
     def setNextCrossToTrain(self, train, nextCrossNum):
         train.nextCross = nextCrossNum
 
+    def checkDoesCrossHavePath(self):
+        if (self.upPath == 0 and self.dwPath == 0 and self.leftPath == 0 and self.rightPath == 0):
+            return False
+        else:
+            return True
 
 # поезд и его движение
 class Train:
@@ -131,8 +136,8 @@ class Train:
     def makeMove(self, playGround):
         self.moveByChoise = 0
         print("makeMove train "+ str(self.number)+ " self.pathNum "+ str(self.pathNum))
-        serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
-        print("serialized_obj " +serialized_obj)
+        # serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
+        # print("serialized_obj " +serialized_obj)
         print( "self.coord " +str(self.coord["x"])+ " --- "+ str(self.coord["y"]))
         path = playGround.pathes[self.pathNum]
 
@@ -191,9 +196,11 @@ class Train:
         self.nowMoving = 0
         maxAtemps = 10
         while(self.nowMoving==0 and tryAtempts<=10):
-            # if(tryAtempts == maxAtemps): #если выяснится, что при первоначальном запуске двигаться некуда
-            #     randomAddTrainToCross(playGround, self.number, self)
-            #     self = playGround.trains[self.number]
+            if(tryAtempts == maxAtemps): #если выяснится, что при первоначальном запуске двигаться некуда
+                self.randomAddTrainToCross(playGround, self.number)
+                print("-tryAtempts randomAddTrainToCross- " + str(tryAtempts))
+                tryAtempts = 0
+                # self = playGround.trains[self.number]
             # randomAddTrainToCross(playGround, trainName, train = 0)
             print("tryAtempts "+str(tryAtempts) + " self.nextMove "+str(self.nextMove))
             tryAtempts = tryAtempts+1
@@ -284,6 +291,45 @@ class Train:
                     # playGround.treassures[self.pickedTress].picked = 0
                     depos[depoK].sum += int(playGround.treassures[self.pickedTress].sum)
                     self.pickedTress = 0
+
+    # при создании пытаемся добавить себя на перекресток
+    # рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove
+    def randomAddTrainToCross(self, playGround, trainName):
+        # def randomAddTrainToCross(playGround, trainName, train=0):
+        NotFoundCrossYet = True
+        MaxTries = 100
+        trys = 0
+        while(NotFoundCrossYet):
+            trys +=1
+            if(trys > MaxTries ):
+                raise Exception('To many tries randomAddTrainToCross!!!')
+            # moving = {1:"up",2:"down",3:"left",4:"right"}
+            moving = ["up", "down", "left", "right"]
+            randCrossKey = random.choice(list(playGround.crosses.keys()))
+            print("train - " + trainName+ " randCrossKey-"+str(randCrossKey))
+            cross = playGround.crosses[randCrossKey]
+            print("cross.train - " + str(cross.train) + " cross.exclude-" + str(cross.exclude)
+                  + " cross.checkDoesCrossHavePath()-" + str(cross.checkDoesCrossHavePath()))
+            if (cross.train == 0 and cross.exclude != 1):
+                if cross.checkDoesCrossHavePath() == False:
+                    continue
+                playGround.crosses[randCrossKey].train = trainName
+
+                # train = Train()
+                self.number = trainName
+                playGround.trains[trainName] = self
+                self.lastCross = randCrossKey
+
+                nextMove = random.choice(moving);
+                self.nextMove = nextMove
+
+                self.coord = {"x": playGround.crosses[randCrossKey].coord["x"],
+                               "y": playGround.crosses[randCrossKey].coord["y"]}
+
+                NotFoundCrossYet = False
+            # else:
+            #     NotFoundCrossYet = True
+
 
 
 

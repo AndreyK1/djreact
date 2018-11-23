@@ -1,7 +1,7 @@
 import math
 import random
 
-from trainsgame.createDepo import createDepo, checkDoesCrossHavePath
+from trainsgame.createDepo import createDepo
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.enums.ColorEnum import Colors
 from trainsgame.enums.TeamEnum import Teams
@@ -163,10 +163,11 @@ def fillPathes(playGround):
 def createTrains(playGround):
 
     # расставляем на перектестках
-    for train in playGround.trains:
-
-        while randomAddTrainToCross(playGround, train) == False:
-            print("try add train to cross "+ train)
+    for trainKey in playGround.trains:
+        train = Train()
+        train.randomAddTrainToCross(playGround, trainKey)
+        # while randomAddTrainToCross(playGround, trainKey) == False:
+        #     print("try add train to cross "+ trainKey)
 
     # присваиваем к разным командам
     keysTrain = list(playGround.trains.keys())
@@ -205,30 +206,30 @@ def createTrains(playGround):
 
 
 # рааставляем тележки на преркрестках(рандомно, только впервые), и выставляем nextMove
-def randomAddTrainToCross(playGround, trainName, train = 0):
-    print("train - "+ trainName)
-    # moving = {1:"up",2:"down",3:"left",4:"right"}
-    moving = ["up", "down","left","right"]
-    randCrossKey = random.choice(list(playGround.crosses.keys()))
-    cross = playGround.crosses[randCrossKey]
-    if(cross.train == 0 and cross.exclude !=1):
-        if checkDoesCrossHavePath(cross)== False :
-            return False
-        playGround.crosses[randCrossKey].train = trainName
-
-        train = Train()
-        train.number = trainName
-        playGround.trains[trainName] = train
-        train.lastCross = randCrossKey
-
-        nextMove = random.choice(moving);
-        train.nextMove = nextMove
-
-        train.coord = {"x":playGround.crosses[randCrossKey].coord["x"], "y": playGround.crosses[randCrossKey].coord["y"]}
-
-        return True
-    else:
-        return False
+# def randomAddTrainToCross(playGround, trainName, train = 0):
+#     print("train - "+ trainName)
+#     # moving = {1:"up",2:"down",3:"left",4:"right"}
+#     moving = ["up", "down","left","right"]
+#     randCrossKey = random.choice(list(playGround.crosses.keys()))
+#     cross = playGround.crosses[randCrossKey]
+#     if(cross.train == 0 and cross.exclude !=1):
+#         if checkDoesCrossHavePath(cross)== False :
+#             return False
+#         playGround.crosses[randCrossKey].train = trainName
+#
+#         train = Train()
+#         train.number = trainName
+#         playGround.trains[trainName] = train
+#         train.lastCross = randCrossKey
+#
+#         nextMove = random.choice(moving);
+#         train.nextMove = nextMove
+#
+#         train.coord = {"x":playGround.crosses[randCrossKey].coord["x"], "y": playGround.crosses[randCrossKey].coord["y"]}
+#
+#         return True
+#     else:
+#         return False
 
 
 # заполняем положения тележек
