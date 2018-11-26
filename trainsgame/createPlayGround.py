@@ -118,15 +118,19 @@ def createPlayGr(playGround):
 
     playGround.croscrossesNum = crossesNum
 
-    createTrains(playGround)
+    # createTrains(playGround)
 
     fillPathes(playGround)
 
-    createTreasurres(playGround)
+    # createTreasurres(playGround)
 
     createDepo(playGround)
 
-    playGround.initialised=True
+    # createTrains(playGround)
+    #
+    # createTreasurres(playGround)
+    #
+    # playGround.initialised=True
 
 
 def createPath(playGround, moveX, moveY, numP, numberOfCross, numberOfCrossBefore):
@@ -161,7 +165,9 @@ def fillPathes(playGround):
 
 # создание тележек и добавление их на перекрестки
 def createTrains(playGround):
-
+    if(playGround.initialised):
+        print("------playGround already initialised-------!!!!!")
+        return;
     # расставляем на перектестках
     for trainKey in playGround.trains:
         train = Train()

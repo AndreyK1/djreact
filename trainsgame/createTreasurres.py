@@ -4,6 +4,9 @@ from trainsgame.models import Tressure
 
 
 def createTreasurres(playGround):
+    if(playGround.initialised):
+        print("------playGround already initialised-------!!!!!")
+        return;
     pathes = playGround.pathes
     tressCount = len(pathes)
 

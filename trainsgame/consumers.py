@@ -10,7 +10,9 @@ from channels.layers import get_channel_layer
 # первичный коннект, и обработка каждого коннекта из канала
 # from django.core import serializers
 
-from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection
+from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection, \
+    createTrains
+from trainsgame.createTreasurres import createTreasurres
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
 
@@ -71,17 +73,27 @@ class StartGameConsumer(WebsocketConsumer):
 
             print("-text_data-"+text_data)
 
+            # певоначально показываем
+            self.cust_sendTosChannel(playGround, text_data)
+
+            createTrains(playGround)
+            createTreasurres(playGround)
+            playGround.initialised = True
+            # self.cust_sendTosChannel(playGround, text_data)
+
             if(playGround.started):
                 return ;
             else:
                 makeFirstMovings(playGround)
                 playGround.started = True
 
-            channel_layer = get_channel_layer()
+            # channel_layer = get_channel_layer()
             i = 0;
             # while i < 10:
             print("-playGround.modeOfGame-" + playGround.modeOfGame)
 
+
+            # запускаем игру
             while playGround.modeOfGame == "play":
                 i = i + 1;
                 print("-i-" + str(i) + playGround.modeOfGame)
@@ -91,17 +103,19 @@ class StartGameConsumer(WebsocketConsumer):
                 # asyncio.sleep(1)
                 time.sleep(playGround.sleepSec)
 
-                serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
+                self.cust_sendTosChannel(playGround, text_data)
 
-                print("+++++++++++++++++++++++++++Try send fffffff "+text_data+" at " + self.channel_name)
+                # serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
+                #
+                # print("+++++++++++++++++++++++++++Try send fffffff "+text_data+" at " + self.channel_name)
 
-                async_to_sync(channel_layer.group_send)(
-                # channel_layer.group_send(
-                #     "trains", {"type": "user.trains",
-                    str(playGround.arena), {"type": "user.trains",
-                               "event": {"bi":serialized_obj, "ku": "dsfsdf"},
-                                "text": {"bi":text_data, "ku": str(i)}
-                           })
+                # async_to_sync(channel_layer.group_send)(
+                # # channel_layer.group_send(
+                # #     "trains", {"type": "user.trains",
+                #     str(playGround.arena), {"type": "user.trains",
+                #                "event": {"bi":serialized_obj, "ku": "dsfsdf"},
+                #                 "text": {"bi":text_data, "ku": str(i)}
+                #            })
 
             playGround.started = False
 
@@ -117,6 +131,21 @@ class StartGameConsumer(WebsocketConsumer):
             #                "event": "New User",
             #                "username": text_data})
 
+
+    def cust_sendTosChannel(self, playGround, text_data):
+        channel_layer = get_channel_layer()
+
+        serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
+
+        print("+++++++++++++++++++++++++++Try send fffffff " + text_data + " at " + self.channel_name)
+
+        async_to_sync(channel_layer.group_send)(
+            # channel_layer.group_send(
+            #     "trains", {"type": "user.trains",
+            str(playGround.arena), {"type": "user.trains",
+                                    "event": {"bi": serialized_obj, "ku": "dsfsdf"},
+                                    "text": {"bi": text_data, "ku": str(1)}
+                                    })
 
 
 
