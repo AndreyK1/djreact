@@ -150,4 +150,21 @@ function drawPath(path) {
     graphics.lineTo(path["coordEnd"]["x"],path["coordEnd"]["y"]);
     graphics.endFill();
     getContainers().gameScene.addChild(graphics);
+
+
+    //    временно цифру пути
+      let style = new TextStyle({
+            fontFamily: "Futura",
+            fontSize: 22,
+            fill: "white"
+      });
+      let textPic = new Text(path["numOfPath"], style);
+      if(path["direction"] == "gor"){
+          textPic.x = path["coordBeg"]["x"] + 15
+          textPic.y = path["coordBeg"]["y"] + 5
+      }else{
+          textPic.x = path["coordBeg"]["x"] + 5
+          textPic.y = path["coordBeg"]["y"] + 15
+      }
+      getContainers().gameScene.addChild(textPic);
 }
