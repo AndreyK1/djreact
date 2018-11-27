@@ -11,7 +11,7 @@ from channels.layers import get_channel_layer
 # from django.core import serializers
 
 from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection, \
-    createTrains
+    createTrains, correctPlayGr
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
@@ -76,10 +76,16 @@ class StartGameConsumer(WebsocketConsumer):
             # певоначально показываем
             self.cust_sendTosChannel(playGround, text_data)
 
+            correctPlayGr(playGround)
+
+            self.cust_sendTosChannel(playGround, text_data, "corect")
+
             createTrains(playGround)
             createTreasurres(playGround)
             playGround.initialised = True
             # self.cust_sendTosChannel(playGround, text_data)
+
+
 
             if(playGround.started):
                 return ;
@@ -132,7 +138,7 @@ class StartGameConsumer(WebsocketConsumer):
             #                "username": text_data})
 
 
-    def cust_sendTosChannel(self, playGround, text_data):
+    def cust_sendTosChannel(self, playGround, text_data, info=""):
         channel_layer = get_channel_layer()
 
         serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
@@ -143,8 +149,8 @@ class StartGameConsumer(WebsocketConsumer):
             # channel_layer.group_send(
             #     "trains", {"type": "user.trains",
             str(playGround.arena), {"type": "user.trains",
-                                    "event": {"bi": serialized_obj, "ku": "dsfsdf"},
-                                    "text": {"bi": text_data, "ku": str(1)}
+                                    "event": {"bi": serialized_obj, "ku": info},
+                                    "text": {"bi": text_data, "ku": info}
                                     })
 
 

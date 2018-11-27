@@ -15,7 +15,7 @@ let stageWidth=700;
 //Create a Pixi Application
 let appTrain = new Application({
     width: stageWidth,
-    height: 700,
+    height: 1700,
     antialias: true,
     transparent: false,
     resolution: 1

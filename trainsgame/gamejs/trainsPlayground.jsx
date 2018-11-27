@@ -16,7 +16,7 @@ let resources = PIXI.loader.resources,
 
 var renderer = PIXI.autoDetectRenderer(800, 600);
 
-let gameScene, dungeon, id, treasure
+let gameScene, dungeon, id, treasure, gameScene2
 
 export default function setupTrainsScene(app) {
 
@@ -25,10 +25,23 @@ export default function setupTrainsScene(app) {
   getContainers().gameScene = gameScene
   app.stage.addChild(gameScene);
 
+
+   gameScene2 = new Container();
+  getContainers().gameScene2 = gameScene2
+    gameScene2.y = 500
+    gameScene.tint = 0xFF0000;
+    app.stage.addChild(gameScene2);
+
     //1. Access the `TextureCache` directly
   let dungeonTexture = TextureCache["dungeon.png"];
   dungeon = new Sprite(dungeonTexture);
   gameScene.addChild(dungeon);
+
+   //gameScene2.addChild(dungeon);
+
+
+
+
 
     //3. Create an optional alias called `id` for all the texture atlas
   //frame id textures.
@@ -43,11 +56,22 @@ export default function setupTrainsScene(app) {
     // console.log(JSON.parse(action.event.bi))
       let data = JSON.parse(action.event.bi)
       console.log(".......",data)
+
+
       // console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
       // console.log(data["treassures"])
       gameState = data.modeOfGame
 
+      console.log("action.event.ku - "+ action.event.ku)
+      if(action.event.ku == "corect"){
+          lastCrossX = 0
+          getContainers().gameScene = getContainers().gameScene2
+      }else{
+          getContainers().gameScene = gameScene
+      }
+
       getContainers().playGroundGl = data
+
 
       drawPlayGround(data)
        drawDepos(data)
@@ -125,5 +149,5 @@ function drawPath(path) {
 
     graphics.lineTo(path["coordEnd"]["x"],path["coordEnd"]["y"]);
     graphics.endFill();
-    gameScene.addChild(graphics);
+    getContainers().gameScene.addChild(graphics);
 }

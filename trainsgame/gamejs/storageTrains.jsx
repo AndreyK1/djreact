@@ -9,6 +9,7 @@ let allContainers = {
     tressContainers: {},
     // tressPictures : {},
     gameScene : 0,
+    gameScene2 : 0,
     id : 0
 
 
