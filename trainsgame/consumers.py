@@ -9,9 +9,9 @@ from channels.layers import get_channel_layer
 
 # первичный коннект, и обработка каждого коннекта из канала
 # from django.core import serializers
-
+from trainsgame.correctPlayground import correctPlayGr
 from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection, \
-    createTrains, correctPlayGr
+    createTrains
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList

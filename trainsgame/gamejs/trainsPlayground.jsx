@@ -160,11 +160,11 @@ function drawPath(path) {
       });
       let textPic = new Text(path["numOfPath"], style);
       if(path["direction"] == "gor"){
-          textPic.x = path["coordBeg"]["x"] + 15
+          textPic.x = path["coordBeg"]["x"] + 45
           textPic.y = path["coordBeg"]["y"] + 5
       }else{
           textPic.x = path["coordBeg"]["x"] + 5
-          textPic.y = path["coordBeg"]["y"] + 15
+          textPic.y = path["coordBeg"]["y"] + 45
       }
       getContainers().gameScene.addChild(textPic);
 }

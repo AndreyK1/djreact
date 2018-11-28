@@ -106,6 +106,8 @@ class Cross:
         self.train = 0
         self.exclude = 0 #исключить из путей
 
+        self.lastPathTry = ""
+
     def setNextCrossToTrain(self, train, nextCrossNum):
         train.nextCross = nextCrossNum
 

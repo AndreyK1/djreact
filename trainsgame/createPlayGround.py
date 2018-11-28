@@ -251,5 +251,4 @@ def changeTrainDirection(playGround, whereMove, name):
             playGround.trains[train].nextMove = whereMove
 
 
-def correctPlayGr(playGround):
-    print("correctPlayGr")
+
