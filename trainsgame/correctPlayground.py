@@ -1,3 +1,7 @@
+# # найденные маршруты во всех итерациях
+# allRoutes= []
+# # найденные пути во всех итерациях (чтоб повторно не использоваьт)
+# allPathesUsed= []
 
 def correctPlayGr(playGround):
     print("correctPlayGr")
@@ -13,6 +17,10 @@ def findExistingPathesBetweenDepos(playGround):
     crosses = playGround.crosses
     pathes = playGround.pathes
 
+    # # найденные маршруты во всех итерациях
+    # allRoutes= []
+
+    # найденный маршрут в этой итерации
     pathesArr = []
     crossesArr = []
     lastCross = depoBeg
@@ -22,7 +30,23 @@ def findExistingPathesBetweenDepos(playGround):
     trie = 0
     while NotFoundEnd or trie<100:
         trie +=1
-        chhosePath(crosses, crosses[lastCross], crossesArr, pathesArr, depoEnd)
+        res = chhosePath(crosses, crosses[lastCross], crossesArr, pathesArr, depoEnd)
+        if res == "found":
+            # нашли конечный путь
+            print("----нашли конечный путь crosses------" + str(crossesArr))
+            print("----нашли конечный путь pathes------" + str(pathesArr))
+            # NotFoundEnd = False
+            playGround.allRoutes.append({"crosses": crossesArr, "pathes": pathesArr})
+
+            # global allPathesUsed
+            allPathesUsedNew = playGround.allPathesUsed + pathesArr
+            playGround.allPathesUsed = allPathesUsedNew
+            crossesArr = []
+            pathesArr = []
+            print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
+            print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
+            # break
+
 
 
 def chhosePath(crosses, cross, crossesArr, pathesArr, depoEnd):
@@ -31,13 +55,10 @@ def chhosePath(crosses, cross, crossesArr, pathesArr, depoEnd):
 
     #проверяем, что это не конец
     if(depoEnd == cross.numOfCross):
-        # нашли конечный путь
-        print("----нашли конечный путь crosses------" + str(crossesArr))
-        print("----нашли конечный путь pathes------" + str(pathesArr))
-        NotFoundEnd = False
-        return
+        # # нашли конечный путь
+        return "found"
 
-    # nowPath =
+    # nowPath =g
     nextCross, nextPath = pathChooseMashine(cross, crossesArr, pathesArr)
     # cross.lastPathTry = nextTry
     # self.nextMove = MovingMashine().nextMove(self.nextMove)
@@ -51,14 +72,17 @@ def chhosePath(crosses, cross, crossesArr, pathesArr, depoEnd):
         crossesArr.pop()
         nextCross = crossesArr[-1]
         pathesArr.pop()
-        chhosePath(crosses, crosses[nextCross], crossesArr, pathesArr, depoEnd)
+        res = chhosePath(crosses, crosses[nextCross], crossesArr, pathesArr, depoEnd)
 
 
     # рекурсим вглубь
     print("рекурсим вглубь")
     crossesArr.append(nextCross)
     pathesArr.append(nextPath)
-    chhosePath(crosses, crosses[nextCross], crossesArr, pathesArr, depoEnd)
+    res = chhosePath(crosses, crosses[nextCross], crossesArr, pathesArr, depoEnd)
+
+    if res =="found":
+        return "found"
 
 
 
@@ -96,6 +120,9 @@ def pathChooseMashine(cross, crossesArr, pathesArr):
         if(last == "up"):
             print("made all circle - last == up")
             return 0 , 0
+
+
+
 
         # проверяем, что этих значений у нас еще нет (не повторяем путь)
         if (pathNext == 0  or  crossNext == 0):
