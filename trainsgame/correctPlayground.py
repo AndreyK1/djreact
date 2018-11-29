@@ -49,9 +49,12 @@ def findExistingPathesBetweenDepos(playGround):
             pathesArr = []
             print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
             print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
-            # break
+            # очищаем все перекрестки
+            for cross1 in playGround.crosses:
+                playGround.crosses[cross1].lastPathTry = ""
 
         if res == "finish":
+
             break
 
 
@@ -79,8 +82,11 @@ def chhosePath(playGround, cross, crossesArr, pathesArr, depoEnd):
         # это тупик откатываемся на один путь назад
         if(len(crossesArr) < 2):
             print("++++++откатываться больше некуда. Завершаем поиск!!!+++++++")
+            print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
+            print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
             return "finish"
-        crossesArr.pop()
+        last = crossesArr.pop()
+        playGround.crosses[last].lastPathTry = ""
         nextCross = crossesArr[-1]
         pathesArr.pop()
         res = chhosePath(playGround, playGround.crosses[nextCross], crossesArr, pathesArr, depoEnd)
@@ -155,6 +161,12 @@ def pathChooseMashine(playGround, cross, crossesArr, pathesArr):
             print(" 3error crossNext " + str(crossNext) + " pathNext " + str(pathNext)+ " cross.lastPathTry "+str(cross.lastPathTry))
             print("pathesArr " + str(pathesArr))
             crossNext, pathNext = pathChooseMashine(playGround, cross, crossesArr, pathesArr)
+
+        elif pathNext in playGround.allPathesUsed:
+            print(" 4error crossNext " + str(crossNext) + " pathNext " + str(pathNext)+ " cross.lastPathTry "+str(cross.lastPathTry))
+            print("playGround.allPathesUsed " + str(playGround.allPathesUsed))
+            crossNext, pathNext = pathChooseMashine(playGround, cross, crossesArr, pathesArr)
+
 
         # else:
         #     print("  return " + str(crossNext) + " pathNext " + str(pathNext))
