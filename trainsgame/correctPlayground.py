@@ -2,8 +2,11 @@
 # allRoutes= []
 # # найденные пути во всех итерациях (чтоб повторно не использоваьт)
 # allPathesUsed= []
+import sys
+
 
 def correctPlayGr(playGround):
+    sys.setrecursionlimit(10000)
     print("correctPlayGr")
     findExistingPathesBetweenDepos(playGround)
 
@@ -30,7 +33,7 @@ def findExistingPathesBetweenDepos(playGround):
     trie = 0
     while NotFoundEnd or trie<100:
         trie +=1
-        res = chhosePath(crosses, crosses[lastCross], crossesArr, pathesArr, depoEnd)
+        res = chhosePath(playGround, playGround.crosses[lastCross], crossesArr, pathesArr, depoEnd)
         if res == "found":
             # нашли конечный путь
             print("----нашли конечный путь crosses------" + str(crossesArr))
@@ -42,24 +45,29 @@ def findExistingPathesBetweenDepos(playGround):
             allPathesUsedNew = playGround.allPathesUsed + pathesArr
             playGround.allPathesUsed = allPathesUsedNew
             crossesArr = []
+            crossesArr.append(depoBeg)
             pathesArr = []
             print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
             print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
             # break
 
+        if res == "finish":
+            break
 
 
-def chhosePath(crosses, cross, crossesArr, pathesArr, depoEnd):
 
-    print(" =chhosePath "+ str(cross.numOfCross))
+def chhosePath(playGround, cross, crossesArr, pathesArr, depoEnd):
+
+    print(" =chhosePath to cross "+ str(cross.numOfCross) + " depoEnd "+ str(depoEnd))
 
     #проверяем, что это не конец
     if(depoEnd == cross.numOfCross):
         # # нашли конечный путь
         return "found"
 
+
     # nowPath =g
-    nextCross, nextPath = pathChooseMashine(cross, crossesArr, pathesArr)
+    nextCross, nextPath = pathChooseMashine(playGround, cross, crossesArr, pathesArr)
     # cross.lastPathTry = nextTry
     # self.nextMove = MovingMashine().nextMove(self.nextMove)
 
@@ -69,26 +77,34 @@ def chhosePath(crosses, cross, crossesArr, pathesArr, depoEnd):
     if(nextPath == 0):
         print("это тупик откатываемся на один путь назад")
         # это тупик откатываемся на один путь назад
+        if(len(crossesArr) < 2):
+            print("++++++откатываться больше некуда. Завершаем поиск!!!+++++++")
+            return "finish"
         crossesArr.pop()
         nextCross = crossesArr[-1]
         pathesArr.pop()
-        res = chhosePath(crosses, crosses[nextCross], crossesArr, pathesArr, depoEnd)
+        res = chhosePath(playGround, playGround.crosses[nextCross], crossesArr, pathesArr, depoEnd)
+        if res == "found":
+            return "found"
+        if res == "finish":
+            return "finish"
 
 
     # рекурсим вглубь
     print("рекурсим вглубь")
     crossesArr.append(nextCross)
     pathesArr.append(nextPath)
-    res = chhosePath(crosses, crosses[nextCross], crossesArr, pathesArr, depoEnd)
-
+    res = chhosePath(playGround, playGround.crosses[nextCross], crossesArr, pathesArr, depoEnd)
     if res =="found":
         return "found"
+    if res == "finish":
+        return "finish"
 
 
 
 
-def pathChooseMashine(cross, crossesArr, pathesArr):
-        print(" ==pathChooseMashine " + str(cross.numOfCross)+ " cross.lastPathTry "+str(cross.lastPathTry))
+def pathChooseMashine(playGround, cross, crossesArr, pathesArr):
+        print(" ==pathChooseMashine " + str(cross.numOfCross)+ " last cross.lastPathTry "+str(cross.lastPathTry))
         last = cross.lastPathTry
 
         crossNext = 0
@@ -127,19 +143,21 @@ def pathChooseMashine(cross, crossesArr, pathesArr):
         # проверяем, что этих значений у нас еще нет (не повторяем путь)
         if (pathNext == 0  or  crossNext == 0):
             print(" 1error crossNext " + str(crossNext)+ " pathNext "+str(pathNext)+ " cross.lastPathTry "+str(cross.lastPathTry))
-            crossNext, pathNext = pathChooseMashine(cross, crossesArr, pathesArr)
+            crossNext, pathNext = pathChooseMashine(playGround, cross, crossesArr, pathesArr)
 
         elif crossNext in crossesArr:
            print(" 2error crossNext " + str(crossNext) + " pathNext " + str(pathNext)+ " cross.lastPathTry "+str(cross.lastPathTry))
-           crossNext, pathNext = pathChooseMashine(cross, crossesArr, pathesArr)
+           print("crossesArr " +str(crossesArr))
+           crossNext, pathNext = pathChooseMashine(playGround, cross, crossesArr, pathesArr)
 
 
         elif pathNext in pathesArr:
             print(" 3error crossNext " + str(crossNext) + " pathNext " + str(pathNext)+ " cross.lastPathTry "+str(cross.lastPathTry))
-            crossNext, pathNext = pathChooseMashine(cross, crossesArr, pathesArr)
+            print("pathesArr " + str(pathesArr))
+            crossNext, pathNext = pathChooseMashine(playGround, cross, crossesArr, pathesArr)
 
         # else:
         #     print("  return " + str(crossNext) + " pathNext " + str(pathNext))
 
-
+        print(" choosen crossNext " + str(crossNext) + " pathNext " +str(pathNext)+ " cross.lastPathTry "+str(cross.lastPathTry))
         return crossNext, pathNext
