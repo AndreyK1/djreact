@@ -11,7 +11,7 @@ from channels.layers import get_channel_layer
 # from django.core import serializers
 from trainsgame.correctPlayground import correctPlayGr
 from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection, \
-    createTrains
+    createTrains, initPlayGround
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
@@ -53,17 +53,20 @@ class StartGameConsumer(WebsocketConsumer):
             text_data = text_data.replace("\"", "")
 
             playGround = PlayGroundList().get(int(text_data))
-            playGround.sleepSec = 1
-            playGround.moveSize = 20
-            playGround.lenghtGor = 8*playGround.moveSize
-            playGround.lenghtVer = 5 * playGround.moveSize
 
+            playGround = initPlayGround(playGround)
+
+            # playGround.sleepSec = 1
+            # playGround.moveSize = 20
+            # playGround.lenghtGor = 8*playGround.moveSize
+            # playGround.lenghtVer = 5 * playGround.moveSize
+            #
             createPlayGr(playGround)
 
             # playGroundList = PlayGroundList()
             #
             # playGround = playGroundList.get(1)
-
+            # playGround = PlayGroundList().get(int(text_data))
 
             # playGround = PlayGround()
 
@@ -74,11 +77,12 @@ class StartGameConsumer(WebsocketConsumer):
             print("-text_data-"+text_data)
 
             # певоначально показываем
+            # self.cust_sendTosChannel(playGround, text_data, "nocorect")
+
+            correctPlayGr(playGround, int(text_data))
+            playGround = PlayGroundList().get(int(text_data))
+
             self.cust_sendTosChannel(playGround, text_data)
-
-            correctPlayGr(playGround)
-
-            self.cust_sendTosChannel(playGround, text_data, "corect")
 
             createTrains(playGround)
             createTreasurres(playGround)

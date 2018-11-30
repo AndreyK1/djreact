@@ -87,6 +87,9 @@ class PlayGroundList():
             self.PlayGrounds[num] = playGround
             return self.PlayGrounds[num]
 
+    def set(self, num, playGround):
+        self.PlayGrounds[num] = playGround
+
 
 
 # перекресток и его координаты

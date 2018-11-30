@@ -62,13 +62,14 @@ export default function setupTrainsScene(app) {
       // console.log(data["treassures"])
       gameState = data.modeOfGame
 
-      console.log("action.event.ku - "+ action.event.ku)
-      if(action.event.ku == "corect"){
-          lastCrossX = 0
-          getContainers().gameScene = getContainers().gameScene2
-      }else{
-          getContainers().gameScene = gameScene
-      }
+      // console.log("action.event.ku - "+ action.event.ku)
+      // if(action.event.ku == "nocorect"){
+      //     lastCrossX = 0
+      //     getContainers().gameScene = getContainers().gameScene2
+      // }else{
+      //     getContainers().gameScene = gameScene
+      // }
+      getContainers().gameScene = gameScene
 
       getContainers().playGroundGl = data
 

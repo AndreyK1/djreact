@@ -4,11 +4,44 @@
 # allPathesUsed= []
 import sys
 
+from trainsgame.createPlayGround import createPlayGr, initPlayGround
+from trainsgame.models import PlayGroundList
 
-def correctPlayGr(playGround):
+
+def correctPlayGr(playGround, arena_num):
+
     sys.setrecursionlimit(10000)
     print("correctPlayGr")
     findExistingPathesBetweenDepos(playGround)
+
+    print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
+    print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
+    print("----найдено ------" + str(len(playGround.allRoutes)))
+    if( len(playGround.allRoutes) < 2):
+        # PlayGroundList().get(arena_num)
+
+        # PlayGroundList().get(arena_num)
+        playGround.initialised = False
+        playGround.allRoutes = []
+        playGround.allPathesUsed = []
+        initPlayGround(playGround)
+        createPlayGr(playGround)
+        correctPlayGr(playGround, arena_num)
+    else:
+        PlayGroundList().set(arena_num, playGround)
+        print("FFFFFFOOUNND!!!!!!!!!!!!!!!!")
+
+
+
+
+
+
+
+
+
+
+
+# def findAllPossiblePath(playGround):
 
 
 def findExistingPathesBetweenDepos(playGround):
@@ -82,8 +115,8 @@ def chhosePath(playGround, cross, crossesArr, pathesArr, depoEnd):
         # это тупик откатываемся на один путь назад
         if(len(crossesArr) < 2):
             print("++++++откатываться больше некуда. Завершаем поиск!!!+++++++")
-            print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
-            print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
+            # print("----нашли конечный путь allRoutes------" + str(playGround.allRoutes))
+            # print("----нашли конечный путь allPathesUsed------" + str(playGround.allPathesUsed))
             return "finish"
         last = crossesArr.pop()
         playGround.crosses[last].lastPathTry = ""

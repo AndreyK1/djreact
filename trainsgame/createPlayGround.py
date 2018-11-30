@@ -7,6 +7,12 @@ from trainsgame.enums.ColorEnum import Colors
 from trainsgame.enums.TeamEnum import Teams
 from trainsgame.models import PlayGround, Cross, Path, Train, PlayGroundList
 
+def initPlayGround(playGround):
+    playGround.sleepSec = 1
+    playGround.moveSize = 20
+    playGround.lenghtGor = 8 * playGround.moveSize
+    playGround.lenghtVer = 5 * playGround.moveSize
+    return playGround
 
 def createPlayGr(playGround):
     if(playGround.initialised):
