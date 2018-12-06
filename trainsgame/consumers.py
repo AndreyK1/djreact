@@ -45,6 +45,9 @@ class StartGameConsumer(WebsocketConsumer):
 
     def connect(self):
         self.accept()
+        self.user = self.scope["user"]
+        print("self.user - "+ str(self.user))
+        print("self.user.is_authenticated - " + str(self.user.is_authenticated))
         # createPlayGr()
 
 
