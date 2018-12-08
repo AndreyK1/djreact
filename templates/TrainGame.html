@@ -15,13 +15,13 @@
 
          var text = "eeee"
          let gameState = "stop"
-        const webSocketBridge = new channels.WebSocketBridge();
+        const webSocketBridgeGroup = new channels.WebSocketBridge();
         const webSocketBridgeStart = new channels.WebSocketBridge();
         const webSocketBridgeControl = new channels.WebSocketBridge();
 
 
         document.addEventListener('DOMContentLoaded', function() {
-          webSocketBridge.connect('/trainsFirstConnectToGame/');
+          webSocketBridgeGroup.connect('/trainsGroupConsumer/');
             {#сразу конектимся#}
           {#webSocketBridge.send("hi")#}
 
@@ -76,7 +76,7 @@
              console.log(textIn)
            var name =   document.getElementById("player_name").value
              if(textIn =="join"){
-                 webSocketBridge.send(arena_num)
+                 webSocketBridgeGroup.send(arena_num)
              }
            webSocketBridgeControl.send({"type":textIn, "name":name, "arena_num":arena_num })
         }

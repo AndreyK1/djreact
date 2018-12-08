@@ -16,8 +16,8 @@ from trainsgame.createTreasurres import createTreasurres
 from trainsgame.makeMovings import makeFirstMovings
 from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
 
-
-class FirstConnectConsumer(AsyncJsonWebsocketConsumer):
+# добавление канала в группу и рассылка по группам
+class GroupConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self,text_data=None):
         await self.accept()
