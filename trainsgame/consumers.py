@@ -26,6 +26,18 @@ class FirstConnectConsumer(AsyncJsonWebsocketConsumer):
 
 
     async def receive(self,text_data=None):
+        # self.user = self.scope["user"]
+        # if self.user.is_authenticated == False:
+        #     print("self.user.is_authenticated == False")
+            # self.close("404")
+            # self.send_json({"type": "user.trains",
+            #                         "event": {"bi": 1, "ku": 2},
+            #                         "text": {"bi": 3, "ku": 4     }})
+
+        # await self.send_json({"type": "user.trains",
+        #                         "event": {"bi": 1, "ku": 2},
+        #                         "text": {"bi": 3, "ku": 4     }})
+
         text_data = text_data.replace("\"", "")
         await self.channel_layer.group_add(str(text_data), self.channel_name)
         print("----------------------Added " +self.channel_name+" channel to trains")
@@ -171,6 +183,10 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
     # def receive(self, text_data=None, bytes_data=None, **kwargs):
     def receive_json(self, content):
+
+            self.send_json({"type": "user.trains",
+                            "event": {"bi": 1, "ku": 2},
+                            "text": {"bi": 3, "ku": 4}})
 
             # self.channel_layer.group_add("trains", self.channel_name)
             # self.channel_layer.group_add("trains", self.channel_name)

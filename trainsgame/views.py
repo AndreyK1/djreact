@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
@@ -8,7 +9,7 @@ from django.urls import reverse
 
 from trainsgame.models import PlayGround
 
-
+@login_required(login_url='/trains/log_in/')
 def beginOfGAme(request):
     playGround = PlayGround()
 

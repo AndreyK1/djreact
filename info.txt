@@ -1,0 +1,32 @@
+
+{#https://media.readthedocs.org/pdf/test-channels/2.0/test-channels.pdf#}
+
+         webSocketBridge.socket.onopen = function(){
+                console.log('!!!!!!!!!!!!!-connected to server');
+            };
+
+
+
+          webSocketBridge.listen(function(action, stream) {
+            console.log("RESPONSE trainsFirstConnectToGame:", action, stream);
+            console.log(JSON.parse(action.event.bi))
+          });
+
+          {#webSocketBridge.socket.addEventListener('open', function() {#}
+          {#    console.log("!!!Connected to WebSocket");#}
+          {#});#}
+          {#webSocketBridge.socket.addEventListener('close', function(str1, str2) {#}
+          {#    console.log("!!!Connected closed");#}
+          {#    console.log(str1);#}
+          {#    console.log(str2);#}
+          {#});#}
+          {# webSocketBridge.socket.addEventListener('close', function(str1, str2) {#}
+          {#    console.log("!!!Connected closed");#}
+          {#    console.log(str1);#}
+          {#    console.log(str2);#}
+          {#});#}
+
+----home------------
+USERS
+testUser
+bagabum1

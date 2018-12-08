@@ -22,10 +22,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
           webSocketBridge.connect('/trainsFirstConnectToGame/');
-          {#webSocketBridge.listen(function(action, stream) {#}
-          {#  console.log("RESPONSE:", action, stream);#}
-          {#  console.log(JSON.parse(action.event.bi))#}
-          {#})#}
             {#сразу конектимся#}
           {#webSocketBridge.send("hi")#}
 
@@ -35,8 +31,8 @@
           });
 
           webSocketBridgeControl.connect('/controlGameConsumer/');
-          webSocketBridgeStart.listen(function(action, stream) {
-             console.log("RESPONSE_notifications:", action);
+          webSocketBridgeControl.listen(function(action, stream) {
+             console.log("controlGameConsumer:", action);
           });
 
 
