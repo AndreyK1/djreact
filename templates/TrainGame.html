@@ -33,6 +33,11 @@
           webSocketBridgeControl.connect('/controlGameConsumer/');
           webSocketBridgeControl.listen(function(action, stream) {
              console.log("controlGameConsumer:", action);
+             if(action["type"] == "redirect"){
+                  console.log(window.location.host + action["value"] + "?next=" + window.location.pathname)
+                 window.location.href = action["value"] + "?next=" + window.location.pathname
+             }
+
           });
 
 

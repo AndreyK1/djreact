@@ -9,6 +9,7 @@ from channels.layers import get_channel_layer
 
 # первичный коннект, и обработка каждого коннекта из канала
 # from django.core import serializers
+from trainsgame.constants import LOGIN_PATH
 from trainsgame.correctPlayground import correctPlayGr
 from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection, \
     createTrains, initPlayGround
@@ -183,10 +184,17 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
     # def receive(self, text_data=None, bytes_data=None, **kwargs):
     def receive_json(self, content):
+            self.user = self.scope["user"]
+            print("self.user - " + str(self.user))
+            print("self.user.is_authenticated - " + str(self.user.is_authenticated))
 
-            self.send_json({"type": "user.trains",
-                            "event": {"bi": 1, "ku": 2},
-                            "text": {"bi": 3, "ku": 4}})
+            if self.user.is_authenticated == False:
+                print("self.user.is_authenticated == False")
+                self.send_json({"type": "redirect",
+                                "value": LOGIN_PATH})
+
+            # self.send_json({"type": "redirect",
+            #                 "value": "/trains/log_in/"})
 
             # self.channel_layer.group_add("trains", self.channel_name)
             # self.channel_layer.group_add("trains", self.channel_name)

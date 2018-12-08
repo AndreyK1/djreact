@@ -6,10 +6,10 @@ from django.contrib.auth import login, logout
 # Create your views here.
 from django.urls import reverse
 # from django.core.urlresolvers import reverse
-
+from trainsgame.constants import LOGIN_PATH, LOGIN_PAGE, BEGIN_GAME_PAGE
 from trainsgame.models import PlayGround
 
-@login_required(login_url='/trains/log_in/')
+# @login_required(login_url=LOGIN_PATH)
 def beginOfGAme(request):
     playGround = PlayGround()
 
@@ -29,7 +29,7 @@ def log_in(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect(reverse('trains:beginOfGAme'))
+            return redirect(reverse(BEGIN_GAME_PAGE))
         else:
             print(form.errors)
     return render(request, 'log_in.html', {'form': form})
@@ -37,7 +37,7 @@ def log_in(request):
 
 def log_out(request):
     logout(request)
-    return redirect(reverse('trains:log_in'))
+    return redirect(reverse(LOGIN_PAGE))
 
 
 def sign_up(request):
@@ -46,7 +46,7 @@ def sign_up(request):
         form = UserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('trains:log_in')
+            return redirect(LOGIN_PAGE)
         else:
             print(form.errors)
     return render(request, "sign_up.html", {"form": form})
