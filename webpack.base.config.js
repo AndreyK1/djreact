@@ -6,7 +6,8 @@ module.exports = {
 
   entry: {
     // Add as many entry points as you have container-react-components here
-    App1: './reactjs/App1',
+      App1: './reactjs/App1',
+      AppMain: './trainsgame/rejs/AppMain',
       // Pixi: './reactjs/lib/pixi.min.js',
       Pixi: './djangorest/pixijs/main',
       Train: './trainsgame/gamejs/main',
