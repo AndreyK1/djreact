@@ -51,6 +51,7 @@ export default function setupTrainsScene(app) {
     createArrowTextures()
 
   // регистрируем отрисовку по сокетному событию
+  //   webSocketBridgeStart.listen(function(action, stream) {
   webSocketBridgeGroup.listen(function(action, stream) {
     //console.log("RESPONSE........:", action, stream);
     // console.log(JSON.parse(action.event.bi))

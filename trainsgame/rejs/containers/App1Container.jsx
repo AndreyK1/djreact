@@ -28,6 +28,15 @@ const styles = {
 export default class App1Container extends React.Component{
   componentDidMount() {
     let {dispatch, github} = this.props
+
+      document.addEventListener('DOMContentLoaded', function() {
+          console.log("--DOMContentLoaded")
+          webSocketBridgeGroup.listen(function(action, stream) {
+              console.log("++++++++++!!!!!!!!componentDidMount controlGameConsumer:", action);
+
+          });
+      });
+
     // if (!github.isLoadingRepos && github.repos === undefined) {
     //   dispatch(githubActions.fetchRepos())
     // }
@@ -67,11 +76,26 @@ export default class App1Container extends React.Component{
     return (
       <div className="container">
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-6">
             {/*<Headline>Sample App!</Headline>*/}
             <div style={[styles.button]} onClick={() => this.handleClickIncreaseSingleton()}>INCREASE Singleton</div>
             <p style={[styles.counter]} >{countersSingle.clicksSingle['ffff']}</p>
-
+          </div>
+          <div className="col-sm-3">
+            войти
+          </div>
+           <div className="col-sm-3">
+            счет
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            в игре| сбор
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            -------------
           </div>
         </div>
       </div>
