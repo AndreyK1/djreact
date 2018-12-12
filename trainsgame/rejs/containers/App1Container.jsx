@@ -6,6 +6,11 @@ import { connect } from "react-redux"
 // import * as counterActions from "../actions/counterActions"
 // import * as githubActions from "../actions/githubActions"
 import * as counterSingleActions from "../actions/counterSingleActions"
+import * as listenPlaygrounsList from "../actions/playGroundActions";
+// import GithubRepos from "../../../reactjs/components/GithubRepos";
+import PlaygroundsList from "../components/PlaygroundsList";
+
+
 // import * as postersAction from "../actions/postersAction"
 // import Headline from "../components/Headline"
 // import GithubRepos from "../components/GithubRepos"
@@ -23,20 +28,21 @@ const styles = {
 
 @connect(state => ({
     countersSingle: state.countersSingle,
+    playground: state.playground,
 }))
 @Radium
 export default class App1Container extends React.Component{
   componentDidMount() {
-    let {dispatch, github} = this.props
-
-      document.addEventListener('DOMContentLoaded', function() {
-          console.log("--DOMContentLoaded")
-          webSocketBridgeReact.listen(function(action, stream) {
-              console.log("++++++++++!!!!!!!!componentDidMount webSocketBridgeReact:", action);
-
-          });
-          setTimeout(()=> {webSocketBridgeReact.send({});}, 2000);
-      });
+    let {dispatch, playground} = this.props
+      dispatch(listenPlaygrounsList.listenPlaygrounsList())
+      // document.addEventListener('DOMContentLoaded', function() {
+      //     console.log("--DOMContentLoaded")
+      //     webSocketBridgeReact.listen(function(action, stream) {
+      //         console.log("++++++++++!!!!!!!!componentDidMount webSocketBridgeReact:", action);
+      //
+      //     });
+      //     setTimeout(()=> {webSocketBridgeReact.send({});}, 2000);
+      // });
 
     // if (!github.isLoadingRepos && github.repos === undefined) {
     //   dispatch(githubActions.fetchRepos())
@@ -70,7 +76,7 @@ export default class App1Container extends React.Component{
   render() {
     console.log("render");
     console.log(this.props);
-    let {countersSingle} = this.props
+    let {countersSingle, playground} = this.props
     // if (github.isLoadingRepos || github.repos === undefined) {
     //   return this.renderLoading()
     // }
@@ -99,6 +105,9 @@ export default class App1Container extends React.Component{
             -------------
           </div>
         </div>
+          {playground.playgrounds !== undefined &&
+              <PlaygroundsList playgrounds={playground.playgrounds} />
+          }
       </div>
     )
   }
