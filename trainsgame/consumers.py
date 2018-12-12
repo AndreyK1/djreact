@@ -44,6 +44,7 @@ class GroupConsumer(AsyncJsonWebsocketConsumer):
         print("----------------------Added " +self.channel_name+" channel to trains")
 
     async def disconnect(self, close_code):
+        # await self.channel_layer.group_discard("trains", self.channel_name)
         await self.channel_layer.group_discard("trains", self.channel_name)
         print("--------------------------Removed "+self.channel_name+" channel to trains")
 

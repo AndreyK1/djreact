@@ -31,10 +31,11 @@ export default class App1Container extends React.Component{
 
       document.addEventListener('DOMContentLoaded', function() {
           console.log("--DOMContentLoaded")
-          webSocketBridgeGroup.listen(function(action, stream) {
-              console.log("++++++++++!!!!!!!!componentDidMount controlGameConsumer:", action);
+          webSocketBridgeReact.listen(function(action, stream) {
+              console.log("++++++++++!!!!!!!!componentDidMount webSocketBridgeReact:", action);
 
           });
+          setTimeout(()=> {webSocketBridgeReact.send({});}, 2000);
       });
 
     // if (!github.isLoadingRepos && github.repos === undefined) {
