@@ -9,6 +9,7 @@ import * as counterSingleActions from "../actions/counterSingleActions"
 import * as listenPlaygrounsList from "../actions/playGroundActions";
 // import GithubRepos from "../../../reactjs/components/GithubRepos";
 import PlaygroundsList from "../components/PlaygroundsList";
+import ModalNewArena from "../components/ModalNewArena";
 
 
 // import * as postersAction from "../actions/postersAction"
@@ -32,29 +33,15 @@ const styles = {
 }))
 @Radium
 export default class App1Container extends React.Component{
+
+    state = { showModNewArena: false };
+
   componentDidMount() {
     let {dispatch, playground} = this.props
       dispatch(listenPlaygrounsList.listenPlaygrounsList())
-      // document.addEventListener('DOMContentLoaded', function() {
-      //     console.log("--DOMContentLoaded")
-      //     webSocketBridgeReact.listen(function(action, stream) {
-      //         console.log("++++++++++!!!!!!!!componentDidMount webSocketBridgeReact:", action);
-      //
-      //     });
-      //     setTimeout(()=> {webSocketBridgeReact.send({});}, 2000);
-      // });
 
-    // if (!github.isLoadingRepos && github.repos === undefined) {
-    //   dispatch(githubActions.fetchRepos())
-    // }
   }
-  // handleClick() {
-  //       console.log("handleClick11");
-  //       console.log(this.props);
-  //   let {dispatch} = this.props;
-  //
-  //   dispatch(counterActions.increaseCounter())
-  // }
+
 
   handleClickIncreaseSingleton(){
     let {dispatch} = this.props;
@@ -73,10 +60,20 @@ export default class App1Container extends React.Component{
     )
   }
 
+  showModalNewArena= () =>{
+    this.setState({ showModNewArena: true });
+  }
+
+  hideModalNewArena= () =>{
+    this.setState({ showModNewArena: false });
+  }
+
   render() {
     console.log("render");
     console.log(this.props);
     let {countersSingle, playground} = this.props
+
+
     // if (github.isLoadingRepos || github.repos === undefined) {
     //   return this.renderLoading()
     // }
@@ -90,6 +87,13 @@ export default class App1Container extends React.Component{
           </div>
           <div className="col-sm-3">
             войти
+              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena}>
+                  <p>Modal</p>
+                  <p>Data</p>
+              </ModalNewArena>
+              <button type="button" onClick={this.showModalNewArena}>
+                  openModNewArena
+              </button>
           </div>
            <div className="col-sm-3">
             счет
