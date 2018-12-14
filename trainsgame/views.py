@@ -15,6 +15,12 @@ def beginOfGAme(request):
 
     return render(request, "TrainGame.html", {"dd": 3})
 
+# @login_required(login_url=LOGIN_PATH)
+def beginOfGAmeTest(request):
+    playGround = PlayGround()
+
+    return render(request, "TrainGameTest.html", {"dd": 3})
+
     # model = SingletonDot()
     # md2 = SingletonDot2()
     # md2.increase();
