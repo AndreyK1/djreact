@@ -20,6 +20,9 @@ export default class ModalNewArena extends React.Component {
     return (
         <div className={showHideClassName}>
           <section className="modal-main">
+             {/*<div className="col-sm-12" id="gameCont">*/}
+
+            {/*</div>*/}
             {children}
             <button onClick={handleClose}>close</button>
           </section>

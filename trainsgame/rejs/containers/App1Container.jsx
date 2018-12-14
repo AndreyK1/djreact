@@ -43,10 +43,10 @@ export default class App1Container extends React.Component{
   }
 
 
-  handleClickIncreaseSingleton(){
-    let {dispatch} = this.props;
-    dispatch(counterSingleActions.increaseCounterSingletons())
-  }
+  // handleClickIncreaseSingleton(){
+  //   let {dispatch} = this.props;
+  //   dispatch(counterSingleActions.increaseCounterSingletons())
+  // }
 
   renderLoading() {
     return (
@@ -80,10 +80,32 @@ export default class App1Container extends React.Component{
     return (
       <div className="container">
         <div className="row">
-          <div className="col-sm-6">
-            {/*<Headline>Sample App!</Headline>*/}
-            <div style={[styles.button]} onClick={() => this.handleClickIncreaseSingleton()}>INCREASE Singleton</div>
-            <p style={[styles.counter]} >{countersSingle.clicksSingle['ffff']}</p>
+          {/*<div className="col-sm-6">*/}
+            {/*/!*<Headline>Sample App!</Headline>*!/*/}
+            {/*<div style={[styles.button]} onClick={() => this.handleClickIncreaseSingleton()}>INCREASE Singleton</div>*/}
+            {/*<p style={[styles.counter]} >{countersSingle.clicksSingle['ffff']}</p>*/}
+          {/*</div>*/}
+          <div className="col-sm-12">
+
+              <ul className="nav nav-tabs" id="myTab">
+                  <li className="active"><a href="#home" data-toggle="tab">Главная</a></li>
+                  <li><a href="#profile" data-toggle="tab">Профиль</a></li>
+                  <li><a href="#messages" data-toggle="tab">Сообщения</a></li>
+                  <li><a href="#settings" data-toggle="tab">Настройки</a></li>
+              </ul>
+
+              <div className="tab-content">
+                  <div className="tab-pane active" id="home">...</div>
+                  <div className="tab-pane" id="profile">profile1</div>
+                  <div className="tab-pane" id="messages">messages1</div>
+                  <div className="tab-pane" id="settings">settings1</div>
+              </div>
+
+
+
+          </div>
+          <div className="col-sm-12" id="gameCont">
+
           </div>
           <div className="col-sm-3">
             войти

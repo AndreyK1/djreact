@@ -9,12 +9,12 @@ let Application = PIXI.Application,
     Rectangle = PIXI.Rectangle,
     TextureCache = PIXI.utils.TextureCache;
 
-let stageWidth=700;
+let stageWidth=550;
 
 //Create a Pixi Application
 let appTrain = new Application({
     width: stageWidth,
-    height: 1700,
+    height: 550,
     antialias: true,
     transparent: false,
     resolution: 1
@@ -22,7 +22,8 @@ let appTrain = new Application({
 );
 
 //Add the canvas that Pixi automatically created for you to the HTML document
-document.body.appendChild(appTrain.view);
+// document.body.appendChild(appTrain.view);
+document.getElementById("gameCont").appendChild(appTrain.view);
 
 loader
   .add([
