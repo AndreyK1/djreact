@@ -54,6 +54,7 @@ class GroupConsumerReact(AsyncJsonWebsocketConsumer):
         # time.sleep(5)
         # await self.sendsArenas(playgrounds)
 
+
         # asyncio.ensure_future(self.sendsArenas())
 
         # asyncio.run(self.sendsArenas())
@@ -149,7 +150,7 @@ class ReactStartConsumer(WebsocketConsumer):
             # channel_layer = get_channel_layer()
 
             serialized_obj = json.dumps(playgrounds, default=lambda x: x.__dict__)
-            print("serialized_obj " + serialized_obj)
+            # print("serialized_obj " + serialized_obj)
 
             # print("+++++++++++++++++++++++++++Try send at " + self.channel_name)
 

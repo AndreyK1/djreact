@@ -12,7 +12,7 @@ export function listenPlaygrounsList(is_list_sended) {
       }
        document.addEventListener('DOMContentLoaded', function() {
           console.log("--DOMContentLoaded")
-          webSocketBridgeReact.listen(function(action, stream) {
+          webSocketBridgeConsGroupCustom.listen(function(action, stream) {
               console.log("++++++++++!!!!!!!!componentDidMount webSocketBridgeReact:", action);
               // let playgr = action["event"]["value"]
               let playgr = JSON.parse(action.event.value)
@@ -24,7 +24,7 @@ export function listenPlaygrounsList(is_list_sended) {
 
           setTimeout(()=> {
               // webSocketBridgeReact.send({});
-              webSocketBridgeStartReact.send({"type":"startReact", "name":1, "whereMove":2, "arena_num":3})
+              webSocketBridgeConsGroupCustom.send({"type":"startReact", "name":1, "whereMove":2, "arena_num":3})
               console.log("++++++++++webSocketBridgeReact  send send send send   :");
               dispatch({type: SET_LISTENER_SENDED, res: true})
           }, 2000);

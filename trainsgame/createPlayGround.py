@@ -202,7 +202,7 @@ def createTrains(playGround):
         # k +=1
         color = 0
         print("counter "+ str(counter))
-        if(counter < halfSize):
+        if(counter < halfSize or halfSize==0):
             color = colors.allPossibleColors[counter]
             colors.usedColors.append(color)
             train.command = Teams.TWO.value
