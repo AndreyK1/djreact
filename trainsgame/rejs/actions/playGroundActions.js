@@ -3,10 +3,13 @@
 import {FETCH_INCREASE_SINGLE_SUCCESS} from "./counterSingleActions";
 
 export const SAVE_PLAYGROUNDS_LIST = "SAVE_PLAYGROUNDS_LIST"
+export const SET_LISTENER_SENDED = "SET_LISTENER_SENDED"
 
-
-export function listenPlaygrounsList() {
+export function listenPlaygrounsList(is_list_sended) {
   return function (dispatch) {
+      if(is_list_sended){
+          return;
+      }
        document.addEventListener('DOMContentLoaded', function() {
           console.log("--DOMContentLoaded")
           webSocketBridgeReact.listen(function(action, stream) {
@@ -18,18 +21,15 @@ export function listenPlaygrounsList() {
 
 
           });
-          setTimeout(()=> {webSocketBridgeReact.send({});}, 2000);
+
+          setTimeout(()=> {
+              // webSocketBridgeReact.send({});
+              webSocketBridgeStartReact.send({"type":"startReact", "name":1, "whereMove":2, "arena_num":3})
+              console.log("++++++++++webSocketBridgeReact  send send send send   :");
+              dispatch({type: SET_LISTENER_SENDED, res: true})
+          }, 2000);
       });
 
 
-    // let url = "/users/single_dot2"
-    // dispatch({type: FETCH_INCREASE_SINGLE})
-    // return request(
-    //   url, {},
-    //   (json) => { dispatch({type: FETCH_INCREASE_SINGLE_SUCCESS, res: json}) },
-    //   (json) => { dispatch({type: FETCH_INCREASE_SINGLE_ERROR400, res: json}) },
-    //   (res) => { dispatch({type: FETCH_INCREASE_SINGLE_ERROR500, res: res}) },
-    //   (ex) => { dispatch({type: FETCH_INCREASE_SINGLE_FAILURE, error: ex}) },
-    // )
   }
 }

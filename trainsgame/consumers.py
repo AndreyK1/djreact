@@ -3,13 +3,14 @@ import json
 import time
 
 import django
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer, WebsocketConsumer, JsonWebsocketConsumer
 from channels.layers import get_channel_layer
 
 # первичный коннект, и обработка каждого коннекта из канала
 # from django.core import serializers
 from trainsgame.constants import LOGIN_PATH
+from trainsgame.consumersReact import GroupConsumerReact
 from trainsgame.correctPlayground import correctPlayGr
 from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillPathes, changeTrainDirection, \
     createTrains, initPlayGround
@@ -185,6 +186,11 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
     # def receive(self, text_data=None, bytes_data=None, **kwargs):
     def receive_json(self, content):
+            print("receive_json");
+
+
+
+
             self.user = self.scope["user"]
             print("self.user - " + str(self.user))
             print("self.user.is_authenticated - " + str(self.user.is_authenticated))

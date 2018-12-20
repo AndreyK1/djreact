@@ -39,7 +39,7 @@ export default class App1Container extends React.Component{
 
   componentDidMount() {
     let {dispatch, playground} = this.props
-      dispatch(listenPlaygrounsList.listenPlaygrounsList())
+      dispatch(listenPlaygrounsList.listenPlaygrounsList(playground.isIstenerSended))
 
   }
 

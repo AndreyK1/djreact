@@ -28,6 +28,7 @@
         const webSocketBridgeStart = new channels.WebSocketBridge();
         const webSocketBridgeControl = new channels.WebSocketBridge();
         const webSocketBridgeReact = new channels.WebSocketBridge();
+        const webSocketBridgeStartReact = new channels.WebSocketBridge();
 
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -49,6 +50,8 @@
              }
 
           });
+
+          webSocketBridgeStartReact.connect('/reactStartConsumer/');
 
           webSocketBridgeReact.connect('/groupConsumerReact/');
           {#webSocketBridgeReact.send({});#}

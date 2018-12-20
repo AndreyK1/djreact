@@ -1,7 +1,7 @@
 import * as playGroundActions from "../actions/playGroundActions"
 
 const initialState = {
-    // isLoadingRepos: false,
+    isIstenerSended: false,
   playgrounds: {},
 }
 
@@ -13,6 +13,9 @@ export default function playgroud(state=initialState, action={}) {
   case playGroundActions.SAVE_PLAYGROUNDS_LIST:
     console.log("reducer", action.res);
     return {...state, playgrounds: action.res}
+  case playGroundActions.SET_LISTENER_SENDED:
+     console.log("SET_LISTENER_SENDED", action.res);
+    return {...state, isIstenerSended: action.res}
   //   return {...state, isLoadingRepos: true}
   // case playGroundActions.FETCH_INCREASE_SINGLE_SUCCESS:
   //   return {...state, isLoadingRepos: false, clicksSingle: action.res}

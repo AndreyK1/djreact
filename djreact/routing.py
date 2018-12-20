@@ -5,7 +5,7 @@ from notifier.consumers import EchoConsumer, PixiConsumer, TickTockConsumer, Sta
 from notifier.consumersWORed import StartNotifConsumerWOR
 
 from trainsgame.consumers import StartGameConsumer, ControlGameConsumer, GroupConsumer
-from trainsgame.consumersReact import GroupConsumerReact
+from trainsgame.consumersReact import GroupConsumerReact, ReactStartConsumer
 
 application = ProtocolTypeRouter({
     "websocket":AuthMiddlewareStack(
@@ -24,6 +24,9 @@ application = ProtocolTypeRouter({
             path("startGameConsumer/", StartGameConsumer),
             path("controlGameConsumer/", ControlGameConsumer),
             path("groupConsumerReact/", GroupConsumerReact),
+            path("reactStartConsumer/", ReactStartConsumer),
+
+
 
 
         ])
