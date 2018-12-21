@@ -16,7 +16,8 @@ from trainsgame.createPlayGround import createPlayGr, fillTrainsPositions, fillP
     createTrains, initPlayGround
 from trainsgame.createTreasurres import createTreasurres
 from trainsgame.makeMovings import makeFirstMovings
-from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList
+from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList, SingleChannelToArena
+
 
 # добавление канала в группу и рассылка по группам
 class GroupConsumer(AsyncJsonWebsocketConsumer):
@@ -42,12 +43,33 @@ class GroupConsumer(AsyncJsonWebsocketConsumer):
 
         text_data = text_data.replace("\"", "")
         await self.channel_layer.group_add(str(text_data), self.channel_name)
-        print("----------------------Added " +self.channel_name+" channel to trains")
+        SingleChannelToArena().addChannelToArena(str(text_data), self.channel_name)
+
+
+        print("----------------------Added " +self.channel_name+" channel to arena "+str(text_data))
 
     async def disconnect(self, close_code):
         # await self.channel_layer.group_discard("trains", self.channel_name)
-        await self.channel_layer.group_discard("trains", self.channel_name)
-        print("--------------------------Removed "+self.channel_name+" channel to trains")
+        # await self.channel_layer.group_discard("trains", self.channel_name)
+        print("---disconect " + self.channel_name)
+
+        arena = SingleChannelToArena().getArenaByChannel(self.channel_name)
+        if arena != None:
+            SingleChannelToArena().remChannelToArena(self.channel_name)
+            await self.channel_layer.group_discard(arena, self.channel_name)
+            print("--------------------------Removed " + self.channel_name + " channel from arena " + arena)
+            await self.channel_layer.group_discard(arena, self.channel_name)
+
+
+        # SingleChannelToArena().remChannelToArena(self.channel_name)
+
+
+        # serialized_obj = json.dumps(SingleChannelToArena().arenasCh, default=lambda x: x.__dict__)
+        # print("serialized_obj SingleChannelToArena " + serialized_obj)
+
+
+
+
 
     # обработка каждого коннекта из канала
     async def user_trains(self, event):
@@ -73,6 +95,7 @@ class StartGameConsumer(WebsocketConsumer):
             playGround = PlayGroundList().get(int(text_data))
 
             playGround = initPlayGround(playGround)
+
 
             # playGround.sleepSec = 1
             # playGround.moveSize = 20
@@ -120,13 +143,22 @@ class StartGameConsumer(WebsocketConsumer):
             # while i < 10:
             print("-playGround.modeOfGame-" + playGround.modeOfGame)
 
-
             # запускаем игру
             while playGround.modeOfGame == "play":
+
+
+                cnt_in_arena = SingleChannelToArena().getCntInArena(playGround.arena)
+                if cnt_in_arena < 1:
+                    print("No more players in arena "+ str(playGround.arena) + " deleting the arena")
+                    PlayGroundList().delete(playGround)
+                    break
+                print("cnt_in_arena of arena " + str(playGround.arena) + " cnt " + str(cnt_in_arena))
                 i = i + 1;
                 print("-i-" + str(i) + playGround.modeOfGame)
 
                 fillTrainsPositions(playGround)
+
+
 
                 # asyncio.sleep(1)
                 time.sleep(playGround.sleepSec)
@@ -153,7 +185,7 @@ class StartGameConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # await self.channel_layer.group_discard("gossip", self.channel_name)
-        print("--------------------------Removed")
+        print("--------------------------Removed StartGameConsumer " + self.channel_name)
             # async_to_sync(channel_layer.group_send)(
             #     "gossip", {"type": "user.gossip",
             #                "event": "New User",
@@ -250,4 +282,4 @@ class ControlGameConsumer(JsonWebsocketConsumer):
 
     def disconnect(self, close_code):
         # await self.channel_layer.group_discard("gossip", self.channel_name)
-        print("--------------------------Removed")
+        print("--------------------------Removed ControlGameConsumer " + self.channel_name)

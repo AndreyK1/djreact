@@ -23,6 +23,57 @@ class SingleChannelObjTrains:
     def addChannel(self, idn, channel):
         self.channels[idn] = channel
 
+@singleton
+class SingleChannelToArena:
+    # Объект (тестовый) в который мы сами будем объединять каналы (не через редис)
+    # text = models.CharField(max_length=200, default="")
+    # doter = models.IntegerField(default=0)
+
+    channelsAr = {}
+    arenasCh = {}
+
+    def addChannelToArena(self, arena, channel):
+        print("addChannelToArena :   arena:" + arena + " channel:" + channel)
+        self.channelsAr[channel] = arena
+        if arena not in self.arenasCh.keys():
+            self.arenasCh[arena] = []
+
+        if channel not in self.arenasCh[arena]:
+            self.arenasCh[arena].append(channel)
+
+        self.printSerialized()
+
+
+    def remChannelToArena(self, channel):
+        self.remChannelToArena1(self.channelsAr[channel], channel)
+
+    def remChannelToArena1(self, arena, channel):
+        print("remChannelToArena :   arena:" + arena + " channel:"+ channel)
+        del self.channelsAr[channel]
+        if self.arenasCh[arena] is None:
+            self.arenasCh[arena] = []
+
+        self.arenasCh[arena].remove(channel)
+
+        self.printSerialized()
+
+    def getArenaByChannel(self, channel):
+        if channel in self.channelsAr.keys():
+            arena = self.channelsAr[channel]
+            return arena
+
+        return None
+
+    def getCntInArena(self, arena):
+        if str(arena) not in self.arenasCh:
+            return 0
+        else:
+            return len(self.arenasCh[str(arena)])
+
+
+    def printSerialized(self):
+        serialized_obj = json.dumps(self.arenasCh, default=lambda x: x.__dict__)
+        print("serialized_obj SingleChannelToArena " + serialized_obj)
 
 @singleton
 class Foo():
@@ -89,6 +140,10 @@ class PlayGroundList():
 
     def set(self, num, playGround):
         self.PlayGrounds[num] = playGround
+
+    def delete(self, playGround):
+        del self.PlayGrounds[playGround.arena]
+        print("Удалена Арена под номером " + str(playGround.arena))
 
 
 
