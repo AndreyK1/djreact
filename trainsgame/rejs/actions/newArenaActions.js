@@ -10,7 +10,23 @@ export function newarenaCreate() {
 
     console.log("---+11111newarenaCreate+--");
 
-      webSocketBridgeControl.send({"type":"join", "name":"a1", "arena_num":1 })
+      webSocketBridgeControl.send({"type":"join", "name":"", "arena_num":0 })
+      // webSocketBridgeControl.listen(function(action, stream) {
+      //        console.log("controlGameConsumer:", action);
+      //        if(action["type"] == "joined"){
+      //             console.log("joined action[\"value\"] " +  action["value"])
+      //        }
+      //
+      // });
+      window.addEventListener("joined", (event) => {
+        console.log("event.details.arena", event)
+        // alert(event.detail.arena)
+          webSocketBridgeGroup.send(event.detail.arena)
+          document.getElementById("player_name").value = event.detail.username
+          document.getElementById("arena_num").value = event.detail.arena
+             //           var name =   document.getElementById("player_name").value
+             // var arena_num =   document.getElementById("arena_num").value
+      })
 
 
 

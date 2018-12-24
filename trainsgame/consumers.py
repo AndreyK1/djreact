@@ -231,6 +231,7 @@ class ControlGameConsumer(JsonWebsocketConsumer):
                 print("self.user.is_authenticated == False")
                 self.send_json({"type": "redirect",
                                 "value": LOGIN_PATH})
+                return
 
             # self.send_json({"type": "redirect",
             #                 "value": "/trains/log_in/"})
@@ -246,22 +247,37 @@ class ControlGameConsumer(JsonWebsocketConsumer):
             # json = django.utils.simplejson.loads(text_data)
 
             # print("-text_data-"+content)
-            print("-text_data.type-" + content["type"])
+            print("-text_data.type-" + content["type"] + " | arena_num " + str(content["arena_num"]) +" | name " + content["name"])
+
 
             arena_num = int(content["arena_num"])
-
+            if(arena_num == 0):
+                if(len(PlayGroundList().PlayGrounds) == 0):
+                    arena_num = 1;
+                else:
+                    arena_num = max(PlayGroundList().PlayGrounds, key=int) + 1
+                print("arena_num - max - " + str(arena_num))
             # playGroundList = PlayGroundList()
             #
             # playGround = playGroundList.get(1)
             playGround = PlayGroundList().get(arena_num)
 
+            name = content["name"]
+            # if name == "":
+            name = str(self.user)
+            print("name  - " + name)
+
+
             # если управление игрой join/play/stop
             if (content["type"] == "join"):
                 # self.channel_layer.group_add(str(arena_num), self.channel_name)
                 # print("----------------------Added " +self.channel_name+" channel to trains")
-                name = content["name"]
+                # name = content["name"]
                 # train = Train()
                 playGround.trains[name] = name
+                self.send_json({"type": "joined",
+                                "value": arena_num,
+                                "username": name})
 
             if (content["type"] == "play"):
                 playGround.modeOfGame = "play"
@@ -271,7 +287,8 @@ class ControlGameConsumer(JsonWebsocketConsumer):
             # если управление телегой moveTrainChange
             if (content["type"] == "moveTrainChange"):
                 whereMove = content["whereMove"]
-                name = content["name"]
+                # name = content["name"]
+
                 changeTrainDirection(playGround, whereMove, name)
 
             # очишаем все PlayGrounds
