@@ -4,7 +4,7 @@ import React from "react"
 
 export default class ModalNewArena extends React.Component {
   render() {
-    let {show, handleClose, children} = this.props
+    let {show, handleClose, children, createGame, dispatch} = this.props
 
     // let plNodes = []
       console.log("ModalNewArena ", show)
@@ -23,6 +23,7 @@ export default class ModalNewArena extends React.Component {
              {/*<div className="col-sm-12" id="gameCont">*/}
 
             {/*</div>*/}
+            <button onClick={dispatch(createGame)}>Create Arena</button>
             {children}
             <button onClick={handleClose}>close</button>
           </section>

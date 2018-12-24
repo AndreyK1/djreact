@@ -11,6 +11,7 @@ import * as listenPlaygrounsList from "../actions/playGroundActions";
 import PlaygroundsList from "../components/PlaygroundsList";
 import ModalNewArena from "../components/ModalNewArena";
 import ArenasTab from "../components/ArenasTab";
+import * as newarenaCreate from "../actions/newArenaActions";
 
 
 // import * as postersAction from "../actions/postersAction"
@@ -31,6 +32,7 @@ const styles = {
 @connect(state => ({
     countersSingle: state.countersSingle,
     playground: state.playground,
+    newarena: state.newarena,
 }))
 @Radium
 export default class App1Container extends React.Component{
@@ -62,6 +64,8 @@ export default class App1Container extends React.Component{
   }
 
   showModalNewArena= () =>{
+     // let {dispatch} = this.props
+     //  dispatch(newarenaCreate.newarenaCreate())
     this.setState({ showModNewArena: true });
   }
 
@@ -72,7 +76,7 @@ export default class App1Container extends React.Component{
   render() {
     console.log("render");
     console.log(this.props);
-    let {countersSingle, playground} = this.props
+    let {countersSingle, playground, dispatch} = this.props
 
 
     // if (github.isLoadingRepos || github.repos === undefined) {
@@ -87,19 +91,21 @@ export default class App1Container extends React.Component{
             {/*<p style={[styles.counter]} >{countersSingle.clicksSingle['ffff']}</p>*/}
           {/*</div>*/}
 
-
+          <div className="col-sm-12">
+              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} >
+                  <p>Modal</p>
+                  <p>Data</p>
+              </ModalNewArena>
+              <button type="button" onClick={this.showModalNewArena}>
+                  create new Arena
+              </button>
+          </div>
           <div className="col-sm-12" id="gameCont">
             <ArenasTab playgrounds={playground.playgrounds} />
           </div>
           <div className="col-sm-3">
             войти
-              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena}>
-                  <p>Modal</p>
-                  <p>Data</p>
-              </ModalNewArena>
-              <button type="button" onClick={this.showModalNewArena}>
-                  openModNewArena
-              </button>
+
           </div>
            <div className="col-sm-3">
             счет
