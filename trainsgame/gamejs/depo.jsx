@@ -54,7 +54,7 @@ class DepoContainer extends Container {
      checkIfAllTressAlreadyDrawn(tressures) {
          for (var i in tressures) {
              let tressK = tressures[i]
-            //console.log("depo value ", value, depoPic.pickedTress, depoPic.pickedTress.indexOf(value))
+            console.log("depo tressK ", tressK, this.depoPic.pickedTress, this.pickedTress.indexOf(tressK))
             if(this.pickedTress.indexOf(tressK)<0) {
                 let trainContainer = getContainers().trainsContainers[getContainers().playGroundGl['treassures'][tressK]["picked"]]
 

@@ -26,6 +26,11 @@ class GroupConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
         # await self.channel_layer.group_add("trains", self.channel_name)
         # print("----------------------Added " +self.channel_name+" channel to trains")
+        # если пользователь конгектился ранее, то возобновляем коннект
+
+
+
+
 
 
     async def receive(self,text_data=None):
@@ -41,12 +46,26 @@ class GroupConsumer(AsyncJsonWebsocketConsumer):
         #                         "event": {"bi": 1, "ku": 2},
         #                         "text": {"bi": 3, "ku": 4     }})
 
+
         text_data = text_data.replace("\"", "")
-        await self.channel_layer.group_add(str(text_data), self.channel_name)
-        SingleChannelToArena().addChannelToArena(str(text_data), self.channel_name)
+        print("text_data "+str(text_data))
+
+        if text_data =="restore":
+            # если это попытка востановить конекшен
+            if "arena" in self.scope["session"]:
+                arena = SingleChannelToArena().checkUserConnectionToAreas(self.scope["user"], self.channel_name, self.scope["session"]["arena"])
+                if arena != 0 and str(arena) != "":
+                    print("restore adding self.channel_name to arena " + str(self.channel_name) + str(arena))
+                    await self.channel_layer.group_add(str(arena), self.channel_name)
+                    return
+        else:
+            await self.channel_layer.group_add(str(text_data), self.channel_name)
+            SingleChannelToArena().addChannelToArena(str(text_data), self.channel_name, self.scope["user"])
+            self.scope["session"]["arena"] = str(text_data)
+            self.scope["session"].save()
+            print("----------------------Added " + self.channel_name + " channel to arena " + str(text_data))
 
 
-        print("----------------------Added " +self.channel_name+" channel to arena "+str(text_data))
 
     async def disconnect(self, close_code):
         # await self.channel_layer.group_discard("trains", self.channel_name)

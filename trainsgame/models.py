@@ -30,11 +30,14 @@ class SingleChannelToArena:
     # doter = models.IntegerField(default=0)
 
     channelsAr = {}
+    userNameChannel = {}
     arenasCh = {}
 
-    def addChannelToArena(self, arena, channel):
+
+    def addChannelToArena(self, arena, channel, userName = None):
         print("addChannelToArena :   arena:" + arena + " channel:" + channel)
         self.channelsAr[channel] = arena
+        self.userNameChannel[userName] = channel
         if arena not in self.arenasCh.keys():
             self.arenasCh[arena] = []
 
@@ -64,6 +67,13 @@ class SingleChannelToArena:
 
         return None
 
+    def changeArenaToChannel(self, oldChannel, newChannel):
+        if oldChannel in self.channelsAr.keys():
+            arena = self.channelsAr[oldChannel]
+            del self.channelsAr[oldChannel]
+            self.channelsAr[newChannel] = arena
+
+
     def getCntInArena(self, arena):
         if str(arena) not in self.arenasCh:
             return 0
@@ -74,6 +84,37 @@ class SingleChannelToArena:
     def printSerialized(self):
         serialized_obj = json.dumps(self.arenasCh, default=lambda x: x.__dict__)
         print("serialized_obj SingleChannelToArena " + serialized_obj)
+
+    def checkUserConnectionToAreas(self, user, channel, arena):
+        print("arena from sessions - " + str(arena))
+
+        if user.is_authenticated == False:
+            return 0
+
+        # if user not in self.userNameChannel:
+        #     return 0
+
+        if int(arena) not in PlayGroundList().PlayGrounds.keys():
+            return 0
+
+        playGround = PlayGroundList().get(int(arena))
+        if str(user) not in playGround.trains.keys():
+            return 0
+
+        print("returning arena to restore " + str(arena))
+
+        # oldChannel = self.userNameChannel[user]
+        # arena = self.getArenaByChannel(oldChannel)
+        self.userNameChannel[user] = channel
+        # self.channelsAr[channel]
+        # self.changeArenaToChannel(oldChannel, channel)
+        self.addChannelToArena(str(arena), channel, user)
+        return arena
+
+
+
+
+
 
 @singleton
 class Foo():
@@ -200,7 +241,7 @@ class Train:
 
     def makeMove(self, playGround):
         self.moveByChoise = 0
-        print("makeMove train "+ str(self.number)+ " self.pathNum "+ str(self.pathNum))
+        # print("makeMove train "+ str(self.number)+ " self.pathNum "+ str(self.pathNum))
         # serialized_obj = json.dumps(playGround, default=lambda x: x.__dict__)
         # print("serialized_obj " +serialized_obj)
         print( "self.coord " +str(self.coord["x"])+ " --- "+ str(self.coord["y"]))
@@ -228,8 +269,8 @@ class Train:
 
 
         print("self.coord " + str(self.coord["x"]) + " --- " + str(self.coord["y"]))
-        print("path.whereNowTrain " + str(path.whereNowTrain))
-        print("------------------------------------------")
+        # print("path.whereNowTrain " + str(path.whereNowTrain))
+        # print("------------------------------------------")
 
         # проверяем на контакт с деньгами
         self.checkContactWithTressure(playGround)
@@ -237,7 +278,7 @@ class Train:
         self.checkContactWithDepo(playGround)
 
         if(path.whereNowTrain >= path.lengtOfPx):
-            print("clear whereNowTrain" +str(path.whereNowTrain))
+            # print("clear whereNowTrain" +str(path.whereNowTrain))
             path.whereNowTrain = 0
             path.existTrainId = 0
             self.chhoseDirection(playGround)
@@ -267,7 +308,7 @@ class Train:
                 tryAtempts = 0
                 # self = playGround.trains[self.number]
             # randomAddTrainToCross(playGround, trainName, train = 0)
-            print("tryAtempts "+str(tryAtempts) + " self.nextMove "+str(self.nextMove))
+            # print("tryAtempts "+str(tryAtempts) + " self.nextMove "+str(self.nextMove))
             tryAtempts = tryAtempts+1
             nextPathNum = 0
             nextCrossNum = 0

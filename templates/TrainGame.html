@@ -35,8 +35,10 @@
 
         document.addEventListener('DOMContentLoaded', function() {
           webSocketBridgeGroup.connect('/trainsGroupConsumer/');
-            {#сразу конектимся#}
-          {#webSocketBridge.send("hi")#}
+          {#если уже был коннектион, то опробоватиь востановить#}
+          setTimeout(()=> {
+            webSocketBridgeGroup.send("restore")
+          }, 2000);
 
           webSocketBridgeStart.connect('/startGameConsumer/');
           webSocketBridgeStart.listen(function(action, stream) {

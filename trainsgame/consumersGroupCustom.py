@@ -32,7 +32,7 @@ class StartConsGroupCustom(AsyncJsonWebsocketConsumer):
         self.id = md2.doter
         md2.addChannel(self.id, self)
 
-        print("Added "+self.channel_name+" channel to gossip")
+        print("Added "+self.channel_name+" channel to GroupCustom react")
 
     async def disconnect(self, code):
         md2 = SingletonChannelObj()
