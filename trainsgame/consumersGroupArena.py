@@ -41,8 +41,8 @@ class StartConsGroupArena(AsyncJsonWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
         print("Recieve--------StartConsGroupArena-----------------------------------")
 
-        await self.send_json({"event": {"bi": "fsdfsd", "ku": "vxcvcxv"}
-                                })
+        # await self.send_json({"event": {"bi": "fsdfsd", "ku": "vxcvcxv"}
+        #                         })
 
 
         text_data = text_data.replace("\"", "")

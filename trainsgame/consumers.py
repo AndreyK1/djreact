@@ -229,7 +229,7 @@ class StartGameConsumer(WebsocketConsumer):
         for key, channel in SingleChannelToArena().arenasCh[str(playGround.arena)].items():
 
             # channel.send_json({"type": "user.trains",
-            #                         "event": {"bi": serialized_obj, "ku": info},
+            #                         "event": {"bi": serialized_obj, "ku": i   nfo},
             #                         "text": {"bi": text_data, "ku": info}
             #                         })
             async_to_sync(self.send_to_channel)(channel, serialized_obj, info, text_data)

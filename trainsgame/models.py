@@ -49,16 +49,18 @@ class SingleChannelToArena:
         self.printSerialized()
 
 
-    def remChannelToArena(self, channel):
-        self.remChannelToArena1(self.channelsAr[channel], channel)
+    def remChannelToArena(self, channel_name):
+        self.remChannelToArena1(self.channelsAr[channel_name], channel_name)
 
     def remChannelToArena1(self, arena, channel):
         print("remChannelToArena :   arena:" + arena + " channel:"+ channel)
         del self.channelsAr[channel]
         if self.arenasCh[arena] is None:
-            self.arenasCh[arena] = []
+            self.arenasCh[arena] = {}
 
-        self.arenasCh[arena].remove(channel)
+        # self.arenasCh[arena].remove(channel)
+        if channel in self.arenasCh[arena]:
+            del self.arenasCh[arena][channel]
 
         self.printSerialized()
 
