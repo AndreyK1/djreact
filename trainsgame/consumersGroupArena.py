@@ -32,7 +32,7 @@ class StartConsGroupArena(AsyncJsonWebsocketConsumer):
 
         arena = SingleChannelToArena().getArenaByChannel(self.channel_name)
         if arena != None:
-            SingleChannelToArena().remChannelToArena(self.channel_name)
+            SingleChannelToArena().remChannelToArena(self.channel_name, self.scope["user"])
             # await self.channel_layer.group_discard(arena, self.channel_name)
             print("--------------------------Removed " + self.channel_name + " channel from arena " + arena)
         # md2 = SingletonChannelObj()

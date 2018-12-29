@@ -20,6 +20,7 @@ from trainsgame.models import PlayGround, Foo, Cross, Train, PlayGroundList, Sin
 
 
 # добавление канала в группу и рассылка по группам
+# TODO delete old
 class GroupConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self,text_data=None):
