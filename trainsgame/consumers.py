@@ -53,14 +53,14 @@ class GroupConsumer(AsyncJsonWebsocketConsumer):
         if text_data =="restore":
             # если это попытка востановить конекшен
             if "arena" in self.scope["session"]:
-                arena = SingleChannelToArena().checkUserConnectionToAreas(self.scope["user"], self.channel_name, self.scope["session"]["arena"])
+                arena = SingleChannelToArena().checkUserConnectionToAreas(self.scope["user"], self, self.scope["session"]["arena"])
                 if arena != 0 and str(arena) != "":
                     print("restore adding self.channel_name to arena " + str(self.channel_name) + str(arena))
                     await self.channel_layer.group_add(str(arena), self.channel_name)
                     return
         else:
             await self.channel_layer.group_add(str(text_data), self.channel_name)
-            SingleChannelToArena().addChannelToArena(str(text_data), self.channel_name, self.scope["user"])
+            SingleChannelToArena().addChannelToArena(str(text_data), self, self.scope["user"])
             self.scope["session"]["arena"] = str(text_data)
             self.scope["session"].save()
             print("----------------------Added " + self.channel_name + " channel to arena " + str(text_data))
@@ -77,7 +77,7 @@ class GroupConsumer(AsyncJsonWebsocketConsumer):
             SingleChannelToArena().remChannelToArena(self.channel_name)
             await self.channel_layer.group_discard(arena, self.channel_name)
             print("--------------------------Removed " + self.channel_name + " channel from arena " + arena)
-            await self.channel_layer.group_discard(arena, self.channel_name)
+            # await self.channel_layer.group_discard(arena, self.channel_name)
 
 
         # SingleChannelToArena().remChannelToArena(self.channel_name)
@@ -218,13 +218,26 @@ class StartGameConsumer(WebsocketConsumer):
 
         print("+++++++++++++++++++++++++++Try send fffffff " + text_data + " at " + self.channel_name)
 
-        async_to_sync(channel_layer.group_send)(
-            # channel_layer.group_send(
-            #     "trains", {"type": "user.trains",
-            str(playGround.arena), {"type": "user.trains",
-                                    "event": {"bi": serialized_obj, "ku": info},
-                                    "text": {"bi": text_data, "ku": info}
-                                    })
+        # async_to_sync(channel_layer.group_send)(
+        #     # channel_layer.group_send(
+        #     #     "trains", {"type": "user.trains",
+        #     str(playGround.arena), {"type": "user.trains",
+        #                             "event": {"bi": serialized_obj, "ku": info},
+        #                             "text": {"bi": text_data, "ku": info}
+        #                             })
+
+        for key, channel in SingleChannelToArena().arenasCh[str(playGround.arena)].items():
+
+            # channel.send_json({"type": "user.trains",
+            #                         "event": {"bi": serialized_obj, "ku": info},
+            #                         "text": {"bi": text_data, "ku": info}
+            #                         })
+            async_to_sync(self.send_to_channel)(channel, serialized_obj, info, text_data)
+            # asyncio.ensure_future(self.send_to_channel(channel, serialized_obj, info, text_data))
+
+    async def send_to_channel(self, channel, serialized_obj, info, text_data):
+        await channel.send_json({"event": {"bi": serialized_obj, "ku": info}
+                                })
 
 
 

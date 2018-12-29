@@ -55,6 +55,7 @@ export default function setupTrainsScene(app) {
   webSocketBridgeGroup.listen(function(action, stream) {
     //console.log("RESPONSE........:", action, stream);
     // console.log(JSON.parse(action.event.bi))
+      console.log("....!...")
       let data = JSON.parse(action.event.bi)
       console.log(".......",data)
 

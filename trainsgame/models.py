@@ -35,14 +35,16 @@ class SingleChannelToArena:
 
 
     def addChannelToArena(self, arena, channel, userName = None):
-        print("addChannelToArena :   arena:" + arena + " channel:" + channel)
-        self.channelsAr[channel] = arena
-        self.userNameChannel[userName] = channel
+        print("addChannelToArena :   arena:" + arena + " channel:" + str(channel))
+        self.channelsAr[channel.channel_name] = arena
+        self.userNameChannel[userName] = channel.channel_name
         if arena not in self.arenasCh.keys():
-            self.arenasCh[arena] = []
+            self.arenasCh[arena] = {}
 
-        if channel not in self.arenasCh[arena]:
-            self.arenasCh[arena].append(channel)
+        if channel.channel_name not in self.arenasCh[arena].keys():
+            # channelInfo = {}
+            # channelInfo[channel.channel_name] = channel
+            self.arenasCh[arena][channel.channel_name] = channel
 
         self.printSerialized()
 
@@ -82,8 +84,9 @@ class SingleChannelToArena:
 
 
     def printSerialized(self):
-        serialized_obj = json.dumps(self.arenasCh, default=lambda x: x.__dict__)
-        print("serialized_obj SingleChannelToArena " + serialized_obj)
+        pass
+        # serialized_obj = json.dumps(self.arenasCh, default=lambda x: x.__dict__)
+        # print("serialized_obj SingleChannelToArena " + serialized_obj)
 
     def checkUserConnectionToAreas(self, user, channel, arena):
         print("arena from sessions - " + str(arena))
@@ -105,7 +108,7 @@ class SingleChannelToArena:
 
         # oldChannel = self.userNameChannel[user]
         # arena = self.getArenaByChannel(oldChannel)
-        self.userNameChannel[user] = channel
+        self.userNameChannel[user] = channel.channel_name
         # self.channelsAr[channel]
         # self.changeArenaToChannel(oldChannel, channel)
         self.addChannelToArena(str(arena), channel, user)

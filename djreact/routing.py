@@ -5,6 +5,7 @@ from notifier.consumers import EchoConsumer, PixiConsumer, TickTockConsumer, Sta
 from notifier.consumersWORed import StartNotifConsumerWOR
 
 from trainsgame.consumers import StartGameConsumer, ControlGameConsumer, GroupConsumer
+from trainsgame.consumersGroupArena import StartConsGroupArena
 from trainsgame.consumersGroupCustom import StartConsGroupCustom
 from trainsgame.consumersReact import GroupConsumerReact, ReactStartConsumer
 
@@ -21,7 +22,9 @@ application = ProtocolTypeRouter({
             path("notificationsWORedis/", StartNotifConsumerWOR),
 
             # trains
-            path("trainsGroupConsumer/", GroupConsumer),
+            # path("trainsGroupConsumer/", GroupConsumer),
+            path("trainsGroupConsumer/", StartConsGroupArena),
+
             path("startGameConsumer/", StartGameConsumer),
             path("controlGameConsumer/", ControlGameConsumer),
             path("groupConsumerReact/", GroupConsumerReact),
