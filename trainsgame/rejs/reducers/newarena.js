@@ -2,7 +2,7 @@ import * as newArenaActions from "../actions/newArenaActions"
 
 const initialState = {
     // isIstenerSended: false,
-  newarena: {},
+  newarena: { arena: 0 , player: ""},
 }
 
 export default function playgroud(state=initialState, action={}) {
@@ -10,9 +10,12 @@ export default function playgroud(state=initialState, action={}) {
 
 
   switch (action.type) {
-  case newArenaActions.SAVE_PLAYGROUNDS_LIST:
-    console.log("reducer", action.res);
-    return {...state, playgrounds: action.res}
+  case newArenaActions.SAVE_PLAYGROUND_DATA:
+    console.log("SAVE_PLAYGROUND_DATA", action.res);
+    let newarena = state.newarena
+      newarena["arena"] = action.res.arena
+      newarena["player"] = action.res.username
+    return {...state, newarena: newarena}
   // case newArenaActions.SET_LISTENER_SENDED:
   //    console.log("SET_LISTENER_SENDED", action.res);
   //   return {...state, isIstenerSended: action.res}

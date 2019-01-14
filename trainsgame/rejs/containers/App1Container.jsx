@@ -76,7 +76,7 @@ export default class App1Container extends React.Component{
   render() {
     console.log("render");
     console.log(this.props);
-    let {countersSingle, playground, dispatch} = this.props
+    let {countersSingle, playground, dispatch, newarena} = this.props
 
 
     // if (github.isLoadingRepos || github.repos === undefined) {
@@ -92,9 +92,10 @@ export default class App1Container extends React.Component{
           {/*</div>*/}
 
           <div className="col-sm-12">
-              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} >
+              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} newarena = {newarena.newarena} >
                   <p>Modal</p>
                   <p>Data</p>
+                  {/*<button onClick={dispatch(createGame)}>Create Arena</button>*/}
               </ModalNewArena>
               <button type="button" onClick={this.showModalNewArena}>
                   create new Arena

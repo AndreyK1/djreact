@@ -2,7 +2,7 @@
 
 import {FETCH_INCREASE_SINGLE_SUCCESS} from "./counterSingleActions";
 
-export const SAVE_PLAYGROUNDS_LIST = "SAVE_PLAYGROUNDS_LIST"
+export const SAVE_PLAYGROUND_DATA = "SAVE_PLAYGROUND_DATA"
 export const SET_LISTENER_SENDED = "SET_LISTENER_SENDED"
 
 export function newarenaCreate() {
@@ -24,6 +24,9 @@ export function newarenaCreate() {
           webSocketBridgeGroup.send(event.detail.arena)
           document.getElementById("player_name").value = event.detail.username
           document.getElementById("arena_num").value = event.detail.arena
+
+          dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
+
              //           var name =   document.getElementById("player_name").value
              // var arena_num =   document.getElementById("arena_num").value
       })
