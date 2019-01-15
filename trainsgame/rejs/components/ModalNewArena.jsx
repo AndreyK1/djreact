@@ -34,8 +34,10 @@ export default class ModalNewArena extends React.Component {
         <div className={showHideClassName}>
           <section className="modal-main">
              {/*<div className="col-sm-12" id="gameCont">*/}
-            <p> arena {newarena.arena}</p>
+            <p id="my_arena"> arena {newarena.arena}</p>
               <p> player {newarena.player}</p>
+              <p> number {newarena.number}</p>
+
             {/*</div>*/}
             <button onClick={this.onButtonClick}>Create Arena</button>
             {children}

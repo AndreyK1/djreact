@@ -2,24 +2,44 @@ import * as newArenaActions from "../actions/newArenaActions"
 
 const initialState = {
     // isIstenerSended: false,
-  newarena: { arena: 0 , player: ""},
+  newarena: { arena: 0 , player: "", number: 0},
 }
 
 export default function playgroud(state=initialState, action={}) {
 
-
+    let newarena = state.newarena
 
   switch (action.type) {
   case newArenaActions.SAVE_PLAYGROUND_DATA:
-    console.log("SAVE_PLAYGROUND_DATA", action.res);
-    let newarena = state.newarena
+    //console.log("SAVE_PLAYGROUND_DATA", action.res);
+    // let newarena = state.newarena
       newarena["arena"] = action.res.arena
       newarena["player"] = action.res.username
     return {...state, newarena: newarena}
-  // case newArenaActions.SET_LISTENER_SENDED:
-  //    console.log("SET_LISTENER_SENDED", action.res);
-  //   return {...state, isIstenerSended: action.res}
-  //   return {...state, isLoadingRepos: true}
+  case newArenaActions.NEW_DATE_PLAYGROUND:
+     //console.log("NEW_DATE_PLAYGROUND", action.res);
+     if(!state.newarena.arena) {
+         //console.log("!state.newarena.arena")
+         return state
+     }
+     if(!action.res[state.newarena.arena]) {
+         //console.log("!action.res[state.newarena.arena]")
+         return state
+     }
+
+      if(action.res[state.newarena.arena]["trains"].size ==state.newarena.number) {
+          //console.log("ction.res[state.newarena.arena][\"trains\"].size")
+          return state
+      }
+
+      //console.log("меняем", Object.keys(action.res[state.newarena.arena]["trains"]).length);
+
+     // let newarena1 = state.newarena
+      //Object.keys(dictionary).length
+      newarena["number"] = Object.keys(action.res[state.newarena.arena]["trains"]).length
+     return {...state, newarena: newarena}
+
+
   // case playGroundActions.FETCH_INCREASE_SINGLE_SUCCESS:
   //   return {...state, isLoadingRepos: false, clicksSingle: action.res}
   // case playGroundActions.FETCH_INCREASE_SINGLE_ERROR400:

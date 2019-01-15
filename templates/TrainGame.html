@@ -52,7 +52,7 @@
                   console.log(window.location.host + action["value"] + "?next=" + window.location.pathname)
                  window.location.href = action["value"] + "?next=" + window.location.pathname
              }else if(action["type"] == "joined"){
-                 let event = new CustomEvent("joined", {detail: { arena : action["value"], username : action["username"]}});
+                 let event = new CustomEvent("joinedI", {detail: { arena : action["value"], username : action["username"]}});
                  window.dispatchEvent(event)
              }
 

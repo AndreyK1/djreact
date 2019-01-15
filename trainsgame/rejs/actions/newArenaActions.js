@@ -3,12 +3,13 @@
 import {FETCH_INCREASE_SINGLE_SUCCESS} from "./counterSingleActions";
 
 export const SAVE_PLAYGROUND_DATA = "SAVE_PLAYGROUND_DATA"
+export const NEW_DATE_PLAYGROUND = "NEW_DATE_PLAYGROUND"
 export const SET_LISTENER_SENDED = "SET_LISTENER_SENDED"
 
 export function newarenaCreate() {
   return function (dispatch) {
 
-    console.log("---+11111newarenaCreate+--");
+    //console.log("---+11111newarenaCreate+--");
 
       webSocketBridgeControl.send({"type":"join", "name":"", "arena_num":0 })
       // webSocketBridgeControl.listen(function(action, stream) {
@@ -18,8 +19,8 @@ export function newarenaCreate() {
       //        }
       //
       // });
-      window.addEventListener("joined", (event) => {
-        console.log("event.details.arena", event)
+      window.addEventListener("joinedI", (event) => {
+        //console.log("event.details.arena", event)
         // alert(event.detail.arena)
           webSocketBridgeGroup.send(event.detail.arena)
           document.getElementById("player_name").value = event.detail.username
@@ -31,7 +32,15 @@ export function newarenaCreate() {
              // var arena_num =   document.getElementById("arena_num").value
       })
 
+      window.addEventListener("chanGeJoined", (event) => {
+        //console.log("chanGeJoined event.detail ", event.detail)
 
+        // alert(event.detail.arena)
+        dispatch({type: NEW_DATE_PLAYGROUND, res: event.detail})
+
+          // dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
+
+      })
 
       // if(is_list_sended){
       //     return;
