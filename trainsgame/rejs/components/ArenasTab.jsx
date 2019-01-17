@@ -1,6 +1,16 @@
 import React from "react"
+import * as newarenaCreate from "../actions/newArenaActions";
 
 export default class ArenasTab extends React.Component {
+
+   joinGame = (arena_num) => {
+     // alert("join " + arena)
+       webSocketBridgeControl.send({"type":"join", "name":"1", "arena_num":arena_num })
+        webSocketBridgeGroup.send(arena_num)
+       chosenArena = arena_num
+        $.cookie("chosenArena", chosenArena)
+    // this.props.dispatch(newarenaCreate.newarenaCreate());
+  }
   render() {
     let {playgrounds} = this.props
     let plNodes = []
@@ -8,8 +18,19 @@ export default class ArenasTab extends React.Component {
       console.log("ArenasTab ", playgrounds)
     // playgrounds.forEach((item, index) => {
       for(let key in playgrounds){
-        let node = (
-          <div className="row"><div className="col-sm-12">{key}  || длина {Object.keys(playgrounds[key].trains).length}</div></div>
+
+          let players = "";
+        for(let keyTrain in playgrounds[key].trains){
+            // players += "+"+playgrounds[key].trains[keyTrain].number
+            players += "+"+keyTrain
+        }
+          let node = (
+          <div className="row">
+              <div className="col-sm-12">
+                  {key}  || кол-во игроков {Object.keys(playgrounds[key].trains).length} ||игроки {players}
+                <button onClick={() => this.joinGame(key)}>join</button>
+              </div>
+          </div>
         )
         if(playgrounds[key].started){
             plNodes.push(node)

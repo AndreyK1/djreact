@@ -10,9 +10,14 @@ export default class ModalNewArena extends React.Component {
   //   dispatch: PropsTypes.func,
   // }
 
-    onButtonClick = () => {
-       console.log("onButtonClick onButtonClick onButtonClick ")
+   createArena = () => {
+       // console.log("onButtonClick onButtonClick onButtonClick ")
     this.props.dispatch(newarenaCreate.newarenaCreate());
+  }
+
+  startGame = () => {
+       console.log("startGame startGame startGame ")
+       webSocketBridgeStart.send(this.props.newarena.arena)
   }
   render() {
     let {show, handleClose, children, createGame, dispatch, newarena} = this.props
@@ -34,14 +39,16 @@ export default class ModalNewArena extends React.Component {
         <div className={showHideClassName}>
           <section className="modal-main">
              {/*<div className="col-sm-12" id="gameCont">*/}
-            <p id="my_arena"> arena {newarena.arena}</p>
-              <p> player {newarena.player}</p>
-              <p> number {newarena.number}</p>
-
+            <p id="my_arena"> arena: {newarena.arena}</p>
+              <p> you: {newarena.player}</p>
+              <p> number: {newarena.number}</p>
+              <p> players: {newarena.trains}</p>
             {/*</div>*/}
-            <button onClick={this.onButtonClick}>Create Arena</button>
+            <button onClick={this.createArena}>Create Arena</button>
+            <button onClick={this.startGame}>startGame</button>
             {children}
             <button onClick={handleClose}>close</button>
+
           </section>
         </div>
     )

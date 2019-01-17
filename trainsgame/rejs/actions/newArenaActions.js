@@ -24,7 +24,9 @@ export function newarenaCreate() {
         // alert(event.detail.arena)
           webSocketBridgeGroup.send(event.detail.arena)
           document.getElementById("player_name").value = event.detail.username
-          document.getElementById("arena_num").value = event.detail.arena
+          chosenArena = event.detail.arena
+          $.cookie("chosenArena", chosenArena)
+          // document.getElementById("arena_num").value = event.detail.arena
 
           dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
 

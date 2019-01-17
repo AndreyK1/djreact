@@ -114,6 +114,8 @@ class StartGameConsumer(WebsocketConsumer):
 
             playGround = PlayGroundList().get(int(text_data))
 
+            playGround.modeOfGame = "play"
+
             playGround = initPlayGround(playGround)
 
 

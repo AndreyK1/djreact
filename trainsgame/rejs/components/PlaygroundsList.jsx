@@ -8,7 +8,7 @@ export default class PlaygroundsList extends React.Component {
     // playgrounds.forEach((item, index) => {
       for(let key in playgrounds){
         let node = (
-          <div className="row"><div className="col-sm-12">{key}  || длина {Object.keys(playgrounds[key].trains).length}</div></div>
+          <div className="row"><div className="col-sm-12">{key}  || кол-во игроков {Object.keys(playgrounds[key].trains).length}</div></div>
         )
         plNodes.push(node)
     }

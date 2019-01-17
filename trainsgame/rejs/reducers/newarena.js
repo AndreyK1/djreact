@@ -2,7 +2,7 @@ import * as newArenaActions from "../actions/newArenaActions"
 
 const initialState = {
     // isIstenerSended: false,
-  newarena: { arena: 0 , player: "", number: 0},
+  newarena: { arena: 0 , player: "", number: 0, trains: ""},
 }
 
 export default function playgroud(state=initialState, action={}) {
@@ -34,9 +34,12 @@ export default function playgroud(state=initialState, action={}) {
 
       //console.log("меняем", Object.keys(action.res[state.newarena.arena]["trains"]).length);
 
-     // let newarena1 = state.newarena
-      //Object.keys(dictionary).length
       newarena["number"] = Object.keys(action.res[state.newarena.arena]["trains"]).length
+      newarena["trains"] = "";
+      for(let keyTrain in action.res[state.newarena.arena]["trains"]){
+            // players += "+"+playgrounds[key].trains[keyTrain].number
+            newarena["trains"] += "| "+keyTrain
+       }
      return {...state, newarena: newarena}
 
 
