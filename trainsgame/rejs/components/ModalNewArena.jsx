@@ -16,14 +16,14 @@ export default class ModalNewArena extends React.Component {
   }
 
   startGame = () => {
-       console.log("startGame startGame startGame ")
-       webSocketBridgeStart.send(this.props.newarena.arena)
+      // console.log("startGame startGame startGame ")
+       webSocketBridgeStart.send(this.props.newarena.newarena.arena)
   }
   render() {
     let {show, handleClose, children, createGame, dispatch, newarena} = this.props
 
     // let plNodes = []
-      console.log("ModalNewArena ", show)
+    //   console.log("ModalNewArena ", show)
     // playgrounds.forEach((item, index) => {
     //   for(let key in playgrounds){
     //     let node = (
@@ -39,10 +39,14 @@ export default class ModalNewArena extends React.Component {
         <div className={showHideClassName}>
           <section className="modal-main">
              {/*<div className="col-sm-12" id="gameCont">*/}
-            <p id="my_arena"> arena: {newarena.arena}</p>
-              <p> you: {newarena.player}</p>
-              <p> number: {newarena.number}</p>
-              <p> players: {newarena.trains}</p>
+
+             <p> whoClicked: {newarena.whoClicked}</p>
+             <p id="my_arena"> arena: {newarena.newarena.arena}</p>
+              <p> you: {newarena.newarena.player}</p>
+              <p> number: {newarena.newarena.number}</p>
+              <p> players: {newarena.newarena.trains}</p>
+
+
             {/*</div>*/}
             <button onClick={this.createArena}>Create Arena</button>
             <button onClick={this.startGame}>startGame</button>

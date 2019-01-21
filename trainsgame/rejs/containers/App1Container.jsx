@@ -63,10 +63,13 @@ export default class App1Container extends React.Component{
     )
   }
 
-  showModalNewArena= () =>{
-     // let {dispatch} = this.props
+  showModNewArenaFun= (whoClicked) =>{
+     let {dispatch} = this.props
      //  dispatch(newarenaCreate.newarenaCreate())
-    this.setState({ showModNewArena: true });
+     this.setState({ showModNewArena: true });
+     dispatch(newarenaCreate.setClicker(whoClicked))
+
+
   }
 
   hideModalNewArena= () =>{
@@ -74,8 +77,8 @@ export default class App1Container extends React.Component{
   }
 
   render() {
-    console.log("render");
-    console.log(this.props);
+    // console.log("render");
+    // console.log(this.props);
     let {countersSingle, playground, dispatch, newarena} = this.props
 
 
@@ -92,17 +95,17 @@ export default class App1Container extends React.Component{
           {/*</div>*/}
 
           <div className="col-sm-12">
-              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} newarena = {newarena.newarena} >
+              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} newarena = {newarena} >
                   <p>Modal</p>
                   <p>Data</p>
                   {/*<button onClick={dispatch(createGame)}>Create Arena</button>*/}
               </ModalNewArena>
-              <button type="button" onClick={this.showModalNewArena}>
+              <button type="button" onClick={() => this.showModNewArenaFun("creator")}>
                   create new Arena
               </button>
           </div>
           <div className="col-sm-12" id="gameCont">
-            <ArenasTab playgrounds={playground.playgrounds} />
+            <ArenasTab playgrounds={playground.playgrounds} joinFunction={this.showModNewArenaFun} dispatch={dispatch}/>
           </div>
           <div className="col-sm-3">
             войти

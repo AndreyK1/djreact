@@ -4,7 +4,15 @@ import {FETCH_INCREASE_SINGLE_SUCCESS} from "./counterSingleActions";
 
 export const SAVE_PLAYGROUND_DATA = "SAVE_PLAYGROUND_DATA"
 export const NEW_DATE_PLAYGROUND = "NEW_DATE_PLAYGROUND"
+export const SET_WHO_CLICKED = "SET_WHO_CLICKED"
+
 export const SET_LISTENER_SENDED = "SET_LISTENER_SENDED"
+
+export function setClicker(whoClicked) {
+    return function (dispatch) {
+        dispatch({type: SET_WHO_CLICKED, res: whoClicked})
+    }
+}
 
 export function newarenaCreate() {
   return function (dispatch) {
@@ -19,30 +27,9 @@ export function newarenaCreate() {
       //        }
       //
       // });
-      window.addEventListener("joinedI", (event) => {
-        //console.log("event.details.arena", event)
-        // alert(event.detail.arena)
-          webSocketBridgeGroup.send(event.detail.arena)
-          document.getElementById("player_name").value = event.detail.username
-          chosenArena = event.detail.arena
-          $.cookie("chosenArena", chosenArena)
-          // document.getElementById("arena_num").value = event.detail.arena
 
-          dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
+      dispatch(newarenaAddListeners());
 
-             //           var name =   document.getElementById("player_name").value
-             // var arena_num =   document.getElementById("arena_num").value
-      })
-
-      window.addEventListener("chanGeJoined", (event) => {
-        //console.log("chanGeJoined event.detail ", event.detail)
-
-        // alert(event.detail.arena)
-        dispatch({type: NEW_DATE_PLAYGROUND, res: event.detail})
-
-          // dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
-
-      })
 
       // if(is_list_sended){
       //     return;
@@ -68,5 +55,36 @@ export function newarenaCreate() {
       // });
 
 
+  }
+
+}
+
+export function newarenaAddListeners() {
+    console.log("newarenaAddListeners")
+  return function (dispatch) {
+      window.addEventListener("joinedI", (event) => {
+        //console.log("event.details.arena", event)
+        // alert(event.detail.arena)
+          webSocketBridgeGroup.send(event.detail.arena)
+          document.getElementById("player_name").value = event.detail.username
+          chosenArena = event.detail.arena
+          $.cookie("chosenArena", chosenArena)
+          // document.getElementById("arena_num").value = event.detail.arena
+
+          dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
+
+             //           var name =   document.getElementById("player_name").value
+             // var arena_num =   document.getElementById("arena_num").value
+      })
+
+      window.addEventListener("chanGeJoined", (event) => {
+        console.log("chanGeJoined event.detail ", event.detail)
+
+        // alert(event.detail.arena)
+        dispatch({type: NEW_DATE_PLAYGROUND, res: event.detail})
+
+          // dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
+
+      })
   }
 }

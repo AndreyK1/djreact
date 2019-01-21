@@ -1,8 +1,10 @@
 import * as newArenaActions from "../actions/newArenaActions"
+import {SET_WHO_CLICKED} from "../actions/newArenaActions";
 
 const initialState = {
     // isIstenerSended: false,
   newarena: { arena: 0 , player: "", number: 0, trains: ""},
+  whoClicked: ""
 }
 
 export default function playgroud(state=initialState, action={}) {
@@ -41,7 +43,8 @@ export default function playgroud(state=initialState, action={}) {
             newarena["trains"] += "| "+keyTrain
        }
      return {...state, newarena: newarena}
-
+  case newArenaActions.SET_WHO_CLICKED:
+     return {...state, whoClicked: action.res}
 
   // case playGroundActions.FETCH_INCREASE_SINGLE_SUCCESS:
   //   return {...state, isLoadingRepos: false, clicksSingle: action.res}

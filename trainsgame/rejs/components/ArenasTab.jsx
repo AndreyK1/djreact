@@ -4,18 +4,22 @@ import * as newarenaCreate from "../actions/newArenaActions";
 export default class ArenasTab extends React.Component {
 
    joinGame = (arena_num) => {
+
+       this.props.joinFunction("joiner")
+
      // alert("join " + arena)
        webSocketBridgeControl.send({"type":"join", "name":"1", "arena_num":arena_num })
         webSocketBridgeGroup.send(arena_num)
        chosenArena = arena_num
         $.cookie("chosenArena", chosenArena)
-    // this.props.dispatch(newarenaCreate.newarenaCreate());
+
+        this.props.dispatch(newarenaCreate.newarenaAddListeners());
   }
   render() {
     let {playgrounds} = this.props
     let plNodes = []
     let joinNodes = []
-      console.log("ArenasTab ", playgrounds)
+      // console.log("ArenasTab ", playgrounds)
     // playgrounds.forEach((item, index) => {
       for(let key in playgrounds){
 

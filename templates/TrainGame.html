@@ -108,13 +108,13 @@
          function changeGame(textIn) {
            gameState = textIn
             {#text = textIn + 1;#}
-             var arena_num =   document.getElementById("arena_num").value
+            {# var arena_num =   document.getElementById("arena_num").value#}
              console.log(textIn)
            var name =   document.getElementById("player_name").value
              if(textIn =="join"){
                  webSocketBridgeGroup.send(arena_num)
              }
-           webSocketBridgeControl.send({"type":textIn, "name":name, "arena_num":arena_num })
+           webSocketBridgeControl.send({"type":textIn, "name":name, "arena_num":chosenArena })
         }
     </script>
 

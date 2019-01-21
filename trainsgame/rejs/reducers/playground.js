@@ -11,7 +11,7 @@ export default function playgroud(state=initialState, action={}) {
 
   switch (action.type) {
   case playGroundActions.SAVE_PLAYGROUNDS_LIST:
-    console.log("reducer", action.res);
+    // console.log("reducer", action.res);
     return {...state, playgrounds: action.res}
   case playGroundActions.SET_LISTENER_SENDED:
      console.log("SET_LISTENER_SENDED", action.res);
