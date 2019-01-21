@@ -33,7 +33,21 @@ export default class ModalNewArena extends React.Component {
     // }
       let showHideClassName = show ? "modal display-block" : "modal display-none";
 
+        let buttons;
 
+        if (newarena.whoClicked == "creator") {
+          buttons =
+              <div>
+                  {newarena.newarena.arena == 0 &&
+                    <button onClick={this.createArena}>Create Arena</button>
+                  }
+                  {newarena.newarena.arena > 0 &&
+                    <button onClick={this.startGame}>startGame</button>
+                  }
+                </div>;
+        } else {
+          buttons = "";
+        }
 
     return (
         <div className={showHideClassName}>
@@ -48,8 +62,9 @@ export default class ModalNewArena extends React.Component {
 
 
             {/*</div>*/}
-            <button onClick={this.createArena}>Create Arena</button>
-            <button onClick={this.startGame}>startGame</button>
+            {/*<button onClick={this.createArena}>Create Arena</button>*/}
+            {/*<button onClick={this.startGame}>startGame</button>*/}
+            {buttons}
             {children}
             <button onClick={handleClose}>close</button>
 
