@@ -20,6 +20,11 @@ export default class ModalNewArena extends React.Component {
       // console.log("startGame startGame startGame ")
        webSocketBridgeStart.send(this.props.newarena.newarena.arena)
   }
+
+  stopGame = () => {
+      // console.log("startGame startGame startGame ")
+        webSocketBridgeControl.send({"type":"stop", "name":"", "arena_num":chosenArena })
+  }
   render() {
     let {show, handleClose, children, createGame, dispatch, newarena} = this.props
 
@@ -46,6 +51,7 @@ export default class ModalNewArena extends React.Component {
                   {newarena.newarena.arena > 0 &&
                     <button onClick={this.startGame}>startGame</button>
                   }
+                  <button onClick={this.stopGame}>stopGame</button>
                 </div>;
         } else {
           buttons = "";
