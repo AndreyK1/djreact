@@ -4,7 +4,7 @@ import * as newarenaCreate from "../actions/newArenaActions";
 export default class ArenasTab extends React.Component {
 
    joinGame = (arena_num) => {
-
+    renderMainSceneGlobal();
        this.props.joinFunction("joiner")
 
      // alert("join " + arena)

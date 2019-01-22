@@ -119,7 +119,8 @@
     </script>
 
 
-        {% render_bundle 'AppMain' %}
+{% render_bundle 'AppMain' %}
+
 
     <button onclick="changeGame('clear')">clearGame</button><br/>
     <input id="arena_num" type="text" value="1" />Номер арены <br/>
@@ -142,13 +143,20 @@
         catImg = "{% static 'images/cat.png' %}"
         tileset = "{% static 'images/tileset.png' %}"
         cubes = "{% static 'images/cubes.jpg' %}"
+
+
+        var renderMainSceneGlobal;
+
     </script>
 
 
 
 {#{% render_bundle 'vendors' %}#}
 {% render_bundle 'Train' %}
-
+    <script type="text/javascript">
+        {#renderMainScene();#}
+        {#renderMainSceneGlobal();#}
+    </script>
 
 
 {% endblock main %}

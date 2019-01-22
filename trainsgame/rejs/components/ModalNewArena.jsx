@@ -11,6 +11,7 @@ export default class ModalNewArena extends React.Component {
   // }
 
    createArena = () => {
+    renderMainSceneGlobal();
        // console.log("onButtonClick onButtonClick onButtonClick ")
     this.props.dispatch(newarenaCreate.newarenaCreate());
   }
@@ -38,9 +39,10 @@ export default class ModalNewArena extends React.Component {
         if (newarena.whoClicked == "creator") {
           buttons =
               <div>
-                  {newarena.newarena.arena == 0 &&
-                    <button onClick={this.createArena}>Create Arena</button>
-                  }
+                  {/*{newarena.newarena.arena == 0 &&*/}
+                    {/*<button onClick={this.createArena}>Create Arena</button>*/}
+                  {/*}*/}
+                  <button onClick={this.createArena}>Create Arena</button>
                   {newarena.newarena.arena > 0 &&
                     <button onClick={this.startGame}>startGame</button>
                   }
@@ -67,6 +69,8 @@ export default class ModalNewArena extends React.Component {
             {buttons}
             {children}
             <button onClick={handleClose}>close</button>
+              <div id="gameCont">
+              </div>
 
           </section>
         </div>

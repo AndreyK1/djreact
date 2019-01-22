@@ -12,27 +12,46 @@ let Application = PIXI.Application,
 let stageWidth=550;
 
 //Create a Pixi Application
-let appTrain = new Application({
-    width: stageWidth,
-    height: 550,
-    antialias: true,
-    transparent: false,
-    resolution: 1
-  }
-);
+let appTrain;
 
-//Add the canvas that Pixi automatically created for you to the HTML document
-// document.body.appendChild(appTrain.view);
-document.getElementById("gameCont").appendChild(appTrain.view);
+function renderMainScene() {
+    appTrain = new Application({
+        width: stageWidth,
+        height: 550,
+        antialias: true,
+        transparent: false,
+        resolution: 1
+      }
+    );
 
-loader
-  .add([
-      {url: treasHuntJs, onComplete: console.log("finish treasHuntJs")},
-      {url: arrows, onComplete: console.log("finish arrows")}
-      ])
-      .on("progress", loadProgressHandler)
-    .load(setupTrainsSceneWrap);
+    //Add the canvas that Pixi automatically created for you to the HTML document
+    // document.body.appendChild(appTrain.view);
+    document.getElementById("gameCont").innerText = ""
+    document.getElementById("gameCont").appendChild(appTrain.view);
 
+    let tresH = loader.resources[treasHuntJs]
+    console.log("treasHuntJs ", tresH)
+    if(tresH){
+       console.log("setupTrainsSceneWrap ")
+      setupTrainsSceneWrap()
+    }else{
+        console.log("loader ")
+     loader
+      .add([
+          {url: treasHuntJs, onComplete: console.log("finish treasHuntJs")},
+          {url: arrows, onComplete: console.log("finish arrows")}
+          ])
+          .on("progress", loadProgressHandler)
+        .load(setupTrainsSceneWrap);
+    }
+
+
+}
+
+
+renderMainSceneGlobal = renderMainScene
+
+// renderMainScene();
 
 function setupTrainsSceneWrap(){
     setupTrainsScene(appTrain)

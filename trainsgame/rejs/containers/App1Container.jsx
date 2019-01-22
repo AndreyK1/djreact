@@ -104,7 +104,7 @@ export default class App1Container extends React.Component{
                   create new Arena
               </button>
           </div>
-          <div className="col-sm-12" id="gameCont">
+          <div className="col-sm-12">
             <ArenasTab playgrounds={playground.playgrounds} joinFunction={this.showModNewArenaFun} dispatch={dispatch}/>
           </div>
           <div className="col-sm-3">
