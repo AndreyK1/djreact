@@ -193,8 +193,11 @@ class PlayGroundList():
         self.PlayGrounds[num] = playGround
 
     def delete(self, playGround):
-        del self.PlayGrounds[playGround.arena]
-        print("Удалена Арена под номером " + str(playGround.arena))
+        self.deleteByArena(playGround.arena)
+
+    def deleteByArena(self, arenaNum):
+        del self.PlayGrounds[arenaNum]
+        print("Удалена Арена под номером " + str(arenaNum))
 
 
 

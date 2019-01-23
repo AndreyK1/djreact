@@ -328,9 +328,13 @@ class ControlGameConsumer(JsonWebsocketConsumer):
                 changeTrainDirection(playGround, whereMove, name)
 
             # очишаем все PlayGrounds
-            # TODO сделать очистку конкретных площадок
+            # TODO удалить потом
             if (content["type"] == "clear"):
                 PlayGroundList().PlayGrounds = {}
+
+            # очишаем конкретную площадоку
+            if (content["type"] == "clearThisArena"):
+                PlayGroundList().deleteByArena(arena_num)
 
 
     def disconnect(self, close_code):
