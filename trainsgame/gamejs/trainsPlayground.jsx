@@ -55,9 +55,9 @@ export default function setupTrainsScene(app) {
   webSocketBridgeGroup.listen(function(action, stream) {
     //console.log("RESPONSE........:", action, stream);
     // console.log(JSON.parse(action.event.bi))
-      console.log("....!...")
+      //console.log("....!...")
       let data = JSON.parse(action.event.bi)
-      console.log(".......",data)
+      console.log("!!!.......",data)
 
 
       // console.log(data["trains"]["a1"]["coord"]["x"] + " - " + data["trains"]["a1"]["coord"]["y"])
@@ -101,10 +101,16 @@ function drawPlayGround(playGround){
     // getContainers().clicks++
 
     //отрисовывается 1 раз
-    if(lastCrossX!=0){
+    // if(lastCrossX!=0){
+    if(getContainers().playGroundDrown){
+        
+        
+        //console.log("уже отрисовывали");
         return;
     }
-    console.log("playGround");
+    getContainers().playGroundDrown = true
+
+    //console.log("playGround");
     lastCrossX = 1
   // console.log(playGround);
 

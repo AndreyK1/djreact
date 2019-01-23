@@ -145,7 +145,8 @@ class StartGameConsumer(WebsocketConsumer):
             correctPlayGr(playGround, int(text_data))
             playGround = PlayGroundList().get(int(text_data))
 
-            self.cust_sendTosChannel(playGround, text_data)
+            # певоначально показываем
+            # self.cust_sendTosChannel(playGround, text_data)
 
             createTrains(playGround)
             createTreasurres(playGround)

@@ -1,5 +1,6 @@
 // import setupHunter from './hunter';
 import setupTrainsScene from './trainsPlayground';
+import getContainers from "./storageTrains";
 
 //Aliases
 let Application = PIXI.Application,
@@ -13,8 +14,13 @@ let stageWidth=550;
 
 //Create a Pixi Application
 let appTrain;
+// let playGroundDrown=false;
 
 function renderMainScene() {
+
+    // playGroundDrown = false
+    getContainers().cleanPlayGround()
+
     appTrain = new Application({
         width: stageWidth,
         height: 550,
@@ -31,11 +37,12 @@ function renderMainScene() {
 
     let tresH = loader.resources[treasHuntJs]
     console.log("treasHuntJs ", tresH)
+    // let lastCrossX=0;
     if(tresH){
-       console.log("setupTrainsSceneWrap ")
+       //console.log("setupTrainsSceneWrap ")
       setupTrainsSceneWrap()
     }else{
-        console.log("loader ")
+        //console.log("loader ")
      loader
       .add([
           {url: treasHuntJs, onComplete: console.log("finish treasHuntJs")},

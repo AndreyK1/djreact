@@ -10,7 +10,17 @@ let allContainers = {
     // tressPictures : {},
     gameScene : 0,
     gameScene2 : 0,
-    id : 0
+    id : 0,
+    playGroundDrown: false,
+
+    cleanPlayGround: function () {
+        this.playGroundDrown = false;
+        this.depoContainers = {};
+        this.trainsContainers = {};
+        this.tressContainers = {};
+    }
+
+
 
 
 }
