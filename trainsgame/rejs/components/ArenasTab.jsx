@@ -15,6 +15,20 @@ export default class ArenasTab extends React.Component {
 
         this.props.dispatch(newarenaCreate.newarenaAddListeners());
   }
+
+  watchGame = (arena_num) => {
+    renderMainSceneGlobal();
+       this.props.joinFunction("watcher")
+
+     // alert("join " + arena)
+     //   webSocketBridgeControl.send({"type":"join", "name":"1", "arena_num":arena_num })
+        webSocketBridgeGroup.send(arena_num)
+       chosenArena = arena_num
+        $.cookie("chosenArena", chosenArena)
+
+        this.props.dispatch(newarenaCreate.newarenaAddListeners());
+  }
+
   render() {
     let {playgrounds} = this.props
     let plNodes = []
@@ -33,6 +47,7 @@ export default class ArenasTab extends React.Component {
               <div className="col-sm-12">
                   {key}  || кол-во игроков {Object.keys(playgrounds[key].trains).length} ||игроки {players}
                 <button onClick={() => this.joinGame(key)}>join</button>
+                <button onClick={() => this.watchGame(key)}>watch</button>
               </div>
           </div>
         )
