@@ -14,6 +14,7 @@ class TressureContainer extends Container {
     constructor(treassK, treassure) {
       super()
 
+        this.treassK = treassK
         this.tressPic = new Sprite(getContainers().id["treasure.png"]);
 
         this.tressPic.x = 0;
@@ -44,6 +45,12 @@ class TressureContainer extends Container {
       this.addSelfToGameScene()
     }
 
+    moveSelfToDepo(containerDepo){
+        containerDepo.containerOfTressuress.addChild(this)
+        containerDepo.changeSum(this)
+        // containerDepo.pickedTress.push(this.treassK)
+    }
+
     addSelfToGameScene(){
         getContainers().gameScene.addChild(this);
     }
@@ -57,7 +64,9 @@ export function drawTressuresFirstTime(playGround){
     let treassures = playGround['treassures']
 
     // let tressContainer
+    //TODO  change
     if(Object.keys(getContainers().tressContainers).length !== 0){
+    // if(Object.keys(getContainers().depoContainers).length !== 0){ //если депо уже отрисованы то и сокровища тоже
         // console.log("----------------tressPictures is not empty----")
         return;
     }

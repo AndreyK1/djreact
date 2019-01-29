@@ -77,9 +77,14 @@ export default function setupTrainsScene(app) {
 
 
       drawPlayGround(data)
-       drawDepos(data)
-      drawTressuresFirstTime(data)
-      drawTrains(data)
+       drawTressuresFirstTime(data)
+       drawTrains(data)
+      drawDepos(data)
+
+      // drawDepos(data)
+      // drawTressuresFirstTime(data)
+      // drawTrains(data)
+
       drawTrainsBesideSocketResponse(data)
 
   })

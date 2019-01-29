@@ -154,8 +154,10 @@ class TrainContainer extends Container {
         tressPic.x = containerDepo.pickedTress.length * 15
         tressPic.y = 0
 
-        containerDepo.containerOfTressuress.addChild(tressPic)
-        containerDepo.changeSum(tressPic)
+        tressPic.moveSelfToDepo(containerDepo)
+
+        // containerDepo.containerOfTressuress.addChild(tressCont)
+        // containerDepo.changeSum(tressCont)
 
     }
 

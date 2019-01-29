@@ -51,11 +51,16 @@ class StartConsGroupArena(AsyncJsonWebsocketConsumer):
         if text_data =="restore":
             # если это попытка востановить конекшен
             if "arena" in self.scope["session"]:
-                arena = SingleChannelToArena().checkUserConnectionToAreas(self.scope["user"], self, self.scope["session"]["arena"])
+                arena = SingleChannelToArena().checkUserConnectionToAreasAndRestore(self.scope["user"], self, self.scope["session"]["arena"])
                 if arena != 0 and str(arena) != "":
                     print("restore adding self.channel_name to arena " + str(self.channel_name) + str(arena))
                     # await self.channel_layer.group_add(str(arena), self.channel_name)
                     return
+        elif text_data =="remove":
+            if "arena" in self.scope["session"]:
+                print("removing from arena " + str(self.channel_name) + str(self.scope["session"]["arena"]))
+                SingleChannelToArena().remChannelToArena(self.channel_name, self.scope["user"])
+
         else:
             # await self.channel_layer.group_add(str(text_data), self.channel_name)
             SingleChannelToArena().addChannelToArena(str(text_data), self, self.scope["user"])

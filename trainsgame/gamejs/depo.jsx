@@ -15,7 +15,7 @@ class DepoContainer extends Container {
 
      constructor(depoK, depo) {
          super()
-
+        console.log("DepoContainer constructor")
         this.depoPic = new Sprite(getContainers().id["door.png"]);
         this.depoPic.x = 0;
         this.depoPic.y = 0;
@@ -56,10 +56,25 @@ class DepoContainer extends Container {
              let tressK = tressures[i]
             console.log("depo tressK ", tressK, this.pickedTress, this.pickedTress.indexOf(tressK))
             if(this.pickedTress.indexOf(tressK)<0) {
-                let trainContainer = getContainers().trainsContainers[getContainers().playGroundGl['treassures'][tressK]["picked"]]
+                let trainNum =  getContainers().playGroundGl['treassures'][tressK]["picked"]
+                let trainContainer = getContainers().trainsContainers[trainNum]
 
-                trainContainer.moveTressToDepo(this)
-                this.pickedTress.push(tressK)
+                if (trainContainer === undefined) {
+                    console.log("trainContainer === undefined --------!!!!!!!!!!!!!!!!!!")
+                    //значит мы просматриваем игру, и сокровище отрисовано все еще на арене
+                    let tressCont = getContainers().tressContainers[train["pickedTress"]]
+                    getContainers().gameScene.removeChild(tressCont)
+
+                    tressCont.moveSelfToDepo(this)
+                    this.pickedTress.push(tressK)
+                }else{
+                    //если сокровиit e ntkt;rb
+                     trainContainer.moveTressToDepo(this)
+                    this.pickedTress.push(tressK)
+                }
+                // trainContainer.moveTressToDepo(this)
+                // this.pickedTress.push(tressK)
+
             }
         }
     }
@@ -87,7 +102,10 @@ export function drawDepos(playGround){
         }else{
             depoContainer = getContainers().depoContainers[depoK]
             // console.log("depo[\"tressures\"]", depo["tressures"])
-            depoContainer.checkIfAllTressAlreadyDrawn(depo["tressures"])
+            // depoContainer.checkIfAllTressAlreadyDrawn(depo["tressures"])
         }
+
+        //если мы вдруг перерисовываем депо, надо проверить есть ли у нас уже в депо сокровища
+        depoContainer.checkIfAllTressAlreadyDrawn(depo["tressures"])
     }
 }

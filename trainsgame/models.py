@@ -50,7 +50,8 @@ class SingleChannelToArena:
 
 
     def remChannelToArena(self, channel_name, user):
-        self.remChannelToArena1(self.channelsAr[channel_name], channel_name, user)
+        if channel_name in self.channelsAr.keys():
+            self.remChannelToArena1(self.channelsAr[channel_name], channel_name, user)
 
     def remChannelToArena1(self, arena, channel, user):
         print("remChannelToArena :   arena:" + arena + " channel:"+ channel)
@@ -62,7 +63,7 @@ class SingleChannelToArena:
         if channel in self.arenasCh[arena]:
             del self.arenasCh[arena][channel]
 
-        del self.channelsAr[channel]
+        # del self.channelsAr[channel]
 
         del self.userNameChannel[str(user)]
 
@@ -95,7 +96,7 @@ class SingleChannelToArena:
         # serialized_obj = json.dumps(self.arenasCh, default=lambda x: x.__dict__)
         # print("serialized_obj SingleChannelToArena " + serialized_obj)
 
-    def checkUserConnectionToAreas(self, user, channel, arena):
+    def checkUserConnectionToAreasAndRestore(self, user, channel, arena):
         print("arena from sessions - " + str(arena))
 
         if user.is_authenticated == False:
