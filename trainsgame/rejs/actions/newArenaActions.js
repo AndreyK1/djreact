@@ -7,6 +7,8 @@ export const NEW_DATE_PLAYGROUND = "NEW_DATE_PLAYGROUND"
 export const SET_WHO_CLICKED = "SET_WHO_CLICKED"
 
 export const SET_LISTENER_SENDED = "SET_LISTENER_SENDED"
+export const CHANGE_GROUP_ARENA_LISTENER_EXIST = "CHANGE_GROUP_ARENA_LISTENER_EXIST"
+
 
 export function setClicker(whoClicked) {
     return function (dispatch) {
@@ -14,7 +16,7 @@ export function setClicker(whoClicked) {
     }
 }
 
-export function newarenaCreate() {
+export function newarenaCreate(is_listener_exist) {
   return function (dispatch) {
 
     //console.log("---+11111newarenaCreate+--");
@@ -28,7 +30,7 @@ export function newarenaCreate() {
       //
       // });
 
-      dispatch(newarenaAddListeners());
+      dispatch(newarenaAddListeners(is_listener_exist));
 
 
       // if(is_list_sended){
@@ -59,9 +61,14 @@ export function newarenaCreate() {
 
 }
 
-export function newarenaAddListeners() {
+export function newarenaAddListeners(is_listener_exist) {
     console.log("newarenaAddListeners")
   return function (dispatch) {
+      if(is_listener_exist){
+          return;
+      }
+      dispatch({type: CHANGE_GROUP_ARENA_LISTENER_EXIST, res: true})
+
       window.addEventListener("joinedI", (event) => {
         //console.log("event.details.arena", event)
         // alert(event.detail.arena)

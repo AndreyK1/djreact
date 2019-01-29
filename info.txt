@@ -35,3 +35,7 @@ bagabum1
 ------work---
 vasya
 buhaha1701
+
+python manage.py createsuperuser
+andrey
+baraban1

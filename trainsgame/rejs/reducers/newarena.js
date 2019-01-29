@@ -4,7 +4,8 @@ import {SET_WHO_CLICKED} from "../actions/newArenaActions";
 const initialState = {
     // isIstenerSended: false,
   newarena: { arena: 0 , player: "", number: 0, trains: ""},
-  whoClicked: ""
+  whoClicked: "",
+  is_listener_exist: false
 }
 
 export default function playgroud(state=initialState, action={}) {
@@ -18,6 +19,10 @@ export default function playgroud(state=initialState, action={}) {
       newarena["arena"] = action.res.arena
       newarena["player"] = action.res.username
     return {...state, newarena: newarena}
+
+   case newArenaActions.CHANGE_GROUP_ARENA_LISTENER_EXIST:
+    return {...state, is_listener_exist: action.res}
+
   case newArenaActions.NEW_DATE_PLAYGROUND:
      //console.log("NEW_DATE_PLAYGROUND", action.res);
      if(!state.newarena.arena) {

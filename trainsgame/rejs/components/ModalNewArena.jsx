@@ -13,7 +13,7 @@ export default class ModalNewArena extends React.Component {
    createArena = () => {
     renderMainSceneGlobal();
        // console.log("onButtonClick onButtonClick onButtonClick ")
-    this.props.dispatch(newarenaCreate.newarenaCreate());
+    this.props.dispatch(newarenaCreate.newarenaCreate(this.props.newarena.is_listener_exist));
   }
 
   startGame = () => {

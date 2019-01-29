@@ -13,7 +13,7 @@ export default class ArenasTab extends React.Component {
        chosenArena = arena_num
         $.cookie("chosenArena", chosenArena)
 
-        this.props.dispatch(newarenaCreate.newarenaAddListeners());
+        this.props.dispatch(newarenaCreate.newarenaAddListeners(this.props.is_listener_exist));
   }
 
   watchGame = (arena_num) => {
@@ -26,7 +26,7 @@ export default class ArenasTab extends React.Component {
        chosenArena = arena_num
         $.cookie("chosenArena", chosenArena)
 
-        this.props.dispatch(newarenaCreate.newarenaAddListeners());
+        this.props.dispatch(newarenaCreate.newarenaAddListeners(this.props.is_listener_exist));
   }
 
   render() {

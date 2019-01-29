@@ -105,7 +105,7 @@ export default class App1Container extends React.Component{
               </button>
           </div>
           <div className="col-sm-12">
-            <ArenasTab playgrounds={playground.playgrounds} joinFunction={this.showModNewArenaFun} dispatch={dispatch}/>
+            <ArenasTab playgrounds={playground.playgrounds} joinFunction={this.showModNewArenaFun} dispatch={dispatch} is_listener_exist={newarena.is_listener_exist}/>
           </div>
           <div className="col-sm-3">
             войти
