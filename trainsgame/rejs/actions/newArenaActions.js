@@ -72,11 +72,12 @@ export function newarenaAddListeners(is_listener_exist) {
       window.addEventListener("joinedI", (event) => {
         //console.log("event.details.arena", event)
         // alert(event.detail.arena)
-          console.log("-------++++------------webSocketBridgeGroup add "+event.detail.arena)
-          webSocketBridgeGroup.send(event.detail.arena)
+        //   console.log("-------++++------------webSocketBridgeGroup add "+event.detail.arena)
+          // webSocketBridgeGroup.send(event.detail.arena)
+          dispatch(arenaAddListeners(event.detail.arena));
           document.getElementById("player_name").value = event.detail.username
-          chosenArena = event.detail.arena
-          $.cookie("chosenArena", chosenArena)
+          // chosenArena = event.detail.arena
+          // $.cookie("chosenArena", chosenArena)
           // document.getElementById("arena_num").value = event.detail.arena
 
           dispatch({type: SAVE_PLAYGROUND_DATA, res: event.detail})
@@ -95,4 +96,14 @@ export function newarenaAddListeners(is_listener_exist) {
 
       })
   }
+}
+
+
+export function arenaAddListeners(arena) {
+    return function (dispatch) {
+        console.log("-------++++------------webSocketBridgeGroup add "+arena)
+        webSocketBridgeGroup.send(arena)
+        chosenArena = arena
+        $.cookie("chosenArena", chosenArena)
+    }
 }

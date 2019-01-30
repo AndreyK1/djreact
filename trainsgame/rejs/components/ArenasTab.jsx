@@ -9,11 +9,12 @@ export default class ArenasTab extends React.Component {
 
      // alert("join " + arena)
        webSocketBridgeControl.send({"type":"join", "name":"1", "arena_num":arena_num })
-        webSocketBridgeGroup.send(arena_num)
-       chosenArena = arena_num
-        $.cookie("chosenArena", chosenArena)
-
-        this.props.dispatch(newarenaCreate.newarenaAddListeners(this.props.is_listener_exist));
+       this.props.dispatch(newarenaCreate.arenaAddListeners(arena_num));
+       //  webSocketBridgeGroup.send(arena_num)
+       // chosenArena = arena_num
+       //  $.cookie("chosenArena", chosenArena)
+       //
+       //  this.props.dispatch(newarenaCreate.newarenaAddListeners(this.props.is_listener_exist));
   }
 
   watchGame = (arena_num) => {
@@ -22,11 +23,12 @@ export default class ArenasTab extends React.Component {
 
      // alert("join " + arena)
      //   webSocketBridgeControl.send({"type":"join", "name":"1", "arena_num":arena_num })
-        webSocketBridgeGroup.send(arena_num)
-       chosenArena = arena_num
-        $.cookie("chosenArena", chosenArena)
+      this.props.dispatch(newarenaCreate.arenaAddListeners(arena_num));
+     //    webSocketBridgeGroup.send(arena_num)
+     //    chosenArena = arena_num
+     //    $.cookie("chosenArena", chosenArena)
 
-        this.props.dispatch(newarenaCreate.newarenaAddListeners(this.props.is_listener_exist));
+        // this.props.dispatch(newarenaCreate.newarenaAddListeners(this.props.is_listener_exist));
   }
 
   render() {
