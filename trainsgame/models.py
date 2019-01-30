@@ -55,7 +55,9 @@ class SingleChannelToArena:
 
     def remChannelToArena1(self, arena, channel, user):
         print("remChannelToArena :   arena:" + arena + " channel:"+ channel)
-        del self.channelsAr[channel]
+        if channel in self.channelsAr:
+            del self.channelsAr[channel]
+
         if self.arenasCh[arena] is None:
             self.arenasCh[arena] = {}
 
@@ -65,7 +67,8 @@ class SingleChannelToArena:
 
         # del self.channelsAr[channel]
 
-        del self.userNameChannel[str(user)]
+        if str(user) in self.userNameChannel:
+            del self.userNameChannel[str(user)]
 
 
         self.printSerialized()

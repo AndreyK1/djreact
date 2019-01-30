@@ -72,7 +72,7 @@ export function newarenaAddListeners(is_listener_exist) {
       window.addEventListener("joinedI", (event) => {
         //console.log("event.details.arena", event)
         // alert(event.detail.arena)
-          console.log("webSocketBridgeGroup add "+event.detail.arena)
+          console.log("-------++++------------webSocketBridgeGroup add "+event.detail.arena)
           webSocketBridgeGroup.send(event.detail.arena)
           document.getElementById("player_name").value = event.detail.username
           chosenArena = event.detail.arena
