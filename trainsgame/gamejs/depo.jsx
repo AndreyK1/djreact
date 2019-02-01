@@ -41,7 +41,8 @@ class DepoContainer extends Container {
             fontWeight: "bold",
             fill: "green"
       });
-      this.textSum = new Text(depo["sum"], style1);
+      // this.textSum = new Text(depo["sum"], style1);
+      this.textSum = new Text(0, style1);
       this.textSum.x = 0;
       this.textSum.y = 10;
       this.addChildAt(this.textSum,3);
@@ -56,25 +57,39 @@ class DepoContainer extends Container {
              let tressK = tressures[i]
             console.log("depo tressK ", tressK, this.pickedTress, this.pickedTress.indexOf(tressK))
             if(this.pickedTress.indexOf(tressK)<0) {
+                console.log("отрисосвываем depo tressK ", tressK)
                 let trainNum =  getContainers().playGroundGl['treassures'][tressK]["picked"]
                 let trainContainer = getContainers().trainsContainers[trainNum]
+                 if (trainContainer === undefined) {
+                     console.log("ERRRORRRR  trainContainer === undefined --------!!!!!!!!!!!!!!!!!!")
+                 }
 
-                if (trainContainer === undefined) {
-                    console.log("trainContainer === undefined --------!!!!!!!!!!!!!!!!!!")
+                let tressContainer = trainContainer.getTressureContainer()
+
+                if (tressContainer === undefined || tressContainer.treassK != tressK) {
+                    console.log("tressContainer === undefined --------!!!!!!!!!!!!!!!!!!", this)
+
                     //значит мы просматриваем игру, и сокровище отрисовано все еще на арене
-                    let tressCont = getContainers().tressContainers[train["pickedTress"]]
-                    getContainers().gameScene.removeChild(tressCont)
+                    let tressCont = getContainers().tressContainers[tressK]
+                    console.log("tressCont", tressCont)
+                    // getContainers().gameScene.removeChild(tressCont)
 
                     tressCont.moveSelfToDepo(this)
+                    getContainers().gameScene.removeChild(tressCont)
                     this.pickedTress.push(tressK)
                 }else{
-                    //если сокровиit e ntkt;rb
+                    //если сокровище в телеге
+                    console.log("tressContainer in trainContainer", this)
+                    console.log(trainContainer)
+                    console.log(tressContainer)
                      trainContainer.moveTressToDepo(this)
                     this.pickedTress.push(tressK)
                 }
                 // trainContainer.moveTressToDepo(this)
                 // this.pickedTress.push(tressK)
 
+            }else{
+                console.log("отрисосвывно уже depo tressK ", tressK)
             }
         }
     }

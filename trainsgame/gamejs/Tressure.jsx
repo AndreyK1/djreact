@@ -46,7 +46,10 @@ class TressureContainer extends Container {
     }
 
     moveSelfToDepo(containerDepo){
+        this.x = containerDepo.pickedTress.length * 15
+        this.y = 0
         containerDepo.containerOfTressuress.addChild(this)
+
         containerDepo.changeSum(this)
         // containerDepo.pickedTress.push(this.treassK)
     }

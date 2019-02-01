@@ -147,18 +147,26 @@ class TrainContainer extends Container {
     }
 
     moveTressToDepo(containerDepo){
-        let tressPic = this.getChildAt(4)
+        let tressPic = this.getTressureContainer()
 
         this.removeChild(tressPic)
         this.pickedTress = 0
-        tressPic.x = containerDepo.pickedTress.length * 15
-        tressPic.y = 0
+        // tressPic.x = containerDepo.pickedTress.length * 15
+        // tressPic.y = 0
 
         tressPic.moveSelfToDepo(containerDepo)
 
         // containerDepo.containerOfTressuress.addChild(tressCont)
         // containerDepo.changeSum(tressCont)
 
+    }
+
+    getTressureContainer(){
+        try {
+            return this.getChildAt(4)
+        }catch (e) {
+            return undefined
+        }
     }
 
     timeoutDrawTrain(moveInOnePeriod){
