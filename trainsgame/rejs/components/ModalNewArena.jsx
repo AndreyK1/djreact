@@ -29,6 +29,78 @@ export default class ModalNewArena extends React.Component {
   clearThisArena = () => {
         webSocketBridgeControl.send({"type":"clearThisArena", "name":"", "arena_num":chosenArena })
   }
+
+  peerJsSend = (peer) => {
+       let another_peers_id =  document.getElementById("rempeerid").value
+       var conn = peer.connect(another_peers_id);
+        // on open will be launch when you successfully connect to PeerServer
+        conn.on('open', function(){
+          // here you have conn.id
+          conn.send('hi!');
+        });
+  }
+
+   peerJsConnect = (peer) => {
+      setTimeout(()=>{
+           document.getElementById("mypeerid").value =  peer.id
+       },3000)
+
+        peer.on('connection', function(conn) {
+          conn.on('data', function(data){
+            // Will print 'hi!'
+            console.log("rrrrrrrrrrrrrrrrrr" + data);
+          });
+        });
+
+
+
+          navigator.getUserMedia =  ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia );
+          let video = document.getElementById("myvideo")
+
+
+       // navigator.getUserMedia({video: true, audio: true}, function(stream) {
+       //        video.src = URL.createObjectURL(stream);
+       //        video.play();
+       //
+       //    }, function(err) {
+       //      console.log('Failed to get stream', err);
+       //    })
+
+
+        peer.on('call', function(call) {
+
+          navigator.getUserMedia({video: false, audio: true}, function(stream) {
+            call.answer(stream);
+            call.on('stream', function(remotestream){
+              video.src = URL.createObjectURL(remotestream);
+              video.play();
+            })
+          }, function(err) {
+            console.log('Failed to get stream', err);
+          })
+       });
+   }
+
+     videoconnect = (peer) => {
+    let video = document.getElementById("myvideo")
+    let localvar = peer;
+    let fname = document.getElementById("rempeerid").value;
+
+    // let n = <any>navigator;
+
+    navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia  || navigator.msGetUserMedia );
+
+    navigator.getUserMedia({video: false, audio: true}, function(stream) {
+      let call = localvar.call(fname, stream);
+      call.on('stream', function(remotestream) {
+        video.src = URL.createObjectURL(remotestream);
+        video.play();
+      })
+    }, function(err){
+      console.log('Failed to get stream', err);
+    })
+  }
+
   render() {
     let {show, handleClose, children, createGame, dispatch, newarena} = this.props
 
@@ -42,6 +114,16 @@ export default class ModalNewArena extends React.Component {
     //     plNodes.push(node)
     // }
       let showHideClassName = show ? "modal display-block" : "modal display-none";
+
+
+       let peer = new Peer({
+          config: {'iceServers': [
+            { url: 'stun:stun.l.google.com:19302' },
+            { url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
+          ]} /* Sample servers, please use appropriate ones */
+        });
+
+
 
         let buttons;
 
@@ -58,6 +140,12 @@ export default class ModalNewArena extends React.Component {
                   <button onClick={this.stopGame}>stopGame</button>
                   <br/>
                   <button onClick={this.clearThisArena}>clearThisGame</button>
+                  <br/>
+                  My Id: <input id="mypeerid" /> Rem Id: <input id="rempeerid" />
+                  <button onClick={() => this.peerJsConnect(peer)}>peerJsConnect</button>
+                  <button onClick={() => this.peerJsSend(peer)}>peerJsSend</button>
+                  <button onClick={() => this.videoconnect(peer)}>videoconnect</button>
+                  <video id="myvideo" ></video>
                 </div>;
         } else {
           buttons = "";
