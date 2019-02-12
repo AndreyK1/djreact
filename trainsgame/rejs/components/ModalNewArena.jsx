@@ -72,7 +72,8 @@ export default class ModalNewArena extends React.Component {
           navigator.getUserMedia({video: false, audio: true}, function(stream) {
             call.answer(stream);
             call.on('stream', function(remotestream){
-              video.src = URL.createObjectURL(remotestream);
+              // video.src = URL.createObjectURL(remotestream);
+                video.srcObject = remotestream
               video.play();
             })
           }, function(err) {
@@ -93,7 +94,8 @@ export default class ModalNewArena extends React.Component {
     navigator.getUserMedia({video: false, audio: true}, function(stream) {
       let call = localvar.call(fname, stream);
       call.on('stream', function(remotestream) {
-        video.src = URL.createObjectURL(remotestream);
+        // video.src = URL.createObjectURL(remotestream);
+        video.srcObject = remotestream
         video.play();
       })
     }, function(err){
@@ -118,8 +120,8 @@ export default class ModalNewArena extends React.Component {
 
        let peer = new Peer({
           config: {'iceServers': [
-            { url: 'stun:stun.l.google.com:19302' },
-            { url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
+            { urls: 'stun:stun.l.google.com:19302' }
+            // ,{ url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
           ]} /* Sample servers, please use appropriate ones */
         });
 
