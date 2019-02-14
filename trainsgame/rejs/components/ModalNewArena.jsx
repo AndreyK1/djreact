@@ -71,7 +71,33 @@ export default class ModalNewArena extends React.Component {
         peer.on('call', function(call) {
 
           navigator.getUserMedia({video: false, audio: true}, function(stream) {
-            call.answer(stream);
+
+              window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+               let audioCtx = new AudioContext();
+               let source = audioCtx.createMediaStreamSource(stream);
+              let synthDelay = new DelayNode(audioCtx, {
+                  delayTime: 1.5,
+                  maxDelayTime: 2,
+                });
+              let merger = audioCtx.createChannelMerger();
+              source.connect(merger, 0, 0)
+
+
+                      source.connect(synthDelay);
+        // synthDelay.connect(remsource
+        //       synthDelay.connect(remsource);
+
+          synthDelay.connect(merger, 0, 0)
+        // mysource.connect(synthDelay);
+        // synthDelay.connect(remsource);
+
+
+
+        // merger.connect(audioCtx.destination);
+            let destination_participant1 = audioCtx.createMediaStreamDestination();
+              merger.connect( destination_participant1 );
+
+            call.answer(destination_participant1.stream);
             call.on('stream', function(remotestream){
               // video.src = URL.createObjectURL(remotestream);
                 video.srcObject = remotestream
