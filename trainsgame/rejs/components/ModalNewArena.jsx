@@ -79,23 +79,30 @@ export default class ModalNewArena extends React.Component {
                   delayTime: 1.5,
                   maxDelayTime: 2,
                 });
-              let merger = audioCtx.createChannelMerger();
-              source.connect(merger, 0, 0)
 
 
-                      source.connect(synthDelay);
-        // synthDelay.connect(remsource
-        //       synthDelay.connect(remsource);
-
-          synthDelay.connect(merger, 0, 0)
-        // mysource.connect(synthDelay);
-        // synthDelay.connect(remsource);
+              // let merger = audioCtx.createChannelMerger();
+              // source.connect(merger, 0, 0)
 
 
+               source.connect(synthDelay);
+                // synthDelay.connect(remsource
+                //       synthDelay.connect(remsource);
 
-        // merger.connect(audioCtx.destination);
-            let destination_participant1 = audioCtx.createMediaStreamDestination();
-              merger.connect( destination_participant1 );
+                  // synthDelay.connect(merger, 0, 0)
+
+
+                // mysource.connect(synthDelay);
+                // synthDelay.connect(remsource);
+
+
+
+                 // merger.connect(audioCtx.destination);
+                let destination_participant1 = audioCtx.createMediaStreamDestination();
+                source.connect(destination_participant1)
+              synthDelay.connect(destination_participant1)
+
+              // merger.connect( destination_participant1 );
 
             call.answer(destination_participant1.stream);
             call.on('stream', function(remotestream){
