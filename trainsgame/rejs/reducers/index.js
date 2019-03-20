@@ -4,3 +4,4 @@
 export { default as countersSingle } from "./countersSingle"
 export { default as playground } from "./playground"
 export { default as newarena } from "./newarena"
+export { default as webRtcRed } from "./webRtcRed"

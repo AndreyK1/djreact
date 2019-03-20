@@ -11,7 +11,9 @@ import * as listenPlaygrounsList from "../actions/playGroundActions";
 import PlaygroundsList from "../components/PlaygroundsList";
 import ModalNewArena from "../components/ModalNewArena";
 import ArenasTab from "../components/ArenasTab";
+import ModalRTC from "../components/ModalRtcComp";
 import * as newarenaCreate from "../actions/newArenaActions";
+import * as webRtcActions from "../actions/webRtcActions";
 
 
 // import * as postersAction from "../actions/postersAction"
@@ -33,6 +35,7 @@ const styles = {
     countersSingle: state.countersSingle,
     playground: state.playground,
     newarena: state.newarena,
+    webRtcRed: state.webRtcRed,
 }))
 @Radium
 export default class App1Container extends React.Component{
@@ -72,6 +75,13 @@ export default class App1Container extends React.Component{
 
   }
 
+   showModRtc= () =>{
+     let {dispatch} = this.props
+     dispatch(webRtcActions.showModalRtc(true))
+  }
+
+
+
   hideModalNewArena= () =>{
     this.setState({ showModNewArena: false });
   }
@@ -79,7 +89,7 @@ export default class App1Container extends React.Component{
   render() {
     // console.log("render");
     // console.log(this.props);
-    let {countersSingle, playground, dispatch, newarena} = this.props
+    let {countersSingle, playground, dispatch, newarena, webRtcRed} = this.props
 
 
     // if (github.isLoadingRepos || github.repos === undefined) {
@@ -102,6 +112,14 @@ export default class App1Container extends React.Component{
               </ModalNewArena>
               <button type="button" onClick={() => this.showModNewArenaFun("creator")}>
                   create new Arena
+              </button>
+          </div>
+          <div className="col-sm-12">
+              <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} >
+                  <p>ModalRTC</p>
+              </ModalRTC>
+              <button type="button" onClick={() => this.showModRtc()}>
+                  webRtc
               </button>
           </div>
           <div className="col-sm-12">
