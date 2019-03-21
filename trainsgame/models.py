@@ -12,6 +12,14 @@ from djangorest.models import singleton
 from trainsgame.MovingMashine import MovingMashine
 
 
+# test TODO dell
+@singleton
+class SingletonDot2:
+    doter = 4
+
+    def increase(self):
+        self.doter = self.doter +1
+
 @singleton
 class SingleChannelObjTrains:
     # Объект (тестовый) в который мы сами будем объединять каналы (не через редис)

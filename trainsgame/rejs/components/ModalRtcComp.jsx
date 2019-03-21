@@ -150,6 +150,11 @@ export default class ModalRTC extends React.Component {
   }
 
 
+  addToRtcGroup = () => {
+      this.props.dispatch(webRtcActions.addToRtcGroup());
+  }
+
+
   audoiExamples = () => {
     let video = document.getElementById("myvideo")
 
@@ -225,7 +230,9 @@ export default class ModalRTC extends React.Component {
               <button onClick={() => this.peerJsSend(peer)}>peerJsSend</button>
               <button onClick={() => this.videoconnect(peer)}>videoconnect</button>
 
-
+            <br/><br/>
+              <p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>
+              <button onClick={() => this.addToRtcGroup()}>addToRtcGroup</button>
                                 <br/>
                   <br/>
 

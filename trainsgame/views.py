@@ -7,7 +7,9 @@ from django.contrib.auth import login, logout
 from django.urls import reverse
 # from django.core.urlresolvers import reverse
 from trainsgame.constants import LOGIN_PATH, LOGIN_PAGE, BEGIN_GAME_PAGE
-from trainsgame.models import PlayGround
+from trainsgame.models import PlayGround, SingletonDot2
+from django.http import JsonResponse
+
 
 # @login_required(login_url=LOGIN_PATH)
 def beginOfGAme(request):
@@ -57,3 +59,9 @@ def sign_up(request):
             print(form.errors)
     return render(request, "sign_up.html", {"form": form})
     # return render(request, "TrainGame.html", {"dd": 3})
+
+
+def addToRtcGroup(request):
+    md2 = SingletonDot2()
+    md2.increase()
+    return JsonResponse({"addedToRtc" : md2.doter})
