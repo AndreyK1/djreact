@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
@@ -6,6 +8,8 @@ from django.contrib.auth import login, logout
 # Create your views here.
 from django.urls import reverse
 # from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+
 from trainsgame.constants import LOGIN_PATH, LOGIN_PAGE, BEGIN_GAME_PAGE
 from trainsgame.models import PlayGround, SingletonDot2
 from django.http import JsonResponse
@@ -61,7 +65,16 @@ def sign_up(request):
     # return render(request, "TrainGame.html", {"dd": 3})
 
 
+@csrf_exempt
 def addToRtcGroup(request):
+    # email = request.POST.get("email", "")
+    # password = request.POST.get("password", "")
+
+    obj = json.loads( request.body.decode('utf-8') )
+
+    email = obj["email"]
+    password = obj["password"]
+    print("------------email " + email + " password " + password)
     md2 = SingletonDot2()
     md2.increase()
     return JsonResponse({"addedToRtc" : md2.doter})

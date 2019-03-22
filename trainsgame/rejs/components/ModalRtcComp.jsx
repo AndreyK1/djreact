@@ -1,6 +1,7 @@
 import React from "react"
 //import * as newarenaCreate from "../actions/newArenaActions";
 import * as webRtcActions from "../actions/webRtcActions";
+import * as listenPlaygrounsList from "../actions/playGroundActions";
 //import * as PropsTypes from "react/lib/ReactPropTypes";
 //import * as newarenaCreate from "../actions/newArenaActions";
 
@@ -8,12 +9,35 @@ import * as webRtcActions from "../actions/webRtcActions";
 
 export default class ModalRTC extends React.Component {
 
+   componentDidMount() {
+    let {dispatch, playground} = this.props
+      // dispatch(listenPlaygrounsList.listenPlaygrounsList(playground.isIstenerSended))
+
+    let peer = new Peer({
+      config: {'iceServers': [
+        { urls: 'stun:stun.l.google.com:19302' }
+        // ,{ url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
+      ]} /* Sample servers, please use appropriate ones */
+    });
+    dispatch(webRtcActions.setPeer(peer))
+
+    peer.on('open', function(id) {
+      document.getElementById("mypeerid").value =  id
+      console.log('My peer ID is: ' + id);
+      dispatch(webRtcActions.setPeerId(id))
+    });
+
+
+  }
+
   handleClose = () => {
     this.props.dispatch(webRtcActions.showModalRtc(false));
   }
 
 
-  peerJsSend = (peer) => {
+  peerJsSend = () => {
+      let {webRtcRed} = this.props
+      let peer = webRtcRed.peer;
        let another_peers_id =  document.getElementById("rempeerid").value
        var conn = peer.connect(another_peers_id);
         // on open will be launch when you successfully connect to PeerServer
@@ -23,10 +47,17 @@ export default class ModalRTC extends React.Component {
         });
   }
 
-  peerJsConnect = (peer) => {
-      setTimeout(()=>{
-           document.getElementById("mypeerid").value =  peer.id
-       },3000)
+  peerJsListen = () => {
+      let {webRtcRed} = this.props
+      let peer = webRtcRed.peer;
+      // peer.on('open', function(id) {
+      //     document.getElementById("mypeerid").value =  id
+      //     console.log('My peer ID is: ' + id);
+      //  });
+      // setTimeout(()=>{
+      //      document.getElementById("mypeerid").value =  peer.id
+      //  },1000)
+
 
         peer.on('connection', function(conn) {
           conn.on('data', function(data){
@@ -98,8 +129,9 @@ export default class ModalRTC extends React.Component {
        });
    }
 
-   videoconnect = (peer) => {
-
+   videoconnect = () => {
+      let {webRtcRed} = this.props
+      let peer = webRtcRed.peer;
        // this.audoiExamples()
 
     let video = document.getElementById("myvideo")
@@ -151,7 +183,9 @@ export default class ModalRTC extends React.Component {
 
 
   addToRtcGroup = () => {
-      this.props.dispatch(webRtcActions.addToRtcGroup());
+       let {webRtcRed} = this.props
+
+      this.props.dispatch(webRtcActions.addToRtcGroup(webRtcRed.peer_id, webRtcRed.myPeerGroup));
   }
 
 
@@ -208,12 +242,18 @@ export default class ModalRTC extends React.Component {
   render() {
     let {webRtcRed, children} = this.props
 
-    let peer = new Peer({
-      config: {'iceServers': [
-        { urls: 'stun:stun.l.google.com:19302' }
-        // ,{ url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
-      ]} /* Sample servers, please use appropriate ones */
-    });
+    // let peer = new Peer({
+    //   config: {'iceServers': [
+    //     { urls: 'stun:stun.l.google.com:19302' }
+    //     // ,{ url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
+    //   ]} /* Sample servers, please use appropriate ones */
+    // });
+    //
+    // peer.on('open', function(id) {
+    //   document.getElementById("mypeerid").value =  id
+    //   console.log('My peer ID is: ' + id);
+    // });
+
 
     let showHideClassName = webRtcRed.isModalRtcShow ? "modal display-block" : "modal display-none";
 
@@ -226,9 +266,11 @@ export default class ModalRTC extends React.Component {
 
 
               My Id: <input id="mypeerid" /> Rem Id: <input id="rempeerid" />
-              <button onClick={() => this.peerJsConnect(peer)}>peerJsConnect</button>
-              <button onClick={() => this.peerJsSend(peer)}>peerJsSend</button>
-              <button onClick={() => this.videoconnect(peer)}>videoconnect</button>
+              My group: <input id="mypeergroup" value={webRtcRed.myPeerGroup} />
+              <br/>
+              <button onClick={() => this.peerJsListen()}>peerJsListen</button>
+              <button onClick={() => this.peerJsSend()}>peerJsSend</button>
+              <button onClick={() => this.videoconnect()}>videoconnect</button>
 
             <br/><br/>
               <p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>

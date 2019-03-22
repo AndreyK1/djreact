@@ -15,16 +15,8 @@ import { request } from "../utils"
 // } from "../../../reactjs/actions/counterSingleActions";
 
 export const SHOW_MODAL_RTC = "SHOW_MODAL_RTC"
-
-
-// export function arenaAddListeners(arena) {
-//     return function (dispatch) {
-//         console.log("-------++++------------webSocketBridgeGroup add "+arena)
-//         webSocketBridgeGroup.send(arena)
-//         chosenArena = arena
-//         $.cookie("chosenArena", chosenArena)
-//     }
-// }
+export const SET_PEER = "SET_PEER"
+export const SET_PEER_ID = "SET_PEER_ID"
 
 
 export function showModalRtc(isShow) {
@@ -37,6 +29,18 @@ export function showModalRtc(isShow) {
     }
 }
 
+export function setPeer(peer) {
+    return function (dispatch) {
+        dispatch({type: SET_PEER, res: peer})
+    }
+}
+
+export function setPeerId(peer_id) {
+    return function (dispatch) {
+        dispatch({type: SET_PEER_ID, res: peer_id})
+    }
+}
+
 
 export const ADD_TO_RTC_GROUP = "ADD_TO_RTC_GROUP"
 export const ADD_TO_RTC_GROUP_SUCCESS = "ADD_TO_RTC_GROUP_SUCCESS"
@@ -44,9 +48,9 @@ export const ADD_TO_RTC_GROUP_ERROR400 = "ADD_TO_RTC_GROUP_ERROR400"
 export const ADD_TO_RTC_GROUP_ERROR500 = "ADD_TO_RTC_GROUP_ERROR500"
 export const ADD_TO_RTC_GROUP_FAILURE = "ADD_TO_RTC_GROUP_FAILURE"
 
-export function addToRtcGroup() {
+export function addToRtcGroup(peer_id, myPeerGroup) {
   return function (dispatch) {
-    let url = "/trains/addToRtcGroup"
+    let url = "/trains/addToRtcGroup/"
     dispatch({type: ADD_TO_RTC_GROUP})
     return request(
       url, {},
