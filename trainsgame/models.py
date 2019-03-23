@@ -14,11 +14,22 @@ from trainsgame.MovingMashine import MovingMashine
 
 # test TODO dell
 @singleton
-class SingletonDot2:
-    doter = 4
+class SingletonRtcGroups:
+    rtcGroups = {}
 
-    def increase(self):
-        self.doter = self.doter +1
+    # def increase(self):
+    #     self.doter = self.doter +1
+    def addRtcToGroup(self, peer_group, peer_id):
+        if peer_group not in self.rtcGroups.keys():
+            self.rtcGroups[peer_group] = []
+
+
+        if peer_id not in self.rtcGroups[peer_group]:
+            self.rtcGroups[peer_group].append(peer_id)
+
+
+
+
 
 @singleton
 class SingleChannelObjTrains:

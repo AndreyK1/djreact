@@ -6,17 +6,11 @@ export function request(url, options, success, error400, error, failure) {
   headers.append("Accept", "application/json")
   options["headers"] = headers
     options['method'] = 'POST'
-    // options['body'] = formData
-        options['body'] = JSON.stringify({
-        // Validation data coming from a form usually
-        email: "111",
-        password: "22222"
-    })
-    //  options['body'] = {
+    //     options['body'] = JSON.stringify({
     //     // Validation data coming from a form usually
     //     email: "111",
-    //     password: "22222"}
-    //}
+    //     password: "22222"
+    // })
   return fetch(url, options)
     .then(res => {
       if (res.status >= 200 && res.status < 300) {

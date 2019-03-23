@@ -52,8 +52,14 @@ export function addToRtcGroup(peer_id, myPeerGroup) {
   return function (dispatch) {
     let url = "/trains/addToRtcGroup/"
     dispatch({type: ADD_TO_RTC_GROUP})
+
+        let options ={ body:JSON.stringify({
+        // Validation data coming from a form usually
+        peer_group: myPeerGroup,
+        peer_id: peer_id
+    }) }
     return request(
-      url, {},
+      url, options,
       (json) => { dispatch({type: ADD_TO_RTC_GROUP_SUCCESS, res: json}) },
       (json) => { dispatch({type: ADD_TO_RTC_GROUP_ERROR400, res: json}) }, //ERROR400
       (res) => { dispatch({type: ADD_TO_RTC_GROUP_ERROR500, res: res}) },  //ERROR500

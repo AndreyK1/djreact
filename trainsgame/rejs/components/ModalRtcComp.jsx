@@ -242,18 +242,25 @@ export default class ModalRTC extends React.Component {
   render() {
     let {webRtcRed, children} = this.props
 
-    // let peer = new Peer({
-    //   config: {'iceServers': [
-    //     { urls: 'stun:stun.l.google.com:19302' }
-    //     // ,{ url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo', username: 'homeo' }
-    //   ]} /* Sample servers, please use appropriate ones */
-    // });
-    //
-    // peer.on('open', function(id) {
-    //   document.getElementById("mypeerid").value =  id
-    //   console.log('My peer ID is: ' + id);
-    // });
+    let rtcGroupsNodes = []
+      console.log("rtcGroups ", webRtcRed.addedToRtc)
+     // let mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]
+       let mygroups =  []
+      if(webRtcRed.addedToRtc[webRtcRed.myPeerGroup]){
+          mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]
+      }else{
+          mygroups =  []
+      }
+      console.log("myrtcGroups ", mygroups)
+    // playgrounds.forEach((item, index) => {
+      //for(let key in webRtcRed.addedToRtc[webRtcRed.myPeerGroup]){
 
+      for (let index = 0; index < mygroups.length; ++index){
+        let node = (
+          <span>{mygroups[index]} | </span>
+        )
+        rtcGroupsNodes.push(node)
+    }
 
     let showHideClassName = webRtcRed.isModalRtcShow ? "modal display-block" : "modal display-none";
 
@@ -273,6 +280,8 @@ export default class ModalRTC extends React.Component {
               <button onClick={() => this.videoconnect()}>videoconnect</button>
 
             <br/><br/>
+              {/*<p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>*/}
+            <p>{rtcGroupsNodes}</p>
               <p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>
               <button onClick={() => this.addToRtcGroup()}>addToRtcGroup</button>
                                 <br/>
