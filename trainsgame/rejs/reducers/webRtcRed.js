@@ -9,6 +9,7 @@ const initialState = {
     isSendingNow: false,
     peer: null,
     peer_id: 0,
+    myPeerServer: 0,
     myPeerGroup: 1,
   // playgrounds: {},
 }
@@ -29,7 +30,11 @@ export default function webRtc(state=initialState, action={}) {
     return {...state, isSendingNow: true}
   case webRtcActions.ADD_TO_RTC_GROUP_SUCCESS:
     console.log("addedToRtc", action.res["addedToRtc"])
-    return {...state, isSendingNow: false, addedToRtc: action.res["addedToRtc"]}
+      let myPeerServer = state.myPeerServer
+      if(action.res["addedToRtc"][state.myPeerGroup] != undefined){
+            myPeerServer = action.res["addedToRtc"][state.myPeerGroup]["server"]
+      }
+    return {...state, isSendingNow: false, addedToRtc: action.res["addedToRtc"], myPeerServer:myPeerServer}
   case webRtcActions.ADD_TO_RTC_GROUP_ERROR400:
   case webRtcActions.ADD_TO_RTC_GROUP_ERROR500:
   case webRtcActions.ADD_TO_RTC_GROUP_FAILURE:

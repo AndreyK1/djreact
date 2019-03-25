@@ -48,7 +48,7 @@ export const ADD_TO_RTC_GROUP_ERROR400 = "ADD_TO_RTC_GROUP_ERROR400"
 export const ADD_TO_RTC_GROUP_ERROR500 = "ADD_TO_RTC_GROUP_ERROR500"
 export const ADD_TO_RTC_GROUP_FAILURE = "ADD_TO_RTC_GROUP_FAILURE"
 
-export function addToRtcGroup(peer_id, myPeerGroup) {
+export function addToRtcGroup(peer_id, myPeerGroup, role) {
   return function (dispatch) {
     let url = "/trains/addToRtcGroup/"
     dispatch({type: ADD_TO_RTC_GROUP})
@@ -56,7 +56,8 @@ export function addToRtcGroup(peer_id, myPeerGroup) {
         let options ={ body:JSON.stringify({
         // Validation data coming from a form usually
         peer_group: myPeerGroup,
-        peer_id: peer_id
+        peer_id: peer_id,
+        role: role
     }) }
     return request(
       url, options,

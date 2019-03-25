@@ -1,6 +1,7 @@
 import random
 
 import json
+from django.http import JsonResponse
 
 # from trainsgame.createPlayGround import randomAddTrainToCross
 from trainsgame.enums.ColorEnum import Colors
@@ -16,16 +17,26 @@ from trainsgame.MovingMashine import MovingMashine
 @singleton
 class SingletonRtcGroups:
     rtcGroups = {}
+    server = 0
 
     # def increase(self):
     #     self.doter = self.doter +1
-    def addRtcToGroup(self, peer_group, peer_id):
+    def addRtcToGroup(self, peer_group, peer_id, role):
         if peer_group not in self.rtcGroups.keys():
-            self.rtcGroups[peer_group] = []
+            self.rtcGroups[peer_group] = {}
+            self.rtcGroups[peer_group]["clients"] = []
+            self.rtcGroups[peer_group]["server"] = 0
+
+        if(role == "server"):
+            self.rtcGroups[peer_group]["server"] = peer_id
+
+        if peer_id not in self.rtcGroups[peer_group]["clients"]:
+            self.rtcGroups[peer_group]["clients"].append(peer_id)
 
 
-        if peer_id not in self.rtcGroups[peer_group]:
-            self.rtcGroups[peer_group].append(peer_id)
+    def returbJsonOfMe(self):
+        return JsonResponse({"addedToRtc": self.rtcGroups})
+
 
 
 

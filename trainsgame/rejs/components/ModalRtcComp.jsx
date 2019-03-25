@@ -38,7 +38,8 @@ export default class ModalRTC extends React.Component {
   peerJsSend = () => {
       let {webRtcRed} = this.props
       let peer = webRtcRed.peer;
-       let another_peers_id =  document.getElementById("rempeerid").value
+       // let another_peers_id =  document.getElementById("rempeerid").value
+      let another_peers_id =  webRtcRed.myPeerServer
        var conn = peer.connect(another_peers_id);
         // on open will be launch when you successfully connect to PeerServer
         conn.on('open', function(){
@@ -47,9 +48,17 @@ export default class ModalRTC extends React.Component {
         });
   }
 
-  peerJsListen = () => {
+  peerJsListenAsServer = () => {
       let {webRtcRed} = this.props
       let peer = webRtcRed.peer;
+
+      //addAsRtcGroupServer  - Добавляем себя как сервер группы
+      this.props.dispatch(webRtcActions.addToRtcGroup(webRtcRed.peer_id, webRtcRed.myPeerGroup, "server"));
+
+
+
+
+
       // peer.on('open', function(id) {
       //     document.getElementById("mypeerid").value =  id
       //     console.log('My peer ID is: ' + id);
@@ -82,6 +91,8 @@ export default class ModalRTC extends React.Component {
 
 
         peer.on('call', function(call) {
+
+            console.log("----------+++NEW CALL++++----------------")
 
           navigator.getUserMedia({video: false, audio: true}, function(stream) {
 
@@ -129,21 +140,26 @@ export default class ModalRTC extends React.Component {
        });
    }
 
-   videoconnect = () => {
+   connectToServer = () => {
       let {webRtcRed} = this.props
       let peer = webRtcRed.peer;
        // this.audoiExamples()
 
     let video = document.getElementById("myvideo")
     let localvar = peer;
-    let fname = document.getElementById("rempeerid").value;
 
+    //let server_id = document.getElementById("rempeerid").value;
+    let server_id = webRtcRed.myPeerServer;
+    if(server_id == 0){
+        alert("server_id = 0")
+        return;
+    }
     // let n = <any>navigator;
 
     navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia  || navigator.msGetUserMedia );
 
     navigator.getUserMedia({video: false, audio: true}, function(stream) {
-      let call = localvar.call(fname, stream);
+      let call = localvar.call(server_id, stream);
       call.on('stream', function(remotestream) {
         // video.src = URL.createObjectURL(remotestream);
 
@@ -185,7 +201,7 @@ export default class ModalRTC extends React.Component {
   addToRtcGroup = () => {
        let {webRtcRed} = this.props
 
-      this.props.dispatch(webRtcActions.addToRtcGroup(webRtcRed.peer_id, webRtcRed.myPeerGroup));
+      this.props.dispatch(webRtcActions.addToRtcGroup(webRtcRed.peer_id, webRtcRed.myPeerGroup, "client"));
   }
 
 
@@ -246,10 +262,10 @@ export default class ModalRTC extends React.Component {
       console.log("rtcGroups ", webRtcRed.addedToRtc)
      // let mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]
        let mygroups =  []
+      let myServer = 0
       if(webRtcRed.addedToRtc[webRtcRed.myPeerGroup]){
-          mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]
-      }else{
-          mygroups =  []
+          mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]["clients"]
+          myServer = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]["server"]
       }
       console.log("myrtcGroups ", mygroups)
     // playgrounds.forEach((item, index) => {
@@ -275,13 +291,16 @@ export default class ModalRTC extends React.Component {
               My Id: <input id="mypeerid" /> Rem Id: <input id="rempeerid" />
               My group: <input id="mypeergroup" value={webRtcRed.myPeerGroup} />
               <br/>
-              <button onClick={() => this.peerJsListen()}>peerJsListen</button>
+              <button onClick={() => this.peerJsListenAsServer()}>peerJsListenAsServer</button>
               <button onClick={() => this.peerJsSend()}>peerJsSend</button>
-              <button onClick={() => this.videoconnect()}>videoconnect</button>
+              <button onClick={() => this.connectToServer()}>connectToServer</button>
+
 
             <br/><br/>
               {/*<p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>*/}
-            <p>{rtcGroupsNodes}</p>
+              {/*<p>server: {myServer}</p>*/}
+              <p>server : {webRtcRed.myPeerServer}</p>
+              <p>{rtcGroupsNodes}</p>
               <p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>
               <button onClick={() => this.addToRtcGroup()}>addToRtcGroup</button>
                                 <br/>
