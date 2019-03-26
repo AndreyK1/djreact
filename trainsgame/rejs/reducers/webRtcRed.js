@@ -11,6 +11,7 @@ const initialState = {
     peer_id: 0,
     myPeerServer: 0,
     myPeerGroup: 1,
+    destination_participant: {},
   // playgrounds: {},
 }
 

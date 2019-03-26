@@ -90,16 +90,19 @@ export default class ModalRTC extends React.Component {
        //    })
 
 
+
         peer.on('call', function(call) {
 
-            console.log("----------+++NEW CALL++++----------------")
+            console.log("----------+++NEW CALL++++----------------from: "+ call.peer)
+            console.log(call)
 
           navigator.getUserMedia({video: false, audio: true}, function(stream) {
 
-              window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
-               let audioCtx = new AudioContext();
+               window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+               // let audioCtx = new window.AudioContext();
                let source = audioCtx.createMediaStreamSource(stream);
-              let synthDelay = new DelayNode(audioCtx, {
+
+               let synthDelay = new DelayNode(audioCtx, {
                   delayTime: 1.5,
                   maxDelayTime: 2,
                 });
@@ -109,7 +112,7 @@ export default class ModalRTC extends React.Component {
               // source.connect(merger, 0, 0)
 
 
-               source.connect(synthDelay);
+               // source.connect(synthDelay);
                 // synthDelay.connect(remsource
                 //       synthDelay.connect(remsource);
 
@@ -122,15 +125,23 @@ export default class ModalRTC extends React.Component {
 
 
                  // merger.connect(audioCtx.destination);
-                let destination_participant1 = audioCtx.createMediaStreamDestination();
+         // let destination_participant1 = audioCtx.createMediaStreamDestination();
                 source.connect(destination_participant1)
-              synthDelay.connect(destination_participant1)
+       // synthDelay.connect(destination_participant1)
+              console.log("destination_participant1", destination_participant1)
 
               // merger.connect( destination_participant1 );
 
             call.answer(destination_participant1.stream);
+
             call.on('stream', function(remotestream){
               // video.src = URL.createObjectURL(remotestream);
+
+                let remsource = audioCtx.createMediaStreamSource(remotestream);
+                 remsource.connect(destination_participant1)
+
+
+
                 video.srcObject = remotestream
               video.play();
             })

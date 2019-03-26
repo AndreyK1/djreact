@@ -148,6 +148,10 @@
 
 
         var renderMainSceneGlobal;
+                      window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+               var audioCtx = new window.AudioContext();
+               {#let source = audioCtx.createMediaStreamSource(stream);#}
+        var destination_participant1 = audioCtx.createMediaStreamDestination();
 
     </script>
 
