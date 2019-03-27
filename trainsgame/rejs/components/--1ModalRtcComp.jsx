@@ -13,8 +13,6 @@ export default class ModalRTC extends React.Component {
     let {dispatch, playground} = this.props
       // dispatch(listenPlaygrounsList.listenPlaygrounsList(playground.isIstenerSended))
 
-
-       //конектимся к серверу самого peer js
     let peer = new Peer({
       config: {'iceServers': [
         { urls: 'stun:stun.l.google.com:19302' }
@@ -42,9 +40,7 @@ export default class ModalRTC extends React.Component {
       let peer = webRtcRed.peer;
        // let another_peers_id =  document.getElementById("rempeerid").value
       let another_peers_id =  webRtcRed.myPeerServer
-
-      //отправка текстовых сообщений серверу
-      var conn = peer.connect(another_peers_id);
+       var conn = peer.connect(another_peers_id);
         // on open will be launch when you successfully connect to PeerServer
         conn.on('open', function(){
           // here you have conn.id
@@ -54,14 +50,24 @@ export default class ModalRTC extends React.Component {
 
   peerJsListenAsServer = () => {
       let {webRtcRed} = this.props
-      let objParent = this
       let peer = webRtcRed.peer;
 
       //addAsRtcGroupServer  - Добавляем себя как сервер группы
       this.props.dispatch(webRtcActions.addToRtcGroup(webRtcRed.peer_id, webRtcRed.myPeerGroup, "server"));
 
 
-        // устанавливаем листенер (режим сервера) текстовых сообщений
+
+
+
+      // peer.on('open', function(id) {
+      //     document.getElementById("mypeerid").value =  id
+      //     console.log('My peer ID is: ' + id);
+      //  });
+      // setTimeout(()=>{
+      //      document.getElementById("mypeerid").value =  peer.id
+      //  },1000)
+
+
         peer.on('connection', function(conn) {
           conn.on('data', function(data){
             // Will print 'hi!'
@@ -85,24 +91,38 @@ export default class ModalRTC extends React.Component {
 
 
 
-        // устанавливаем листенер (режим сервера) звонков
         peer.on('call', function(call) {
 
             console.log("----------+++NEW CALL++++----------------from: "+ call.peer)
             console.log("call", call)
-            console.log("this", objParent)
-            objParent.makeanswer(call)
 
-       });
-   }
-
-   //отвечаем на звонок
-    makeanswer = (call) => {
-         navigator.getUserMedia({video: false, audio: true}, function(stream) {
+          navigator.getUserMedia({video: false, audio: true}, function(stream) {
 
                window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
                // let audioCtx = new window.AudioContext();
                let source = audioCtx.createMediaStreamSource(stream);
+
+               let synthDelay = new DelayNode(audioCtx, {
+                  delayTime: 1.5,
+                  maxDelayTime: 2,
+                });
+
+
+              // let merger = audioCtx.createChannelMerger();
+              // source.connect(merger, 0, 0)
+
+
+               // source.connect(synthDelay);
+                // synthDelay.connect(remsource
+                //       synthDelay.connect(remsource);
+
+                  // synthDelay.connect(merger, 0, 0)
+
+
+                // mysource.connect(synthDelay);
+                // synthDelay.connect(remsource);
+
+
 
                  // merger.connect(audioCtx.destination);
          // let destination_participant1 = audioCtx.createMediaStreamDestination();
@@ -112,7 +132,6 @@ export default class ModalRTC extends React.Component {
 
               // merger.connect( destination_participant1 );
 
-             //сам ответ на звонок
             call.answer(destination_participant1.stream);
 
             call.on('stream', function(remotestream){
@@ -122,17 +141,16 @@ export default class ModalRTC extends React.Component {
 
                 let remsource = audioCtx.createMediaStreamSource(remotestream);
                  remsource.connect(destination_participant1)
-                console.log("destination_participant1", destination_participant1)
 
-                //destination_server
-                    let video = document.getElementById("myvideo")
-                //выводим себе, серверу на микрофон TODO change on destination_server
-                video.srcObject = destination_participant1.stream
+
+
+                video.srcObject = remotestream
               video.play();
             })
           }, function(err) {
             console.log('Failed to get stream', err);
           })
+       });
    }
 
    connectToServer = () => {
