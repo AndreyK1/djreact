@@ -87,8 +87,9 @@ export default class ModalRTC extends React.Component {
 
         // устанавливаем листенер (режим сервера) звонков
         peer.on('call', function(call) {
-
+            console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-1")
             console.log("----------+++NEW CALL++++----------------from: "+ call.peer)
+
             console.log("call", call)
             console.log("this", objParent)
             objParent.makeanswer(call)
@@ -99,14 +100,15 @@ export default class ModalRTC extends React.Component {
    //отвечаем на звонок
     makeanswer = (call) => {
          navigator.getUserMedia({video: false, audio: true}, function(stream) {
+             console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-2")
 
                window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
                // let audioCtx = new window.AudioContext();
-               let source = audioCtx.createMediaStreamSource(stream);
+               let mysource = audioCtx.createMediaStreamSource(stream);
 
                  // merger.connect(audioCtx.destination);
          // let destination_participant1 = audioCtx.createMediaStreamDestination();
-                source.connect(destination_participant1)
+                mysource.connect(destination_participant1)
        // synthDelay.connect(destination_participant1)
               console.log("destination_participant1", destination_participant1)
 
@@ -116,6 +118,7 @@ export default class ModalRTC extends React.Component {
             call.answer(destination_participant1.stream);
 
             call.on('stream', function(remotestream){
+                console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-3")
               console.log("---------------------------call.on(stream'---------------------- ")
                 console.log("remotestream", remotestream)
               // video.src = URL.createObjectURL(remotestream);
@@ -157,7 +160,7 @@ export default class ModalRTC extends React.Component {
       let call = localvar.call(server_id, stream);
       call.on('stream', function(remotestream) {
         // video.src = URL.createObjectURL(remotestream);
-
+        console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-CLENT - 1")
 
         window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
         let audioCtx = new AudioContext();
@@ -210,8 +213,9 @@ export default class ModalRTC extends React.Component {
     let objGlob = this
 
     navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia  || navigator.msGetUserMedia );
-
+    alert("outside")
     navigator.getUserMedia({video: false, audio: true}, function(stream) {
+        alert("inside")
         // Web Audio - create context
         window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
         let audioCtx = new AudioContext();
