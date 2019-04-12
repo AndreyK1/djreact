@@ -69,13 +69,29 @@ export default class ModalRTC extends React.Component {
           });
         });
 
+
+
+
+          let video = document.getElementById("myvideo")
+
+
+       // navigator.getUserMedia({video: true, audio: true}, function(stream) {
+       //        video.src = URL.createObjectURL(stream);
+       //        video.play();
+       //
+       //    }, function(err) {
+       //      console.log('Failed to get stream', err);
+       //    })
+
+
+
         // устанавливаем листенер (режим сервера) звонков
         peer.on('call', function(call) {
-            console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER---------from:"+ call.peer)
+            console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-1")
             console.log("----------+++NEW CALL++++----------------from: "+ call.peer)
 
-            // console.log("call", call)
-            // console.log("this", objParent)
+            console.log("call", call)
+            console.log("this", objParent)
             objParent.makeanswer(call)
 
        });
@@ -83,21 +99,33 @@ export default class ModalRTC extends React.Component {
 
    //отвечаем на звонок
     makeanswer = (call) => {
+       let parObj = this
        navigator.getUserMedia =  ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia );
          navigator.getUserMedia({video: false, audio: true}, function(stream) {
              console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-2")
 
              console.log("getUserMedia stream : ", stream)
 
+               // window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+               // let audioCtx = new window.AudioContext();
                let mysource = audioCtx.createMediaStreamSource(stream);
 
+                 // merger.connect(audioCtx.destination);
+         // let destination_participant1 = audioCtx.createMediaStreamDestination();
                 mysource.connect(destination_participant1)
+       // synthDelay.connect(destination_participant1)
+              console.log("destination_participant1", destination_participant1)
 
+              // merger.connect( destination_participant1 );
+
+             //сам ответ на звонок
             call.answer(destination_participant1.stream);
 
             call.on('stream', function(remotestream){
                 console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-3")
-              // video.src = URL.createOjectURL(remotestream);
+              console.log("---------------------------call.on(stream'---------------------- ")
+                console.log("remotestream", remotestream)
+              // video.src = URL.createObjectURL(remotestream);
 
                 // let iddd = remotestream["id"]
                 //
@@ -106,8 +134,6 @@ export default class ModalRTC extends React.Component {
                 console.log("remotestream", remotestream)
                     let video = document.getElementById("myvideo")
 
-
-                //преобразование сигнала из webRTC в web Audio
                 let audio = new Audio();
                 audio.srcObject = remotestream;
                 audio.onloadedmetadata = function() {
@@ -122,8 +148,58 @@ export default class ModalRTC extends React.Component {
                     video.play();
                 }
 
+      //           let remsource = audioCtx.createMediaStreamSource(remotestream);
+
+
+
+                // remsource.connect(script)
+     //           remsource.connect(destination_participant1)
+    //            remsource.connect(server_participant)
+
+                  //  parObj.visualiseStream(remsource)
+                //remsource.connect(audioCtx.destination);
+
+//remsource.connect(audioCtx.destination);
+
+
+
+      //          console.log("remsource", remsource)
+                // remsource.connect(destination_participant1)
+
+
+
+
+       //         remsource.connect(merger_server_participant, 0, 0)
+               // source.connect(merger_server_participant, 0, 0)
+                //merger.connect(audioCtx.destination);
+
+
+                //remsource.connect(server_participant)
+
+                console.log("destination_participant1", destination_participant1)
+                console.log("merger_server_participant", merger_server_participant)
+
+                // let merger = audioCtx.createChannelMerger();
+                // merger_server_participant.connect(audioCtx.destination);
+
+                //destination_server
+
+                //выводим себе, серверу на микрофон TODO change on destination_server
+
+                //video.srcObject = destination_participant1.stream
+                 console.log("server_participant.stream", server_participant.stream)
+
+         //       remsource.connect(audioCtx.destination);
+
+      //      remsource.connect(audioCtx.destination);
+      //           video.srcObject =server_participant.stream
+              //  remsource.connect(audioCtx.destination);
                // video.controls = true;
               //video.play();
+
+
+
+
 
             })
           }, function(err) {
@@ -150,8 +226,44 @@ export default class ModalRTC extends React.Component {
            analyser.getByteFrequencyData(dataArray);
             console.log("getByteFrequencyData ",dataArray )
         }, 500);
+
+
+       //  let canvas = document.getElementById("canvas_id")
+       // let canvasCtx = canvas.getContext('2d');
+       //  canvasCtx.lineWidth = 2;
+       //  let WIDTH = 1200
+       // let HEIGHT = 1200
+       //  canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+       // this.draw(WIDTH, HEIGHT, analyser, canvasCtx, dataArray, bufferLength)
+
+
+
    }
 
+   draw = (WIDTH, HEIGHT, analyser, canvasCtx, dataArray, bufferLength) => {
+
+            console.log("!!!!!!!!!draw analyser canvasCtx ",WIDTH, HEIGHT, analyser,  canvasCtx)
+       console.log("dataArray bufferLength ",dataArray,  bufferLength)
+          let drawVisual = requestAnimationFrame(()=>this.draw(WIDTH, HEIGHT, analyser, canvasCtx, dataArray, bufferLength));
+
+          analyser.getByteFrequencyData(dataArray);
+
+          canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+          canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+          let barWidth = (WIDTH / bufferLength) * 2.5;
+          let barHeight;
+          let x = 0;
+
+          for(let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+
+            canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+            canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
+
+            x += barWidth + 1;
+          }
+    }
 
 
     closeConnectToServer = () => {

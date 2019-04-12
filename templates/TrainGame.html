@@ -153,7 +153,10 @@
                {#let source = audioCtx.createMediaStreamSource(stream);#}
 
         var destination_participant1 = audioCtx.createMediaStreamDestination();
-        var destination_server = audioCtx.createMediaStreamDestination();
+        var server_participant = audioCtx.createMediaStreamDestination();
+         let merger_server_participant = audioCtx.createChannelMerger();
+;
+    var callConnectionOfClient;
 
 
     </script>

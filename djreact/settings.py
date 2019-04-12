@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'notifier',
     'channels',
     'trainsgame',
+    "sslserver",
 ]
 
 
