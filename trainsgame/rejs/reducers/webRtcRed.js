@@ -1,6 +1,7 @@
  import * as webRtcActions from "../actions/webRtcActions"
  import * as counterSingleActions from "../../../reactjs/actions/counterSingleActions";
  import {SET_PEER} from "../actions/webRtcActions";
+ import {ADD_GAIN_NODE} from "../actions/webRtcActions";
 
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
     myPeerServer: 0,
     myPeerGroup: 1,
     destination_participant: {},
+    dictOfGains: {}
   // playgrounds: {},
 }
 
@@ -26,6 +28,13 @@ export default function webRtc(state=initialState, action={}) {
     return {...state, peer: action.res}
   case webRtcActions.SET_PEER_ID:
     return {...state, peer_id: action.res}
+  case webRtcActions.ADD_GAIN_NODE:
+        let dictOfGains  = state.dictOfGains
+        dictOfGains[action.peer_id] = action.gainNode
+      console.log("dictOfGains", dictOfGains)
+
+    return {...state, dictOfGains: dictOfGains}
+
 
   case webRtcActions.ADD_TO_RTC_GROUP:
     return {...state, isSendingNow: true}

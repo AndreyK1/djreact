@@ -36,6 +36,36 @@ export default class ModalRTC extends React.Component {
     this.props.dispatch(webRtcActions.showModalRtc(false));
   }
 
+   addGainNode = (peer_id, gainNode) => {
+    this.props.dispatch(webRtcActions.addGainNode(peer_id, gainNode));
+  }
+
+
+  gainNodeVolumechange = (peer_id, action) => {
+    let {webRtcRed} = this.props
+
+      let dictOfGains = webRtcRed.dictOfGains
+      let val = 0;
+      if(action == "+"){
+          val = +0.25
+      }else if(action == "-"){
+          val = -0.25
+      }else{
+          alert("error action in gainNodeVolumechange")
+          return;
+      }
+
+      let gainNode = dictOfGains[peer_id]
+
+       let currGain = gainNode.gain.value;
+       // currGain -= 0.25;
+      currGain = currGain + val;
+       console.log("currGain", currGain)
+      gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+    // this.props.dispatch(webRtcActions.addGainNode(peer_id, gainNode));
+  }
+
+
 
   peerJsSend = () => {
       let {webRtcRed} = this.props
@@ -83,6 +113,9 @@ export default class ModalRTC extends React.Component {
 
    //отвечаем на звонок
     makeanswer = (call) => {
+       let {webRtcRed} = this.props
+        let objParent = this
+
        navigator.getUserMedia =  ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia );
          navigator.getUserMedia({video: false, audio: true}, function(stream) {
              console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-2")
@@ -97,11 +130,6 @@ export default class ModalRTC extends React.Component {
 
             call.on('stream', function(remotestream){
                 console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-3")
-              // video.src = URL.createOjectURL(remotestream);
-
-                // let iddd = remotestream["id"]
-                //
-                // remotestream["id"] = "{"+iddd+"}"
 
                 console.log("remotestream", remotestream)
                     let video = document.getElementById("myvideo")
@@ -116,8 +144,35 @@ export default class ModalRTC extends React.Component {
                  // audio.muted = true;
                   //source.connect(gainNode);
                   //gainNode.connect(ctx.destination);
+                    let gainNode = audioCtx.createGain();
+                    gainNode.gain.value = 0.5;
+                    //let currGain = gainNode.gain.value;
+                    // dictOfGains[call.peer] = gainNode
+                    objParent.addGainNode(call.peer, gainNode)
+
+                       // document.getElementById("targetAtTimePlus").onclick = function() {
+                       //     let currGain = gainNode.gain.value;
+                       //    currGain += 0.25;
+                       //    console.log("currGain", currGain)
+                       //    gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+                       //  }
+                       //
+                       //  document.getElementById("targetAtTimeMinus").onclick = function() {
+                       //    let currGain = gainNode.gain.value;
+                       //     currGain -= 0.25;
+                       //     console.log("currGain", currGain)
+                       //    gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+                       //  }
+
+
+                    remsource.connect(gainNode)
+                    gainNode.connect(server_participant)
+
+
                     remsource.connect(destination_participant1)
-                    remsource.connect(server_participant)
+                    // remsource.connect(server_participant)
+
+
                     video.srcObject =server_participant.stream
                     video.play();
                 }
@@ -349,6 +404,22 @@ export default class ModalRTC extends React.Component {
         rtcGroupsNodes.push(node)
     }
 
+
+
+    //отрисовка регулировок громкости
+    let rtcGainsNodes = []
+    let dictOfGains =   webRtcRed.dictOfGains
+      console.log("dictOfGains--render--", dictOfGains)
+    for (let key in dictOfGains){
+
+        let nodeGain = (
+            <span>{key} : <button onClick={() => this.gainNodeVolumechange(key, "+")} >+</button> <button onClick={() => this.gainNodeVolumechange(key, "-")} >-</button> | </span>
+        )
+        // <div>{index} : <button>+</button><button>-</button> | </div>
+        rtcGainsNodes.push(nodeGain)
+    }
+
+
     let showHideClassName = webRtcRed.isModalRtcShow ? "modal display-block" : "modal display-none";
 
     return (
@@ -387,6 +458,10 @@ export default class ModalRTC extends React.Component {
 
             {children}
             <button onClick={() => this.handleClose()}>close</button>
+              <div>{rtcGainsNodes}</div>
+
+
+              {/*<button id="targetAtTimePlus">+++</button><button id="targetAtTimeMinus">---</button>*/}
 
           </section>
         </div>
