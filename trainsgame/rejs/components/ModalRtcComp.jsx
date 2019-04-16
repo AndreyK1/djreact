@@ -60,7 +60,7 @@ export default class ModalRTC extends React.Component {
        let currGain = gainNode.gain.value;
        // currGain -= 0.25;
       currGain = currGain + val;
-       console.log("currGain", currGain)
+       console.log("currGain, peer_id", currGain, peer_id)
       gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
     // this.props.dispatch(webRtcActions.addGainNode(peer_id, gainNode));
   }
@@ -166,10 +166,10 @@ export default class ModalRTC extends React.Component {
 
 
                     remsource.connect(gainNode)
-                    gainNode.connect(server_participant)
+                    gainNode.connect(destination_participant1)
 
 
-                    remsource.connect(destination_participant1)
+                    remsource.connect(server_participant)
                     // remsource.connect(server_participant)
 
 
