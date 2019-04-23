@@ -181,6 +181,14 @@ export default class ModalRTC extends React.Component {
               //video.play();
 
             })
+
+            call.on('close', function() {
+                 alert('closed connection by client22: '+ call.peer)
+            })
+            call.on('error', function(err) {
+                alert('error connection with client22: '+ call.peer)
+                console.log('error connection with client22', err);
+            })
           }, function(err) {
             console.log('Failed to get stream', err);
           })
@@ -274,11 +282,11 @@ export default class ModalRTC extends React.Component {
       })
 
         call.on('close', function() {
-            alert('closed connection by client: '+ call.peer)
+            alert('closed connection by server: '+ call.peer)
         })
         call.on('error', function(err) {
-            alert('error connection with client: '+ call.peer)
-            console.log('error connection with client', err);
+            alert('error connection with server: '+ call.peer)
+            console.log('error connection with server', err);
         })
 
     }, function(err){
