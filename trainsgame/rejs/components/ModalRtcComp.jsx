@@ -132,12 +132,13 @@ export default class ModalRTC extends React.Component {
 
                let mysource = audioCtx.createMediaStreamSource(stream);
 
-                mysource.connect(destination_participant1)
+      //TODO включить звук от вервера обязательно потом
+                       mysource.connect(destination_participant1)
 
             call.answer(destination_participant1.stream);
 
             call.on('stream', function(remotestream){
-                console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER-3")
+                console.log("!!!!!!!!!!!1---------!!!!!!!!!!! PHASE-SERVER-3")
 
                 console.log("remotestream", remotestream)
                     let video = document.getElementById("myvideo")
@@ -177,7 +178,8 @@ export default class ModalRTC extends React.Component {
                     gainNode.connect(destination_participant1)
 
 
-                    remsource.connect(server_participant)
+                    // remsource.connect(server_participant)
+                    gainNode.connect(server_participant)
                     // remsource.connect(server_participant)
 
 
