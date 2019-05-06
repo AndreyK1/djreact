@@ -29,8 +29,9 @@ export default function webRtc(state=initialState, action={}) {
   case webRtcActions.SET_PEER_ID:
     return {...state, peer_id: action.res}
   case webRtcActions.ADD_GAIN_NODE:
-        let dictOfGains  = state.dictOfGains
-        dictOfGains[action.peer_id] = action.gainNode
+      let peer_id = action.call.peer
+       let dictOfGains  = state.dictOfGains
+        dictOfGains[peer_id] = {gainNode: action.gainNode, call: action.call}
       console.log("dictOfGains", dictOfGains)
 
     return {...state, dictOfGains: dictOfGains}

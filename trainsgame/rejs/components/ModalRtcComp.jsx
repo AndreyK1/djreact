@@ -36,8 +36,8 @@ export default class ModalRTC extends React.Component {
     this.props.dispatch(webRtcActions.showModalRtc(false));
   }
 
-   addGainNode = (peer_id, gainNode) => {
-    this.props.dispatch(webRtcActions.addGainNode(peer_id, gainNode));
+   addGainNode = (call, gainNode) => {
+    this.props.dispatch(webRtcActions.addGainNode(call, gainNode));
   }
 
 
@@ -55,15 +55,23 @@ export default class ModalRTC extends React.Component {
           return;
       }
 
-      let gainNode = dictOfGains[peer_id]
+      let gainNode = dictOfGains[peer_id]["gainNode"]
 
        let currGain = gainNode.gain.value;
        // currGain -= 0.25;
       currGain = currGain + val;
-       console.log("currGain, peer_id", currGain, peer_id)
+       console.log("currGain, peer_id00", currGain, peer_id)
       gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
     // this.props.dispatch(webRtcActions.addGainNode(peer_id, gainNode));
   }
+
+  closeConnectToClient = (peer_id) => {
+       let {webRtcRed} = this.props
+      let dictOfGains = webRtcRed.dictOfGains
+      let call = dictOfGains[peer_id]["call"]
+      call.close()
+
+    }
 
 
 
@@ -148,7 +156,7 @@ export default class ModalRTC extends React.Component {
                     gainNode.gain.value = 0.5;
                     //let currGain = gainNode.gain.value;
                     // dictOfGains[call.peer] = gainNode
-                    objParent.addGainNode(call.peer, gainNode)
+                    objParent.addGainNode(call, gainNode)
 
                        // document.getElementById("targetAtTimePlus").onclick = function() {
                        //     let currGain = gainNode.gain.value;
@@ -421,7 +429,8 @@ export default class ModalRTC extends React.Component {
     for (let key in dictOfGains){
 
         let nodeGain = (
-            <span>{key} : <button onClick={() => this.gainNodeVolumechange(key, "+")} >+</button> <button onClick={() => this.gainNodeVolumechange(key, "-")} >-</button> | </span>
+            <span>{key} : <button onClick={() => this.gainNodeVolumechange(key, "+")} >+</button> <button onClick={() => this.gainNodeVolumechange(key, "-")} >-</button>
+                <button onClick={() => this.closeConnectToClient(key)} >X</button> | </span>
         )
         // <div>{index} : <button>+</button><button>-</button> | </div>
         rtcGainsNodes.push(nodeGain)
