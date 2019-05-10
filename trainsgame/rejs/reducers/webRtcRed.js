@@ -2,6 +2,7 @@
  import * as counterSingleActions from "../../../reactjs/actions/counterSingleActions";
  import {SET_PEER} from "../actions/webRtcActions";
  import {ADD_GAIN_NODE} from "../actions/webRtcActions";
+ import {DEL_GAIN_NODE} from "../actions/webRtcActions";
 
 
 const initialState = {
@@ -35,6 +36,12 @@ export default function webRtc(state=initialState, action={}) {
       console.log("dictOfGains", dictOfGains)
 
     return {...state, dictOfGains: dictOfGains}
+
+  case webRtcActions.DEL_GAIN_NODE:
+      let peer_id1 = action.call.peer
+      let dictOfGains1  = state.dictOfGains
+      delete dictOfGains1[peer_id1]
+      return {...state, dictOfGains: dictOfGains1}
 
 
   case webRtcActions.ADD_TO_RTC_GROUP:

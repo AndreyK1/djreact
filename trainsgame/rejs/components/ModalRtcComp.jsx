@@ -40,6 +40,10 @@ export default class ModalRTC extends React.Component {
     this.props.dispatch(webRtcActions.addGainNode(call, gainNode, visualiser));
   }
 
+  delGainNode = (call) => {
+    this.props.dispatch(webRtcActions.delGainNode(call));
+  }
+
 
   gainNodeVolumechange = (peer_id, action) => {
     let {webRtcRed} = this.props
@@ -58,11 +62,9 @@ export default class ModalRTC extends React.Component {
       let gainNode = dictOfGains[peer_id]["gainNode"]
 
        let currGain = gainNode.gain.value;
-       // currGain -= 0.25;
       currGain = currGain + val;
        console.log("currGain, peer_id00", currGain, peer_id)
       gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
-    // this.props.dispatch(webRtcActions.addGainNode(peer_id, gainNode));
   }
 
   closeConnectToClient = (peer_id) => {
@@ -111,9 +113,6 @@ export default class ModalRTC extends React.Component {
         peer.on('call', function(call) {
             console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-SERVER---------from:"+ call.peer)
             console.log("----------+++NEW CALL++++----------------from: "+ call.peer)
-
-            // console.log("call", call)
-            // console.log("this", objParent)
             objParent.makeanswer(call)
 
        });
@@ -149,30 +148,8 @@ export default class ModalRTC extends React.Component {
                 audio.srcObject = remotestream;
                 audio.onloadedmetadata = function() {
                   let remsource = audioCtx.createMediaStreamSource(audio.srcObject);
-                //  audio.play();
-                 // audio.muted = true;
-                  //source.connect(gainNode);
-                  //gainNode.connect(ctx.destination);
                     let gainNode = audioCtx.createGain();
                     gainNode.gain.value = 0.5;
-                    //let currGain = gainNode.gain.value;
-                    // dictOfGains[call.peer] = gainNode
-                    // objParent.addGainNode(call, gainNode)
-
-                       // document.getElementById("targetAtTimePlus").onclick = function() {
-                       //     let currGain = gainNode.gain.value;
-                       //    currGain += 0.25;
-                       //    console.log("currGain", currGain)
-                       //    gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
-                       //  }
-                       //
-                       //  document.getElementById("targetAtTimeMinus").onclick = function() {
-                       //    let currGain = gainNode.gain.value;
-                       //     currGain -= 0.25;
-                       //     console.log("currGain", currGain)
-                       //    gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
-                       //  }
-
 
                     remsource.connect(gainNode)
 
@@ -181,26 +158,19 @@ export default class ModalRTC extends React.Component {
 
                     objParent.addGainNode(call, gainNode, visualiser)
 
-
                     visualiser.connect(destination_participant1)
-
-
-                    // remsource.connect(server_participant)
                     visualiser.connect(server_participant)
-                    // remsource.connect(server_participant)
-
 
                     video.srcObject =server_participant.stream
                     video.play();
                 }
 
-               // video.controls = true;
-              //video.play();
-
             })
 
             call.on('close', function() {
-                 alert('closed connection by client22: '+ call.peer)
+                 alert('closed connection with client22: '+ call.peer)
+                objParent.delGainNode(call)
+
             })
             call.on('error', function(err) {
                 alert('error connection with client22: '+ call.peer)
@@ -220,16 +190,6 @@ export default class ModalRTC extends React.Component {
         // analyser.fftSize = 2048;
         let bufferLength = analyser.frequencyBinCount;
         console.log("bufferLength ",bufferLength )
-
-       // setInterval(function() {
-       //        let dataArrayF = new Float32Array(bufferLength);
-       //     analyser.getFloatTimeDomainData(dataArrayF);
-       //                  // console.log("getByteFrequencyData ",dataArrayF )
-       //
-       //     let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
-       //     console.log("max ",max )
-       // }, 500);
-
        return analyser;
 
    }
@@ -248,43 +208,13 @@ export default class ModalRTC extends React.Component {
 
 
        setInterval(function() {
-           //   let dataArray = new Uint8Array(bufferLength);
-           //  analyser.getByteTimeDomainData(dataArray);
-           //  console.log("getByteTimeDomainData ",dataArray )
-           // analyser.getByteFrequencyData(dataArray);
-           //  console.log("getByteFrequencyData ",dataArray )
-
            let dataArray = new Uint8Array(bufferLength);
-           // let dataArray10 =  Uint8Array.prototype.subarray(0,10);
-           // analyser.getByteFrequencyData(dataArray);
-           //              console.log("getByteFrequencyData ",dataArray )
-
-           // let max =  Math.max.apply(Math, dataArray);
-           // console.log("max ",max )
-           //
-           //
-           // const sum = dataArray.reduce((partial_sum, a) => partial_sum + a,0);
-           // let max2 = sum/dataArray.length
-           // console.log("max2 ",max2 )
-           //
-           // var max3 =  Math.sqrt(sum / dataArray.length);
-           // console.log("max3 ",max3 )
-           //
-           //
-           // // const sumElNo0 = dataArray.reduce((partial_sum, a) => { if(a!=0){partial_sum + 1}else{ partial_sum},0);
-           // const sumElNo0 = dataArray.reduce((partial_sum, a) =>  a!=0?partial_sum + 1:partial_sum,0);
-           // console.log("sumElNo0 ",sumElNo0 )
            let dataArrayF = new Float32Array(bufferLength);
            analyser.getFloatTimeDomainData(dataArrayF);
                         // console.log("getByteFrequencyData ",dataArrayF )
 
            let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
            console.log("max ",max )
-
-           // analyser.getByteTimeDomainData(dataArray);
-           // console.log("getByteTimeDomainData ",dataArray )
-           //   let max1 =  Math.max.apply(Math, dataArray);
-           // console.log("max ",max1 )
 
         }, 500);
    }
@@ -325,31 +255,8 @@ export default class ModalRTC extends React.Component {
     navigator.getUserMedia({video: false, audio: true}, function(stream) {
       let call = localvar.call(server_id, stream);
       call.on('stream', function(remotestream) {
-        // video.src = URL.createObjectURL(remotestream);
         console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-CLENT - 1")
-
-        // window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
-        // let audioCtx = new AudioContext();
-        //let mysource = audioCtx.createMediaStreamSource(stream);
-        let remsource = audioCtx.createMediaStreamSource(remotestream);
-        //
-        // let synthDelay = new DelayNode(audioCtx, {
-        //   delayTime: 1.5,
-        //   maxDelayTime: 2,
-        // });
-        //
-        //  let merger = audioCtx.createChannelMerger();
-        // mysource.connect(merger, 0, 0)
-        //   remsource.connect(merger, 0, 0)
-            // mysource.connect(synthDelay);
-            // synthDelay.connect(remsource);
-
-
-
-        // merger.connect(audioCtx.destination);
-      //    remsource.connect(audioCtx.destination);
-//
-
+        // let remsource = audioCtx.createMediaStreamSource(remotestream);
 
          video.srcObject = remotestream
         video.play();
@@ -377,11 +284,6 @@ export default class ModalRTC extends React.Component {
 
 
   audoiExamples = () => {
-
-
-
-
-    // let n = <any>navigator;
     console.log(this)
     let objGlob = this
 
@@ -391,36 +293,15 @@ export default class ModalRTC extends React.Component {
 
         let audioTracks = stream.getAudioTracks()
         console.log("audioTracks ", audioTracks)
-
-       // alert("inside")
-        // Web Audio - create context
-        // window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
-        // let audioCtx = new AudioContext();
-
-
         console.log("getUserMedia stream", stream)
 
         let source = audioCtx.createMediaStreamSource(stream);
 
         objGlob.visualiseStream(source)
-        // Create a biquadfilter
-        // let biquadFilter = audioCtx.createBiquadFilter();
-        // biquadFilter.type = "lowshelf";
-        // biquadFilter.frequency.value = 1000;
-        // biquadFilter.gain.value = 10;
-
-
-        // let synthDelay = audioCtx.createDelay(55.0);
         let synthDelay = new DelayNode(audioCtx, {
           delayTime: 1.5,
           maxDelayTime: 2,
         });
-
-        // connect the AudioBufferSourceNode to the gainNode
-        // and the gainNode to the destination, so we can play the
-        // music and adjust the volume using the mouse cursor
-        // source.connect(biquadFilter);
-        // biquadFilter.connect(audioCtx.destination);
 
         console.log("source", source)
         source.connect(synthDelay);
@@ -428,36 +309,13 @@ export default class ModalRTC extends React.Component {
 
          var destination_particip = audioCtx.createMediaStreamDestination();
          synthDelay.connect(destination_particip)
-
-
-
         console.log("destination_particip stream", destination_particip.stream)
-
-
-        // merger.connect(audioCtx.destination);
-
-        //
-        //  objGlob.mystreasm  = synthDelay
-        //
-        // objGlob.mystreasm.connect(audioCtx.destination);
-
                         let merger = audioCtx.createChannelMerger();
                 synthDelay.connect(merger, 0, 0)
                 source.connect(merger, 0, 0)
                console.log("merger stream", destination_particip.stream)
 
                 merger.connect(audioCtx.destination);
-
-
-
-                //  synthDelay.connect(audioCtx.destination);
-        // source.connect(audioCtx.destination);
-
-
-        // this.mystreasm = stream
-         // video.srcObject = this.mystrerasm
-
-
     }, function(err){
       console.log('Failed to get stream', err);
     })
@@ -467,17 +325,11 @@ export default class ModalRTC extends React.Component {
     let {webRtcRed, children} = this.props
 
     let rtcGroupsNodes = []
-      //console.log("rtcGroups ", webRtcRed.addedToRtc)
-     // let mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]
        let mygroups =  []
       let myServer = 0
       if(webRtcRed.addedToRtc[webRtcRed.myPeerGroup]){
           mygroups = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]["clients"]
-       //   myServer = webRtcRed.addedToRtc[webRtcRed.myPeerGroup]["server"]
       }
-      //console.log("myrtcGroups ", mygroups)
-    // playgrounds.forEach((item, index) => {
-      //for(let key in webRtcRed.addedToRtc[webRtcRed.myPeerGroup]){
 
       for (let index = 0; index < mygroups.length; ++index){
         let node = (
