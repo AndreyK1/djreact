@@ -71,8 +71,8 @@ export function addToRtcGroup(peer_id, myPeerGroup, role) {
 
 export const ADD_GAIN_NODE = "ADD_GAIN_NODE"
 
-export function addGainNode(call, gainNode){
+export function addGainNode(call, gainNode, visualiser){
     return function (dispatch) {
-        dispatch({type: ADD_GAIN_NODE, call: call, gainNode: gainNode})
+        dispatch({type: ADD_GAIN_NODE, call: call, gainNode: gainNode, visualiser: visualiser})
     }
 }

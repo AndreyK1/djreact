@@ -36,8 +36,8 @@ export default class ModalRTC extends React.Component {
     this.props.dispatch(webRtcActions.showModalRtc(false));
   }
 
-   addGainNode = (call, gainNode) => {
-    this.props.dispatch(webRtcActions.addGainNode(call, gainNode));
+   addGainNode = (call, gainNode, visualiser) => {
+    this.props.dispatch(webRtcActions.addGainNode(call, gainNode, visualiser));
   }
 
 
@@ -157,7 +157,7 @@ export default class ModalRTC extends React.Component {
                     gainNode.gain.value = 0.5;
                     //let currGain = gainNode.gain.value;
                     // dictOfGains[call.peer] = gainNode
-                    objParent.addGainNode(call, gainNode)
+                    // objParent.addGainNode(call, gainNode)
 
                        // document.getElementById("targetAtTimePlus").onclick = function() {
                        //     let currGain = gainNode.gain.value;
@@ -175,11 +175,18 @@ export default class ModalRTC extends React.Component {
 
 
                     remsource.connect(gainNode)
-                    gainNode.connect(destination_participant1)
+
+
+                    let visualiser = objParent.visualiseStreamForCall(gainNode)
+
+                    objParent.addGainNode(call, gainNode, visualiser)
+
+
+                    visualiser.connect(destination_participant1)
 
 
                     // remsource.connect(server_participant)
-                    gainNode.connect(server_participant)
+                    visualiser.connect(server_participant)
                     // remsource.connect(server_participant)
 
 
@@ -204,6 +211,29 @@ export default class ModalRTC extends React.Component {
           })
    }
 
+   visualiseStreamForCall = (source) => {
+       console.log("!!!!!!!!!1visualiseStream source ",source )
+        let analyser = audioCtx.createAnalyser();
+        source.connect(analyser);
+
+        analyser.fftSize = 256;
+        // analyser.fftSize = 2048;
+        let bufferLength = analyser.frequencyBinCount;
+        console.log("bufferLength ",bufferLength )
+
+       // setInterval(function() {
+       //        let dataArrayF = new Float32Array(bufferLength);
+       //     analyser.getFloatTimeDomainData(dataArrayF);
+       //                  // console.log("getByteFrequencyData ",dataArrayF )
+       //
+       //     let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
+       //     console.log("max ",max )
+       // }, 500);
+
+       return analyser;
+
+   }
+
 
    visualiseStream = (source) => {
        console.log("!!!!!!!!!1visualiseStream source ",source )
@@ -211,17 +241,51 @@ export default class ModalRTC extends React.Component {
         source.connect(analyser);
 
         analyser.fftSize = 256;
+        // analyser.fftSize = 2048;
         let bufferLength = analyser.frequencyBinCount;
         console.log("bufferLength ",bufferLength )
 
 
 
        setInterval(function() {
-             let dataArray = new Uint8Array(bufferLength);
-            analyser.getByteTimeDomainData(dataArray);
-            console.log("getByteTimeDomainData ",dataArray )
-           analyser.getByteFrequencyData(dataArray);
-            console.log("getByteFrequencyData ",dataArray )
+           //   let dataArray = new Uint8Array(bufferLength);
+           //  analyser.getByteTimeDomainData(dataArray);
+           //  console.log("getByteTimeDomainData ",dataArray )
+           // analyser.getByteFrequencyData(dataArray);
+           //  console.log("getByteFrequencyData ",dataArray )
+
+           let dataArray = new Uint8Array(bufferLength);
+           // let dataArray10 =  Uint8Array.prototype.subarray(0,10);
+           // analyser.getByteFrequencyData(dataArray);
+           //              console.log("getByteFrequencyData ",dataArray )
+
+           // let max =  Math.max.apply(Math, dataArray);
+           // console.log("max ",max )
+           //
+           //
+           // const sum = dataArray.reduce((partial_sum, a) => partial_sum + a,0);
+           // let max2 = sum/dataArray.length
+           // console.log("max2 ",max2 )
+           //
+           // var max3 =  Math.sqrt(sum / dataArray.length);
+           // console.log("max3 ",max3 )
+           //
+           //
+           // // const sumElNo0 = dataArray.reduce((partial_sum, a) => { if(a!=0){partial_sum + 1}else{ partial_sum},0);
+           // const sumElNo0 = dataArray.reduce((partial_sum, a) =>  a!=0?partial_sum + 1:partial_sum,0);
+           // console.log("sumElNo0 ",sumElNo0 )
+           let dataArrayF = new Float32Array(bufferLength);
+           analyser.getFloatTimeDomainData(dataArrayF);
+                        // console.log("getByteFrequencyData ",dataArrayF )
+
+           let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
+           console.log("max ",max )
+
+           // analyser.getByteTimeDomainData(dataArray);
+           // console.log("getByteTimeDomainData ",dataArray )
+           //   let max1 =  Math.max.apply(Math, dataArray);
+           // console.log("max ",max1 )
+
         }, 500);
    }
 
@@ -432,11 +496,40 @@ export default class ModalRTC extends React.Component {
 
         let nodeGain = (
             <span>{key} : <button onClick={() => this.gainNodeVolumechange(key, "+")} >+</button> <button onClick={() => this.gainNodeVolumechange(key, "-")} >-</button>
-                <button onClick={() => this.closeConnectToClient(key)} >X</button> | </span>
+                Volume:<span id={key}>0</span> <button onClick={() => this.closeConnectToClient(key)} >X</button> | </span>
         )
         // <div>{index} : <button>+</button><button>-</button> | </div>
         rtcGainsNodes.push(nodeGain)
     }
+
+
+    if (window.intervalOfVolumes !== null) {
+        console.log("intervalOfVolumes ", window.intervalOfVolumes)
+        clearInterval(window.intervalOfVolumes)
+    }
+
+
+    window.intervalOfVolumes = setInterval(function() {
+        for (let key in dictOfGains){
+           let analyser = dictOfGains[key]["visualiser"]
+            let bufferLength = analyser.frequencyBinCount;
+           let dataArrayF = new Float32Array(bufferLength);
+           analyser.getFloatTimeDomainData(dataArrayF);
+                        // console.log("getByteFrequencyData ",dataArrayF )
+
+           let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
+            max = max*100
+           console.log("max key ", key,max )
+            document.getElementById(key).innerHTML =  max.toFixed(4)
+
+
+
+
+        }
+
+       }, 500);
+
+
 
 
     let showHideClassName = webRtcRed.isModalRtcShow ? "modal display-block" : "modal display-none";
