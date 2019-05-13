@@ -57,21 +57,41 @@ export default class ModalRTC extends React.Component {
     let {webRtcRed} = this.props
 
       let dictOfGains = webRtcRed.dictOfGains
+      let gainNode = dictOfGains[peer_id]["gainNode"]
+      let currGain
+      if(gainNode.gain.tvalue){
+          currGain = parseFloat(gainNode.gain.tvalue);
+      }else{
+          currGain = parseFloat(gainNode.gain.value);
+      }
+
+
+     console.log("currGain", currGain)
+    let step = 0.25
       let val = 0;
       if(action == "+"){
-          val = +0.25
+          // if(val >= step)
+          //    val = 1
+          // else
+          //   val = +step
+          currGain = currGain +0.25
       }else if(action == "-"){
-          val = -0.25
+          // if(val <= step)
+          //    val = 0
+          // else
+          //   val = -step
+          currGain = currGain -0.25
       }else{
           alert("error action in gainNodeVolumechange")
           return;
       }
 
-      let gainNode = dictOfGains[peer_id]["gainNode"]
 
-       let currGain = gainNode.gain.value;
-      currGain = currGain + val;
+
+
+      // currGain = currGain + val;
        console.log("currGain, peer_id00", currGain, peer_id)
+      gainNode.gain.tvalue = currGain
       gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
   }
 
@@ -114,6 +134,8 @@ export default class ModalRTC extends React.Component {
           conn.on('data', function(data){
             // Will print 'hi!'
             console.log("rrrrrrrrrrrrrrrrrr" + data);
+            console.log('connection', conn)
+            let id_conn =  conn.peer
           });
         });
 
