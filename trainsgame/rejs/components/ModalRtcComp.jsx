@@ -1,3 +1,7 @@
+//сначала конектится к бэе серверу ртсСервер (с определенной группой). Затем клиент с такой же группой забирает с бэк сервера
+// Id ртс сервера требуемой группы и конектится к нему
+// ртс сервер собирает все конекты к себе и создает соединение звезда между ними и собой
+
 import React from "react"
 //import * as newarenaCreate from "../actions/newArenaActions";
 import * as webRtcActions from "../actions/webRtcActions";
@@ -42,6 +46,10 @@ export default class ModalRTC extends React.Component {
 
   delGainNode = (call) => {
     this.props.dispatch(webRtcActions.delGainNode(call));
+  }
+
+  changeMyPeergroup = (el) => {
+    this.props.dispatch(webRtcActions.changeMyPeergroup(el.target.value));
   }
 
 
@@ -395,7 +403,7 @@ export default class ModalRTC extends React.Component {
 
 
               My Id: <input id="mypeerid" /> Rem Id: <input id="rempeerid" />
-              My group: <input id="mypeergroup" value={webRtcRed.myPeerGroup} />
+              My group: {webRtcRed.myPeerGroup} | <input id="mypeergroup_id" onChange={(el) => this.changeMyPeergroup(el)} />
               <br/>
               <button onClick={() => this.peerJsListenAsServer()}>peerJsListenAsServer</button>
               <button onClick={() => this.peerJsSend()}>peerJsSend</button>

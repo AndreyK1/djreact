@@ -71,6 +71,7 @@ export function addToRtcGroup(peer_id, myPeerGroup, role) {
 
 export const ADD_GAIN_NODE = "ADD_GAIN_NODE"
 export const DEL_GAIN_NODE = "DEL_GAIN_NODE"
+export const CHANGE_PEER_GROUP_ID = "CHANGE_PEER_GROUP_ID"
 
 export function addGainNode(call, gainNode, visualiser){
     return function (dispatch) {
@@ -81,5 +82,11 @@ export function addGainNode(call, gainNode, visualiser){
 export function delGainNode(call){
     return function (dispatch) {
         dispatch({type: DEL_GAIN_NODE, call: call})
+    }
+}
+
+export function changeMyPeergroup(peer_group_id){
+    return function (dispatch) {
+        dispatch({type: CHANGE_PEER_GROUP_ID, peer_group_id: peer_group_id})
     }
 }

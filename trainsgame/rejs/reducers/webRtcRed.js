@@ -3,6 +3,7 @@
  import {SET_PEER} from "../actions/webRtcActions";
  import {ADD_GAIN_NODE} from "../actions/webRtcActions";
  import {DEL_GAIN_NODE} from "../actions/webRtcActions";
+ import {CHANGE_PEER_GROUP_ID} from "../actions/webRtcActions";
 
 
 const initialState = {
@@ -43,6 +44,8 @@ export default function webRtc(state=initialState, action={}) {
       delete dictOfGains1[peer_id1]
       return {...state, dictOfGains: dictOfGains1}
 
+  case webRtcActions.CHANGE_PEER_GROUP_ID:
+      return {...state, myPeerGroup: action.peer_group_id}
 
   case webRtcActions.ADD_TO_RTC_GROUP:
     return {...state, isSendingNow: true}
