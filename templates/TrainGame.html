@@ -23,8 +23,20 @@
 
 
     <script>
+        {#var userName ="{{user}}"#}
+        {#console.log("----------request", "{{user}}")#}
+        {#var userName = "{{ user }}";#}
+         {#var userName ="{{user}}"#}
+        {#     if (userName == ""){#}
+        {#         userName = "unknown"#}
+        {#     }#}
+             {#window.userName = userName#}
+             {#console.log("window.userName0 " + window.userName)#}
+         {#    $.cookie("userName", "gdfgdf")#}
+            {#var chosenArena = $.cookie("chosenArena");#}
 
-         var text = "eeee"
+
+        var text = "eeee"
          let gameState = "stop"
         const webSocketBridgeGroup = new channels.WebSocketBridge();
         const webSocketBridgeStart = new channels.WebSocketBridge();

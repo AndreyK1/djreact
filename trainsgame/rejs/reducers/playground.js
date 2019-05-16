@@ -3,6 +3,7 @@ import * as playGroundActions from "../actions/playGroundActions"
 const initialState = {
     isIstenerSended: false,
   playgrounds: {},
+  userName: "unknown1"
 }
 
 export default function playgroud(state=initialState, action={}) {
@@ -12,7 +13,8 @@ export default function playgroud(state=initialState, action={}) {
   switch (action.type) {
   case playGroundActions.SAVE_PLAYGROUNDS_LIST:
     // console.log("reducer", action.res);
-    return {...state, playgrounds: action.res}
+    return {...state, playgrounds: action.res, userName: action.userName}
+
   case playGroundActions.SET_LISTENER_SENDED:
      console.log("SET_LISTENER_SENDED", action.res);
     return {...state, isIstenerSended: action.res}

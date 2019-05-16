@@ -12,12 +12,15 @@ export function listenPlaygrounsList(is_list_sended) {
       }
        document.addEventListener('DOMContentLoaded', function() {
           //console.log("--DOMContentLoaded")
+           //слушаем все арены и рендерим их изменения
           webSocketBridgeConsGroupCustom.listen(function(action, stream) {
               console.log("++++++++++!!!!!!!!componentDidMount webSocketBridgeReact:", action);
               // let playgr = action["event"]["value"]
               let playgr = JSON.parse(action.event.value)
+              let userName = action.event.userName
               // console.log(playgr);
-              dispatch({type: SAVE_PLAYGROUNDS_LIST, res: playgr})
+              dispatch({type: SAVE_PLAYGROUNDS_LIST, res: playgr, userName: userName})
+
 
               //поверяем, если мы в процессе создания новой арены, то создаем листенер для нее
               let my_arenaEl = document.getElementById("my_arena")

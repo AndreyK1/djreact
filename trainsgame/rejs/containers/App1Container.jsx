@@ -45,6 +45,8 @@ export default class App1Container extends React.Component{
   componentDidMount() {
     let {dispatch, playground} = this.props
       dispatch(listenPlaygrounsList.listenPlaygrounsList(playground.isIstenerSended))
+    // console.log("window.userName" + window.userName)
+
 
   }
 
@@ -113,6 +115,7 @@ export default class App1Container extends React.Component{
               <button type="button" onClick={() => this.showModNewArenaFun("creator")}>
                   create new Arena
               </button>
+              <span>userName: {playground.userName}</span>
           </div>
           <div className="col-sm-12">
               <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} >

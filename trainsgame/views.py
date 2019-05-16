@@ -42,6 +42,8 @@ def log_in(request):
         if form.is_valid():
             login(request, form.get_user())
             return redirect(reverse(BEGIN_GAME_PAGE))
+        # print("------------form.get_user() " + str(form.get_user()))
+        # return HttpResponseRedirect(reverse(BEGIN_GAME_PAGE, kwargs={"username": form.get_user()}))
         else:
             print(form.errors)
     return render(request, 'log_in.html', {'form': form})

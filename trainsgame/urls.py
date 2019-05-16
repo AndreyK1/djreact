@@ -7,6 +7,9 @@ urlpatterns = [
 	# url(r'^$', UserViewSet.as_view(), name='us_list'),
     # url(r'^trains/', beginOfGAme, name='beginOfGAme'),
     url(r'^$', beginOfGAme, name='beginOfGAme'),
+    #прописвываем переменную get
+    # url(r'^/(?P<username>[^/]+)/$', beginOfGAme, name='beginOfGAme'),
+
     url(r'^test', beginOfGAmeTest, name='beginOfGAmeTest'),
     url(r'^log_in/$', log_in, name='log_in'),
     url(r'^log_out/$', log_out, name='log_out'),

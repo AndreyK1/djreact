@@ -86,8 +86,10 @@ class StartConsGroupCustom(AsyncJsonWebsocketConsumer):
             #                             })
             for k in md2.channels:
                 print("key ", k)
+                userName = md2.channels[k].scope["user"].username;
                 await md2.channels[k].send_json({"type": "user.react",
-                                        "event": {"value": serialized_obj, "type": "arenas"},
+                                        # "event": {"value": serialized_obj, "type": "arenas"},
+                                        "event": {"value": serialized_obj, "type": "arenas", "userName": userName},
                                         })
 
 
