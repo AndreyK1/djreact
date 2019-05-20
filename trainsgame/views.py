@@ -79,7 +79,9 @@ def addToRtcGroup(request):
     role = obj["role"]
     print("------------peer_group " + str(peer_group) + " peer_id " + str(peer_id) + " role " + str(role))
     groups = SingletonRtcGroups()
-    groups.addRtcToGroup(peer_group, peer_id, role)
+    # отключаем добавление клиентов (пока) оставляем только доб-е сервера, который затем возвращаем клиентам
+    if(role == "server"):
+        groups.addRtcToGroup(peer_group, peer_id, role)
     # md2.increase()
 
     # serialized_obj = json.dumps(groups.rtcGroups, default=lambda x: x.__dict__)

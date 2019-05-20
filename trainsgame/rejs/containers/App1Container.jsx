@@ -118,7 +118,7 @@ export default class App1Container extends React.Component{
               <span>userName: {playground.userName}</span>
           </div>
           <div className="col-sm-12">
-              <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} >
+              <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={playground.userName} >
                   <p>ModalRTC</p>
               </ModalRTC>
               <button type="button" onClick={() => this.showModRtc()}>
