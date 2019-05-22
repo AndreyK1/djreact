@@ -16,7 +16,7 @@ import * as listenPlaygrounsList from "../actions/playGroundActions";
 export default class ModalRTC extends React.Component {
 
    componentDidMount() {
-    let {dispatch, playground} = this.props
+    let {dispatch, playground, webRtcRed} = this.props
       // dispatch(listenPlaygrounsList.listenPlaygrounsList(playground.isIstenerSended))
 
 
@@ -34,6 +34,73 @@ export default class ModalRTC extends React.Component {
       console.log('My peer ID is: ' + id);
       dispatch(webRtcActions.setPeerId(id))
     });
+
+
+    // устанавливаем листенер (режим сервера) текстовых сообщений
+    peer.on('connection', function(conn) {
+      conn.on('data', function(data){
+        // Will print 'hi!'
+        console.log("rrrrrrrrrrrrrrrrrr conn.peer:" + conn.peer, data);
+        // console.log('connection', conn)
+
+        //если в сообщении (серверу)прилетело имя юзера-клиента, то прикрепляем его к конекшену
+        if(data["userName"]){
+            console.log('webRtcRed.dictOfGains', webRtcRed.dictOfGains)
+            let dictOfGain = webRtcRed.dictOfGains[conn.peer]
+            console.log("dictOfGain", dictOfGain)
+            if(dictOfGain){
+                // dictOfGain["userName"] = data["userName"]
+                dispatch(webRtcActions.addUserNameToConn(conn.peer, data["userName"]));
+            }
+        }
+
+        //если в сообщении (клиенту)прилетает от сервера весь список клиентов
+        if(data["rtcGroup"]){
+            console.log('webRtcRed.dictOfGains', webRtcRed.dictOfGains)
+                console.log("data[\"rtcGroup\"] " +data["rtcGroup"])
+
+                dispatch(webRtcActions.addRtcGroupConn(JSON.parse(data["rtcGroup"])));
+        }
+
+
+      });
+    });
+
+
+    //если я сервер (ртс), то рассылаю всем участникам состав группы
+    if (window.intervalORtsBroadcast !== null) {
+        console.log("intervalORtsBroadcast ", window.intervalORtsBroadcast)
+        clearInterval(window.intervalORtsBroadcast)
+    }
+    let dictOfGains =   webRtcRed.dictOfGains
+    console.log("dictOfGains--intervalORtsBroadcast--", dictOfGains)
+     window.intervalORtsBroadcast = setInterval(function() {
+         let aarayOfNames = []
+         for (let key in dictOfGains){
+             aarayOfNames.push(dictOfGains[key]["userName"])
+         }
+        for (let key in dictOfGains){
+            //connectionOfClientsToServer
+            var conn;
+            if(connectionOfClientsToServer[key]){
+                conn = connectionOfClientsToServer[key];
+                console.log("conn exist send ", aarayOfNames)
+                conn.send({"rtcGroup": JSON.stringify(aarayOfNames)});
+            }else{
+                 conn = peer.connect(key);
+                 connectionOfClientsToServer[key] = conn
+                // on open will be launch when you successfully connect to PeerServer
+                conn.on('open', function(){
+                  // here you have conn.id
+                    console.log("conn created send ", aarayOfNames)
+                  conn.send({"rtcGroup": JSON.stringify(aarayOfNames)});
+                });
+            }
+
+
+        }
+
+      }, 3000);
 
 
   }
@@ -131,25 +198,7 @@ export default class ModalRTC extends React.Component {
       this.props.dispatch(webRtcActions.addToRtcGroup(webRtcRed.peer_id, webRtcRed.myPeerGroup, "server"));
 
 
-        // устанавливаем листенер (режим сервера) текстовых сообщений
-        peer.on('connection', function(conn) {
-          conn.on('data', function(data){
-            // Will print 'hi!'
-            console.log("rrrrrrrrrrrrrrrrrr conn.peer:" + conn.peer, data);
-            // console.log('connection', conn)
-            //если в сообщении прилетело имя юзера, то прикрепляем его к конекшену
-            if(data["userName"]){
-                console.log('webRtcRed.dictOfGains', webRtcRed.dictOfGains)
-                let dictOfGain = webRtcRed.dictOfGains[conn.peer]
-                console.log("dictOfGain", dictOfGain)
-                if(dictOfGain){
-                    // dictOfGain["userName"] = data["userName"]
-                    dispatch(webRtcActions.addUserNameToConn(conn.peer, data["userName"]));
-                }
-            }
-            let id_conn =  conn.peer
-          });
-        });
+
 
         // устанавливаем листенер (режим сервера) звонков
         peer.on('call', function(call) {
@@ -249,16 +298,16 @@ export default class ModalRTC extends React.Component {
 
 
 
-       setInterval(function() {
-           let dataArray = new Uint8Array(bufferLength);
-           let dataArrayF = new Float32Array(bufferLength);
-           analyser.getFloatTimeDomainData(dataArrayF);
-                        // console.log("getByteFrequencyData ",dataArrayF )
-
-           let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
-           console.log("max ",max )
-
-        }, 500);
+       // setInterval(function() {
+       //     let dataArray = new Uint8Array(bufferLength);
+       //     let dataArrayF = new Float32Array(bufferLength);
+       //     analyser.getFloatTimeDomainData(dataArrayF);
+       //                  // console.log("getByteFrequencyData ",dataArrayF )
+       //
+       //     let max = Math.max(-Math.min.apply(Math,dataArrayF), Math.max.apply(Math, dataArrayF))
+       //     console.log("max ",max )
+       //
+       //  }, 500);
    }
 
 
@@ -267,9 +316,9 @@ export default class ModalRTC extends React.Component {
          let {webRtcRed} = this.props
 
 
-        console.log("callConnectionOfClient", callConnectionOfClient)
-       let connections = callConnectionOfClient.connections[webRtcRed.myPeerServer]
-        console.log("connections", connections)
+        // console.log("callConnectionOfClient11", callConnectionOfClient)
+       let connections = webRtcRed.peer.connections[webRtcRed.myPeerServer]
+        console.log("connections1222", connections)
         let conn = connections.pop()
         conn.close()
 
@@ -279,10 +328,13 @@ export default class ModalRTC extends React.Component {
       let {webRtcRed, userName} = this.props
       let peer = webRtcRed.peer;
        // this.audoiExamples()
+       let mainObj = this
 
     let video = document.getElementById("myvideo")
     let localvar = peer;
-    callConnectionOfClient = peer
+    // callConnectionOfClient = peer
+
+
 
     //let server_id = document.getElementById("rempeerid").value;
     let server_id = webRtcRed.myPeerServer;
@@ -300,8 +352,8 @@ export default class ModalRTC extends React.Component {
 
      //звонок
     navigator.getUserMedia({video: false, audio: true}, function(stream) {
-      let call = localvar.call(server_id, stream);
-      call.on('stream', function(remotestream) {
+      let callConn = localvar.call(server_id, stream);
+      callConn.on('stream', function(remotestream) {
         console.log("!!!!!!!!!!!---------!!!!!!!!!!! PHASE-CLENT - 1")
         // let remsource = audioCtx.createMediaStreamSource(remotestream);
 
@@ -316,14 +368,19 @@ export default class ModalRTC extends React.Component {
               // here you have conn.id
               connText.send({"userName": userName});
             });
+          // console.log("call 99999", call)
+          // call.pc.send({"userName": userName});
 
       })
 
-        call.on('close', function() {
-            alert('closed connection by server: '+ call.peer)
+        callConn.on('close', function() {
+            alert('closed connection by server: '+ callConn.peer)
+
+            // callConn = localvar.call(server_id, stream);
+            mainObj.connectToServer();
         })
-        call.on('error', function(err) {
-            alert('error connection with server: '+ call.peer)
+        callConn.on('error', function(err) {
+            alert('error connection with server: '+ callConn.peer)
             console.log('error connection with server', err);
         })
 
@@ -397,7 +454,7 @@ export default class ModalRTC extends React.Component {
 
 
 
-    //отрисовка регулировок громкости
+    //отрисовка регулировок громкости на сервере
     let rtcGainsNodes = []
     let dictOfGains =   webRtcRed.dictOfGains
       console.log("dictOfGains--render--", dictOfGains)
@@ -411,13 +468,17 @@ export default class ModalRTC extends React.Component {
         rtcGainsNodes.push(nodeGain)
     }
 
+     //отрисовка ртс группы на клиенте
+    let rtcGroupConnectionsNodes = []
+    let rtcGroupConnections =   webRtcRed.rtcGroupConnections
+    for (let i=0; i< rtcGroupConnections.length; i++){
+        rtcGroupConnectionsNodes.push(<span> {rtcGroupConnections[i]} | </span>)
+    }
 
     if (window.intervalOfVolumes !== null) {
         console.log("intervalOfVolumes ", window.intervalOfVolumes)
         clearInterval(window.intervalOfVolumes)
     }
-
-
     window.intervalOfVolumes = setInterval(function() {
         for (let key in dictOfGains){
            let analyser = dictOfGains[key]["visualiser"]
@@ -480,6 +541,8 @@ export default class ModalRTC extends React.Component {
             {children}
             <button onClick={() => this.handleClose()}>close</button>
               <div>{rtcGainsNodes}</div>
+
+              <div>В канале: {rtcGroupConnectionsNodes}</div>
 
 
               {/*<button id="targetAtTimePlus">+++</button><button id="targetAtTimeMinus">---</button>*/}

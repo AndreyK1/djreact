@@ -16,7 +16,8 @@ const initialState = {
     myPeerServer: 0,
     myPeerGroup: 1,
     destination_participant: {},
-    dictOfGains: {}
+    dictOfGains: {},
+    rtcGroupConnections: []
   // playgrounds: {},
 }
 
@@ -53,6 +54,8 @@ export default function webRtc(state=initialState, action={}) {
         dictOfGains2[action.peer_id] = {...dictOfGains2[action.peer_id], userName: action.userName}
       return {...state, dictOfGains: dictOfGains2}
 
+ case webRtcActions.CHANGE_RTC_GROUP_CONNECTIOS:
+      return {...state, rtcGroupConnections: action.rtcGroupConnections}
 
   case webRtcActions.ADD_TO_RTC_GROUP:
     return {...state, isSendingNow: true}
