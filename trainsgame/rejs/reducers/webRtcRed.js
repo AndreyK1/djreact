@@ -5,6 +5,7 @@
  import {DEL_GAIN_NODE} from "../actions/webRtcActions";
  import {CHANGE_PEER_GROUP_ID} from "../actions/webRtcActions";
  import {CHANGE_USERNAME_PEER_ID} from "../actions/webRtcActions";
+ import {ADD_CONNECT_TO_CLIENT} from "../actions/webRtcActions";
 
 
 const initialState = {
@@ -35,7 +36,8 @@ export default function webRtc(state=initialState, action={}) {
   case webRtcActions.ADD_GAIN_NODE:
       let peer_id = action.call.peer
        let dictOfGains  = state.dictOfGains
-        dictOfGains[peer_id] = {gainNode: action.gainNode, call: action.call, visualiser: action.visualiser, userName: "unknown"}
+        dictOfGains[peer_id] = {gainNode: action.gainNode, call: action.call, visualiser: action.visualiser, userName: "unknown", connectionOfClient: null}
+        // gainNode - усилитель (Node), visualiser - анализатор (Node), call - вызов, connectionOfClient - connection
       console.log("dictOfGains", dictOfGains)
 
     return {...state, dictOfGains: dictOfGains}
@@ -53,6 +55,12 @@ export default function webRtc(state=initialState, action={}) {
         let dictOfGains2  = state.dictOfGains
         dictOfGains2[action.peer_id] = {...dictOfGains2[action.peer_id], userName: action.userName}
       return {...state, dictOfGains: dictOfGains2}
+
+  case webRtcActions.ADD_CONNECT_TO_CLIENT:
+        let dictOfGains3  = state.dictOfGains
+        dictOfGains3[action.peer_id] = {...dictOfGains3[action.peer_id], connectionOfClient: action.connectionOfClient}
+      return {...state, dictOfGains: dictOfGains3}
+
 
  case webRtcActions.CHANGE_RTC_GROUP_CONNECTIOS:
       return {...state, rtcGroupConnections: action.rtcGroupConnections}

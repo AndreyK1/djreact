@@ -74,6 +74,7 @@ export const DEL_GAIN_NODE = "DEL_GAIN_NODE"
 export const CHANGE_PEER_GROUP_ID = "CHANGE_PEER_GROUP_ID"
 export const CHANGE_USERNAME_PEER_ID = "CHANGE_USERNAME_PEER_ID"
 export const CHANGE_RTC_GROUP_CONNECTIOS = "CHANGE_RTC_GROUP_CONNECTIOS"
+export const ADD_CONNECT_TO_CLIENT = "ADD_CONNECT_TO_CLIENT"
 
 export function addGainNode(call, gainNode, visualiser){
     return function (dispatch) {
@@ -99,7 +100,14 @@ export function addUserNameToConn(peer_id, userName){
     }
 }
 
+export function addConnectionToClient(peer_id, conn){
+    return function (dispatch) {
+        dispatch({type: ADD_CONNECT_TO_CLIENT, peer_id: peer_id, connectionOfClient: conn})
+    }
+}
+
 export function addRtcGroupConn(rtcGroupConnections){
+    //console.log("rtcGroupConnections", rtcGroupConnections)
     return function (dispatch) {
         dispatch({type: CHANGE_RTC_GROUP_CONNECTIOS, rtcGroupConnections: rtcGroupConnections})
     }

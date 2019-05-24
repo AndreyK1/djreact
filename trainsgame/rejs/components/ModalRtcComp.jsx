@@ -82,19 +82,21 @@ export default class ModalRTC extends React.Component {
         for (let key in dictOfGains){
             //connectionOfClientsToServer
             var conn;
-            if(connectionOfClientsToServer[key]){
-                conn = connectionOfClientsToServer[key];
+            if(dictOfGains[key]["connectionOfClient"]){
+                // conn = connectionOfClientsToServer[key];
+                conn = dictOfGains[key]["connectionOfClient"];
                 console.log("conn exist send ", aarayOfNames)
                 conn.send({"rtcGroup": JSON.stringify(aarayOfNames)});
             }else{
                  conn = peer.connect(key);
-                 connectionOfClientsToServer[key] = conn
+                 //connectionOfClientsToServer[key] = conn
                 // on open will be launch when you successfully connect to PeerServer
                 conn.on('open', function(){
                   // here you have conn.id
                     console.log("conn created send ", aarayOfNames)
                   conn.send({"rtcGroup": JSON.stringify(aarayOfNames)});
                 });
+                dispatch(webRtcActions.addConnectionToClient(key, conn));
             }
 
 
@@ -319,13 +321,17 @@ export default class ModalRTC extends React.Component {
         // console.log("callConnectionOfClient11", callConnectionOfClient)
        let connections = webRtcRed.peer.connections[webRtcRed.myPeerServer]
         console.log("connections1222", connections)
-        let conn = connections.pop()
-        conn.close()
+        for(let i=0; i<connections.length; i++){
+            let conn = connections[i]
+            conn.close()
+        }
+        //let conn = connections.pop()
+        //conn.close()
 
     }
 
    connectToServer = () => {
-      let {webRtcRed, userName} = this.props
+      let {webRtcRed, userName, dispatch} = this.props
       let peer = webRtcRed.peer;
        // this.audoiExamples()
        let mainObj = this
@@ -365,6 +371,8 @@ export default class ModalRTC extends React.Component {
           let connText = localvar.connect(server_id);
             // on open will be launch when you successfully connect to PeerServer
             connText.on('open', function(){
+                document.getElementById("conn_state").innerText = "connected"
+                document.getElementById("conn_state").style.color = "green"
               // here you have conn.id
               connText.send({"userName": userName});
             });
@@ -375,9 +383,17 @@ export default class ModalRTC extends React.Component {
 
         callConn.on('close', function() {
             alert('closed connection by server: '+ callConn.peer)
+            document.getElementById("conn_state").innerText = "disconnected"
+            document.getElementById("conn_state").style.color = "red"
+            //очищаем список клиентов
+            // document.getElementById("rtc_clients_list").innerText = ""
+            dispatch(webRtcActions.addRtcGroupConn([]));
 
             // callConn = localvar.call(server_id, stream);
-            mainObj.connectToServer();
+            if(document.getElementById("is_need_reconect").checked){
+                mainObj.connectToServer();
+            }
+
         })
         callConn.on('error', function(err) {
             alert('error connection with server: '+ callConn.peer)
@@ -480,6 +496,7 @@ export default class ModalRTC extends React.Component {
         clearInterval(window.intervalOfVolumes)
     }
     window.intervalOfVolumes = setInterval(function() {
+        //console.log("----dictOfGains", dictOfGains)
         for (let key in dictOfGains){
            let analyser = dictOfGains[key]["visualiser"]
             let bufferLength = analyser.frequencyBinCount;
@@ -518,8 +535,10 @@ export default class ModalRTC extends React.Component {
               <button onClick={() => this.peerJsListenAsServer()}>peerJsListenAsServer</button>
               <button onClick={() => this.peerJsSend()}>peerJsSend</button>
               <button onClick={() => this.connectToServer()}>connectToServer</button>
+              reconnect<input type="checkbox" id="is_need_reconect"  /><span id="conn_state"></span>
               <br/>
               <button onClick={() => this.closeConnectToServer()}>closeConnectToServer</button>
+
               <canvas id="canvas_id"></canvas>
 
 
