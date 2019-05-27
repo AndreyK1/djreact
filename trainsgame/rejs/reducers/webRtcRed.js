@@ -24,6 +24,18 @@ const initialState = {
 
 export default function webRtc(state=initialState, action={}) {
 
+    let dictOfGains  = state.dictOfGains
+    let peer_id = null
+    if(action.call){
+       peer_id = action.call.peer
+    }else if(action.peer_id){
+       peer_id = action.peer_id
+    }
+
+    if(peer_id){
+
+    }
+
 
   switch (action.type) {
   case webRtcActions.SHOW_MODAL_RTC:
@@ -34,8 +46,8 @@ export default function webRtc(state=initialState, action={}) {
   case webRtcActions.SET_PEER_ID:
     return {...state, peer_id: action.res}
   case webRtcActions.ADD_GAIN_NODE:
-      let peer_id = action.call.peer
-       let dictOfGains  = state.dictOfGains
+      // let peer_id = action.call.peer
+       // let dictOfGains  = state.dictOfGains
         dictOfGains[peer_id] = {gainNode: action.gainNode, call: action.call, visualiser: action.visualiser, userName: "unknown", connectionOfClient: null}
         // gainNode - усилитель (Node), visualiser - анализатор (Node), call - вызов, connectionOfClient - connection
       console.log("dictOfGains", dictOfGains)
@@ -43,23 +55,25 @@ export default function webRtc(state=initialState, action={}) {
     return {...state, dictOfGains: dictOfGains}
 
   case webRtcActions.DEL_GAIN_NODE:
-      let peer_id1 = action.call.peer
-      let dictOfGains1  = state.dictOfGains
-      delete dictOfGains1[peer_id1]
-      return {...state, dictOfGains: dictOfGains1}
+      // let peer_id1 = action.call.peer
+      // let dictOfGains1  = state.dictOfGains
+      delete dictOfGains[peer_id]
+      return {...state, dictOfGains: dictOfGains}
 
   case webRtcActions.CHANGE_PEER_GROUP_ID:
       return {...state, myPeerGroup: action.peer_group_id}
 
  case webRtcActions.CHANGE_USERNAME_PEER_ID:
-        let dictOfGains2  = state.dictOfGains
-        dictOfGains2[action.peer_id] = {...dictOfGains2[action.peer_id], userName: action.userName}
-      return {...state, dictOfGains: dictOfGains2}
+        // let dictOfGains2  = state.dictOfGains
+        // dictOfGains2[action.peer_id] = {...dictOfGains2[action.peer_id], userName: action.userName}
+        dictOfGains[peer_id] = {...dictOfGains[peer_id], userName: action.userName}
+      return {...state, dictOfGains: dictOfGains}
 
   case webRtcActions.ADD_CONNECT_TO_CLIENT:
-        let dictOfGains3  = state.dictOfGains
-        dictOfGains3[action.peer_id] = {...dictOfGains3[action.peer_id], connectionOfClient: action.connectionOfClient}
-      return {...state, dictOfGains: dictOfGains3}
+        // let dictOfGains3  = state.dictOfGains
+        // dictOfGains3[action.peer_id] = {...dictOfGains3[action.peer_id], connectionOfClient: action.connectionOfClient}
+        dictOfGains[peer_id] = {...dictOfGains[peer_id], connectionOfClient: action.connectionOfClient}
+      return {...state, dictOfGains: dictOfGains}
 
 
  case webRtcActions.CHANGE_RTC_GROUP_CONNECTIOS:
