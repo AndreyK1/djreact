@@ -77,10 +77,10 @@ export default class App1Container extends React.Component{
 
   }
 
-   showModRtc= () =>{
-     let {dispatch} = this.props
-     dispatch(webRtcActions.showModalRtc(true))
-  }
+  //  showModRtc= () =>{
+  //    let {dispatch} = this.props
+  //    dispatch(webRtcActions.showModalRtc(true))
+  // }
 
 
 
@@ -107,7 +107,7 @@ export default class App1Container extends React.Component{
           {/*</div>*/}
 
           <div className="col-sm-12">
-              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} newarena = {newarena} >
+              <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} newarena = {newarena} webRtcRed={webRtcRed} userName={playground.userName} >
                   <p>Modal</p>
                   <p>Data</p>
                   {/*<button onClick={dispatch(createGame)}>Create Arena</button>*/}
@@ -118,12 +118,12 @@ export default class App1Container extends React.Component{
               <span>userName: {playground.userName}</span>
           </div>
           <div className="col-sm-12">
-              <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={playground.userName} >
-                  <p>ModalRTC</p>
-              </ModalRTC>
-              <button type="button" onClick={() => this.showModRtc()}>
-                  webRtc
-              </button>
+              {/*<ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={playground.userName} >*/}
+                  {/*<p>ModalRTC</p>*/}
+              {/*</ModalRTC>*/}
+              {/*<button type="button" onClick={() => this.showModRtc()}>*/}
+                  {/*webRtc*/}
+              {/*</button>*/}
           </div>
           <div className="col-sm-12">
             <ArenasTab playgrounds={playground.playgrounds} joinFunction={this.showModNewArenaFun} dispatch={dispatch} is_listener_exist={newarena.is_listener_exist}/>

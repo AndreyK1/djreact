@@ -1,6 +1,8 @@
 import React from "react"
 import * as PropsTypes from "react/lib/ReactPropTypes";
 import * as newarenaCreate from "../actions/newArenaActions";
+import ModalRTC from "./ModalRtcComp";
+import * as webRtcActions from "../actions/webRtcActions";
 
 
 
@@ -32,8 +34,14 @@ export default class ModalNewArena extends React.Component {
   }
 
 
+  showModRtc= () =>{
+     let {dispatch} = this.props
+     dispatch(webRtcActions.showModalRtc(true))
+  }
+
+
   render() {
-    let {show, handleClose, children, createGame, dispatch, newarena} = this.props
+    let {show, handleClose, children, createGame, dispatch, newarena, webRtcRed, userName} = this.props
 
     // let plNodes = []
     //   console.log("ModalNewArena ", show)
@@ -77,6 +85,16 @@ export default class ModalNewArena extends React.Component {
     return (
         <div className={showHideClassName}>
           <section className="modal-main">
+
+             <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={userName} >
+                  <p>ModalRTC</p>
+              </ModalRTC>
+
+              <button type="button" onClick={() => this.showModRtc()}>
+                  webRtc
+              </button>
+
+
              {/*<div className="col-sm-12" id="gameCont">*/}
 
              <p> whoClicked: {newarena.whoClicked}</p>
