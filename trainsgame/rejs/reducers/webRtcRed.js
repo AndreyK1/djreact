@@ -57,7 +57,10 @@ export default function webRtc(state=initialState, action={}) {
   case webRtcActions.DEL_GAIN_NODE:
       // let peer_id1 = action.call.peer
       // let dictOfGains1  = state.dictOfGains
-      delete dictOfGains[peer_id]
+      console.log("action.call.id " + action.call.id + " dictOfGains[peer_id][\"call\"].id " + dictOfGains[peer_id]["call"].id)
+      if(action.call.id == dictOfGains[peer_id]["call"].id){
+        delete dictOfGains[peer_id]
+      }
       return {...state, dictOfGains: dictOfGains}
 
   case webRtcActions.CHANGE_PEER_GROUP_ID:

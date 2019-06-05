@@ -265,6 +265,8 @@ export default class ModalRTC extends React.Component {
             })
 
             call.on('close', function() {
+                // console.log("-------------close call ", call)
+                // console.log("-------------close webRtcRed ",webRtcRed)
                  alert('closed connection with client22: '+ call.peer)
                 objParent.delGainNode(call)
 
