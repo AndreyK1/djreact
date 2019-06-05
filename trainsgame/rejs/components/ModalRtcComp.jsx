@@ -11,7 +11,11 @@ import * as listenPlaygrounsList from "../actions/playGroundActions";
 //import * as PropsTypes from "react/lib/ReactPropTypes";
 //import * as newarenaCreate from "../actions/newArenaActions";
 
-
+const styles = {
+  video: {
+      display: "none",
+  }
+}
 
 export default class ModalRTC extends React.Component {
 
@@ -30,7 +34,7 @@ export default class ModalRTC extends React.Component {
     dispatch(webRtcActions.setPeer(peer))
 
     peer.on('open', function(id) {
-      document.getElementById("mypeerid").value =  id
+      document.getElementById("mypeerid").innerText =  id
       console.log('My peer ID is: ' + id);
       dispatch(webRtcActions.setPeerId(id))
     });
@@ -526,42 +530,38 @@ export default class ModalRTC extends React.Component {
           <section className="modal-main">
              {/*<div className="col-sm-12" id="gameCont">*/}
 
-             <p> isModalRtcShow: {webRtcRed.isModalRtcShow}</p>
+             {/*<p> isModalRtcShow: {webRtcRed.isModalRtcShow}</p>*/}
 
 
-              My Id: <input id="mypeerid" /> Rem Id: <input id="rempeerid" />
-              My group: {webRtcRed.myPeerGroup} | <input id="mypeergroup_id" onChange={(el) => this.changeMyPeergroup(el)} />
+              {/*My Id: <input id="mypeerid" /> Rem Id: <input id="rempeerid" />*/}
+              {/*My group: {webRtcRed.myPeerGroup} | <input id="mypeergroup_id" onChange={(el) => this.changeMyPeergroup(el)} />*/}
+              My Id: <span id="mypeerid" ></span> | My group: {webRtcRed.myPeerGroup}
               <br/>
               <button onClick={() => this.peerJsListenAsServer()}>peerJsListenAsServer</button>
-              <button onClick={() => this.peerJsSend()}>peerJsSend</button>
+              {/*<button onClick={() => this.peerJsSend()}>peerJsSend</button>*/}
               <button onClick={() => this.connectToServer()}>connectToServer</button>
               reconnect<input type="checkbox" id="is_need_reconect"  /><span id="conn_state"></span>
               <br/>
               <button onClick={() => this.closeConnectToServer()}>closeConnectToServer</button>
-
-              <canvas id="canvas_id"></canvas>
-
-
-
-            <br/><br/>
+              {/*<canvas id="canvas_id"></canvas>*/}
+              <br/>
               {/*<p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>*/}
               {/*<p>server: {myServer}</p>*/}
               <p>server : {webRtcRed.myPeerServer}</p>
               <p>{rtcGroupsNodes}</p>
               <p >addedToRtc : {webRtcRed.addedToRtc["addedToRtc"]}</p>
               <button onClick={() => this.addToRtcGroup()}>addToRtcGroup</button>
-                                <br/>
-                  <br/>
+              <br/>
+              <button onClick={() => this.audoiExamples()}>audoiExamples</button>
 
-                  <button onClick={() => this.audoiExamples()}>audoiExamples</button>
-
-              <video id="myvideo" ></video>
-
-            {children}
-            <button onClick={() => this.handleClose()}>close</button>
-              <div>{rtcGainsNodes}</div>
+              <audio id="myvideo" style={[styles.video]}></audio>
+               <div>{rtcGainsNodes}</div>
 
               <div>В канале: {rtcGroupConnectionsNodes}</div>
+
+            {/*{children}*/}
+            <button onClick={() => this.handleClose()}>close</button>
+
 
 
               {/*<button id="targetAtTimePlus">+++</button><button id="targetAtTimeMinus">---</button>*/}
