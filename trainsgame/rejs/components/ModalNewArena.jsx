@@ -5,6 +5,15 @@ import ModalRTC from "./ModalRtcComp";
 import * as webRtcActions from "../actions/webRtcActions";
 
 
+// const styles = {
+//   outerFloat: {
+//       position: "relative",
+//   },
+//    innerFloat: {
+//       float: "left",
+//       width: "45%",
+//   }
+// }
 
 export default class ModalNewArena extends React.Component {
 
@@ -85,34 +94,38 @@ export default class ModalNewArena extends React.Component {
     return (
         <div className={showHideClassName}>
           <section className="modal-main">
+            <div className="outer-float">
+                  <div className="inner-float">
+                     {/*<div className="col-sm-12" id="gameCont">*/}
 
-             <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={userName} >
-                  <p>ModalRTC</p>
-              </ModalRTC>
-
-              <button type="button" onClick={() => this.showModRtc()}>
-                  webRtc
-              </button>
-
-
-             {/*<div className="col-sm-12" id="gameCont">*/}
-
-             <p> whoClicked: {newarena.whoClicked}</p>
-             <p id="my_arena"> arena: {newarena.newarena.arena}</p>
-              <p> you: {newarena.newarena.player}</p>
-              <p> number: {newarena.newarena.number}</p>
-              <p> players: {newarena.newarena.trains}</p>
+                     <p> whoClicked: {newarena.whoClicked}</p>
+                     <p id="my_arena"> arena: {newarena.newarena.arena}</p>
+                      <p> you: {newarena.newarena.player}</p>
+                      <p> number: {newarena.newarena.number}</p>
+                      <p> players: {newarena.newarena.trains}</p>
 
 
-            {/*</div>*/}
-            {/*<button onClick={this.createArena}>Create Arena</button>*/}
-            {/*<button onClick={this.startGame}>startGame</button>*/}
-            {buttons}
-            {children}
-            <button onClick={handleClose}>close</button>
-              <div id="gameCont">
-              </div>
+                    {/*</div>*/}
+                    {/*<button onClick={this.createArena}>Create Arena</button>*/}
+                    {/*<button onClick={this.startGame}>startGame</button>*/}
+                    {buttons}
+                    {children}
+                    <button onClick={handleClose}>close</button>
+               </div>
+               <div className="inner-float">
+                     <ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={userName} >
+                          <p>ModalRTC</p>
+                      </ModalRTC>
 
+                      <button type="button" onClick={() => this.showModRtc()}>
+                          webRtc
+                      </button>
+               </div>
+               <div className="clear-both">
+               </div>
+               <div id="gameCont">
+               </div>
+          </div>
           </section>
         </div>
     )

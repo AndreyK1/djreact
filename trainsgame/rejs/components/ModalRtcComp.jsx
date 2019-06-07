@@ -528,9 +528,10 @@ export default class ModalRTC extends React.Component {
     let showHideClassName = webRtcRed.isModalRtcShow ? "modal display-block" : "modal display-none";
 
     return (
-        <div className={showHideClassName}>
-          <section className="modal-main">
-             {/*<div className="col-sm-12" id="gameCont">*/}
+        <section>
+          {/*<section className="modal-main">*/}
+        {/*<div className={showHideClassName}>*/}
+        {/*<div className="col-sm-12" id="gameCont">*/}
 
              {/*<p> isModalRtcShow: {webRtcRed.isModalRtcShow}</p>*/}
 
@@ -567,9 +568,9 @@ export default class ModalRTC extends React.Component {
 
 
               {/*<button id="targetAtTimePlus">+++</button><button id="targetAtTimeMinus">---</button>*/}
-
+        {/*</div>*/}
           </section>
-        </div>
+
     )
   }
 }
