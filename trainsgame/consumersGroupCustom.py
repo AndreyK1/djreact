@@ -16,7 +16,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 from trainsgame.consumersReact import GroupConsumerReact
-from trainsgame.models import PlayGroundList
+from trainsgame.models import PlayGroundList, Account
 
 
 class StartConsGroupCustom(AsyncJsonWebsocketConsumer):
@@ -87,11 +87,27 @@ class StartConsGroupCustom(AsyncJsonWebsocketConsumer):
             for k in md2.channels:
                 print("key ", k)
                 userName = md2.channels[k].scope["user"].username;
+
                 await md2.channels[k].send_json({"type": "user.react",
                                         # "event": {"value": serialized_obj, "type": "arenas"},
-                                        "event": {"value": serialized_obj, "type": "arenas", "userName": userName},
+                                        "event": {"value": serialized_obj, "type": "arenas", "userName": userName, "count": self.getAccount(md2.channels[k])},
                                         })
 
 
 
         GroupConsumerReact.STARTET = False
+
+
+    def getAccount(self, channel):
+        count = 0;
+        if hasattr(channel, 'account'):
+            count = channel.account.count
+        else:
+            account = Account.objects.get(owner=channel.scope["user"])
+            channel.account = account
+            print("find account in BD")
+            count = account.count
+
+        print(" count " + str(count))
+
+        return count;

@@ -18,6 +18,8 @@ export default function playgroud(state=initialState, action={}) {
     // let newarena = state.newarena
       newarena["arena"] = action.res.arena
       newarena["player"] = action.res.username
+      // newarena["userCount"] = action.res.userCount
+
     return {...state, newarena: newarena}
 
    case newArenaActions.CHANGE_GROUP_ARENA_LISTENER_EXIST:

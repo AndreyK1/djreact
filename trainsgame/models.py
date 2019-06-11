@@ -1,9 +1,13 @@
 import random
 
 import json
+
+from django.conf import settings
 from django.http import JsonResponse
 
 # from trainsgame.createPlayGround import randomAddTrainToCross
+from django.utils import timezone
+
 from trainsgame.enums.ColorEnum import Colors
 
 from django.db import models
@@ -11,6 +15,26 @@ from django.db import models
 # Create your models here.
 from djangorest.models import singleton
 from trainsgame.MovingMashine import MovingMashine
+
+
+# python manage.py makemigrations trainsgame
+# python manage.py migrate trainsgame
+
+class Account(models.Model):
+
+    # title = models.CharField(max_length=200)
+    # owner = models.ForeignKey(User)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(default=timezone.now)
+    count = models.IntegerField(default=0)
+    # text = models.TextField()
+    real = models.BooleanField()
+    isnew = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.count)
+
+
 
 
 # test TODO dell

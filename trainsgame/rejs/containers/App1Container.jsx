@@ -115,7 +115,7 @@ export default class App1Container extends React.Component{
               <button type="button" onClick={() => this.showModNewArenaFun("creator")}>
                   create new Arena
               </button>
-              <span>userName: {playground.userName}</span>
+              <span>userName: {playground.userName} | count: {playground.userCount}</span>
           </div>
           <div className="col-sm-12">
               {/*<ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={playground.userName} >*/}

@@ -18,8 +18,9 @@ export function listenPlaygrounsList(is_list_sended) {
               // let playgr = action["event"]["value"]
               let playgr = JSON.parse(action.event.value)
               let userName = action.event.userName
+              let userCount = action.event.count
               // console.log(playgr);
-              dispatch({type: SAVE_PLAYGROUNDS_LIST, res: playgr, userName: userName})
+              dispatch({type: SAVE_PLAYGROUNDS_LIST, res: playgr, userName: userName, userCount: userCount})
 
 
               //поверяем, если мы в процессе создания новой арены, то создаем листенер для нее
