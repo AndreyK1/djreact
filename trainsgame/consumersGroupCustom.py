@@ -103,10 +103,20 @@ class StartConsGroupCustom(AsyncJsonWebsocketConsumer):
         if hasattr(channel, 'account'):
             count = channel.account.count
         else:
-            account = Account.objects.get(owner=channel.scope["user"])
-            channel.account = account
+            if channel.scope["user"].is_authenticated:
+                try:
+                    account = Account.objects.get(owner=channel.scope["user"])
+                except:
+                    # создаем запись
+                    account = Account(owner = channel.scope["user"])
+                    account.save()
+
+                channel.account = account
+                count = account.count
+            else:
+                count = 0
             print("find account in BD")
-            count = account.count
+
 
         print(" count " + str(count))
 

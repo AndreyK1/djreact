@@ -3,7 +3,7 @@ import * as playGroundActions from "../actions/playGroundActions"
 const initialState = {
     isIstenerSended: false,
   playgrounds: {},
-  userName: "unknown1",
+  userName: "unknown",
   userCount: 0,
 }
 

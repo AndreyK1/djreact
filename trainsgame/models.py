@@ -28,7 +28,7 @@ class Account(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     count = models.IntegerField(default=0)
     # text = models.TextField()
-    real = models.BooleanField()
+    real = models.BooleanField(default=False)
     isnew = models.BooleanField(default=True)
 
     def __str__(self):

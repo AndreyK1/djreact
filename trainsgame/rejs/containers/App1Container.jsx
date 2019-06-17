@@ -93,6 +93,12 @@ export default class App1Container extends React.Component{
     // console.log(this.props);
     let {countersSingle, playground, dispatch, newarena, webRtcRed} = this.props
 
+     let logActions = ""
+     if(playground.userName == "unknown" || playground.userName == ""){
+         logActions = <span><a href="/trains/log_in">log_in</a> |  <a href="/trains/sign_up">sign_up</a></span>
+     }else{
+         logActions = <a href="/trains/log_out">log_out</a>
+     }
 
     // if (github.isLoadingRepos || github.repos === undefined) {
     //   return this.renderLoading()
@@ -115,7 +121,8 @@ export default class App1Container extends React.Component{
               <button type="button" onClick={() => this.showModNewArenaFun("creator")}>
                   create new Arena
               </button>
-              <span>userName: {playground.userName} | count: {playground.userCount}</span>
+              <span>userName: {playground.userName} | count: {playground.userCount} | </span> {logActions}
+
           </div>
           <div className="col-sm-12">
               {/*<ModalRTC  dispatch={dispatch} webRtcRed={webRtcRed} userName={playground.userName} >*/}
