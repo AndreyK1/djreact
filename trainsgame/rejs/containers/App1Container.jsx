@@ -14,6 +14,8 @@ import ArenasTab from "../components/ArenasTab";
 import ModalRTC from "../components/ModalRtcComp";
 import * as newarenaCreate from "../actions/newArenaActions";
 import * as webRtcActions from "../actions/webRtcActions";
+import * as profileActions from "../actions/profileActions";
+import ProfileModal from "../components/ProfileModal";
 
 
 // import * as postersAction from "../actions/postersAction"
@@ -36,6 +38,7 @@ const styles = {
     playground: state.playground,
     newarena: state.newarena,
     webRtcRed: state.webRtcRed,
+    profileRed: state.profileRed,
 }))
 @Radium
 export default class App1Container extends React.Component{
@@ -81,6 +84,10 @@ export default class App1Container extends React.Component{
   //    let {dispatch} = this.props
   //    dispatch(webRtcActions.showModalRtc(true))
   // }
+   showModProfile= () =>{
+     let {dispatch} = this.props
+     dispatch(profileActions.showModalProfile(true))
+  }
 
 
 
@@ -91,7 +98,7 @@ export default class App1Container extends React.Component{
   render() {
     // console.log("render");
     // console.log(this.props);
-    let {countersSingle, playground, dispatch, newarena, webRtcRed} = this.props
+    let {countersSingle, playground, dispatch, newarena, webRtcRed, profileRed} = this.props
 
      let logActions = ""
      if(playground.userName == "unknown" || playground.userName == ""){
@@ -111,7 +118,13 @@ export default class App1Container extends React.Component{
             {/*<div style={[styles.button]} onClick={() => this.handleClickIncreaseSingleton()}>INCREASE Singleton</div>*/}
             {/*<p style={[styles.counter]} >{countersSingle.clicksSingle['ffff']}</p>*/}
           {/*</div>*/}
-
+          <div className="col-sm-12">
+              <ProfileModal  dispatch={dispatch} userName={playground.userName} profileRed={profileRed} >
+              </ProfileModal>
+              <button type="button"  onClick={() => this.showModProfile()}>
+                  Profile
+              </button>
+          </div>
           <div className="col-sm-12">
               <ModalNewArena show={this.state.showModNewArena} handleClose={this.hideModalNewArena} createGame={newarenaCreate.newarenaCreate} dispatch={dispatch} newarena = {newarena} webRtcRed={webRtcRed} userName={playground.userName} >
                   <p>Modal</p>
