@@ -119,7 +119,7 @@ export default class App1Container extends React.Component{
             {/*<p style={[styles.counter]} >{countersSingle.clicksSingle['ffff']}</p>*/}
           {/*</div>*/}
           <div className="col-sm-12">
-              <ProfileModal  dispatch={dispatch} userName={playground.userName} profileRed={profileRed} >
+              <ProfileModal  dispatch={dispatch} playground={playground} profileRed={profileRed} >
               </ProfileModal>
               <button type="button"  onClick={() => this.showModProfile()}>
                   Profile
