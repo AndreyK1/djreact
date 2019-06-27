@@ -9,9 +9,18 @@ export default class ProfileModal extends React.Component {
         let tokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_value","type":"uint256"}],"name":"burnFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDecimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"}]
         let tokenAddress = "0xab20a3630f943831a57c767ee94b90801b88787c"
 
-       // let web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/metamask'));
 
-       window.TreasureContractOld = web3.eth.contract(tokenABI).at(tokenAddress)
+
+        let web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/metamask'));
+        window.TreasureContractNew1 = new web3.eth.Contract(tokenABI, tokenAddress);
+
+        // window.TreasureContractOld = window.TreasureContractNew1;
+
+
+
+       //  let web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/metamask'));
+       //
+       // window.TreasureContractOld = web3.eth.contract(tokenABI).at(tokenAddress)
 
         //        window.TreasureContractNew = new web3.eth.Contract(tokenABI, tokenAddress);
         // console.log(" TreasureContractNew oooo11",  TreasureContractNew)
@@ -37,10 +46,8 @@ export default class ProfileModal extends React.Component {
        //
        // let TreasureContract = web3.eth.contract(tokenABI).at(tokenAddress)
 
-        // web3.eth.getBalance(address, function(error, result){
-        window.TreasureContractOld.balanceOf(address, function(error, result){
-            console.log('yes') ;
-            if(!error) {
+         window.TreasureContractNew1.methods.balanceOf(address).call().then(function(result){
+            // if(!error) {
                 console.log("getBalance ", result)
                 balance = result.toString(10) ;
                 // setBalance(balance) ;
@@ -50,23 +57,41 @@ export default class ProfileModal extends React.Component {
                   alert("eth" + eth)
                     $('.balance_positive').html(eth) ;
                   $.cookie("address", address);
-            } else {
-                alert('Some error happens. Please, try again.') ;
-                console.error(error);
-            }
+            // } else {
+            //     alert('Some error happens. Please, try again.') ;
+            //     console.error(error);
+            // }
         });
+      //old
+      //   window.TreasureContractOld.balanceOf(address, function(error, result){
+      //       console.log('yes') ;
+      //       if(!error) {
+      //           console.log("getBalance ", result)
+      //           balance = result.toString(10) ;
+      //           // setBalance(balance) ;
+      //           let wei = balance
+      //              let eth = wei / 1000000000000000000 ;
+      //             // let eth = wei(wei, 'ether') ;
+      //             alert("eth" + eth)
+      //               $('.balance_positive').html(eth) ;
+      //             $.cookie("address", address);
+      //       } else {
+      //           alert('Some error happens. Please, try again.') ;
+      //           console.error(error);
+      //       }
+      //   });
 
   }
 
   showCoinName = () => {
-       console.log(" window.TreasureContract",  window.TreasureContract)
+       console.log(" window.TreasureContract",  window.TreasureContractOld)
       //    let tokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_value","type":"uint256"}],"name":"burnFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDecimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"}]
       //   let tokenAddress = "0xab20a3630f943831a57c767ee94b90801b88787c"
       //
       //
       // let TreasureContra = new web3.eth.Contract(tokenABI, tokenAddress);
-         console.log(" window.TreasureContractNew 1111",  window.TreasureContractNew)
-       window.TreasureContractNew.methods.name().call().then(console.log);
+         console.log(" window.TreasureContractNew1 111123",  window.TreasureContractNew1)
+       window.TreasureContractNew1.methods.name().call().then(console.log);
 
       //old working
       // window.TreasureContractOld.name(function(error, result){
