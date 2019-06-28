@@ -123,7 +123,7 @@ export default class ProfileModal extends React.Component {
       let privateKey = Buffer.from('1C7A3993B45DFFE6403004AF68AEE24BBA8C6D5C5F31CDDA0B271D27364C4A67', 'hex')
 
         // 1e18 === 1 HST
-        let amount = window.web31.utils.toHex(199e18)
+        let amount = window.web31.utils.toHex(3e18)
 
         window.web31.eth.getTransactionCount(wallet)
           .then((count) => {
@@ -147,6 +147,14 @@ export default class ProfileModal extends React.Component {
   }
 
 
+  newAccount = () => {
+       let newAccount = window.web31.eth.accounts.create()
+      console.log("newAccount", newAccount)
+
+  }
+
+
+
 
 
 
@@ -168,6 +176,9 @@ export default class ProfileModal extends React.Component {
             <br />
             <button onClick={() => this.transfer()}>transfer</button>
             <br />
+            <button onClick={() => this.newAccount()}>newAccount</button>
+            <br />
+
             <button onClick={() => this.handleClose()}>close</button>
           </section>
 
