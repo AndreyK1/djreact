@@ -139,7 +139,13 @@ export default class ProfileModal extends React.Component {
             let transaction = new ethereumjs.Tx(rawTransaction)
             transaction.sign(privateKey)
             window.web31.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'))
-              .on('transactionHash', console.log)
+              .on('transactionHash', (txEnded ) => {
+                  console.log("transactionHash ended ", txEnded)
+                  let href = "https://rinkeby.etherscan.io/tx/"+txEnded
+                  document.getElementById("transactions-id").innerHTML =  "<a href='"+href+"' >"+txEnded+"</a>"
+
+              })
+              //https://rinkeby.etherscan.io/tx/0x5781f10855598225367bd4ab8b9be43cf2b5fe4f4b3ddbcc80be1fe2e258b232
           })
 
 
@@ -174,7 +180,7 @@ export default class ProfileModal extends React.Component {
             <br />
             <button onClick={() => this.showCoinName()}>showCoinName</button>
             <br />
-            <button onClick={() => this.transfer()}>transfer</button>
+            <button onClick={() => this.transfer()}>transfer</button><span id="transactions-id"></span>
             <br />
             <button onClick={() => this.newAccount()}>newAccount</button>
             <br />
