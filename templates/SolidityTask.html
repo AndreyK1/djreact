@@ -5,7 +5,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <!--
-    Андрей, добрый день!
 Информация по тестовому заданию для АФТ ниже. Напишите, пожалуйста, обратным письмом, в какие сроки сможете его выполнить.
 Если есть вопросы по заданию - можете написать, я передам в Ассоциацию ФинТех.
 
@@ -25,33 +24,23 @@
 
 
     Aдресс контракта <input id="contract_adress" /> или
-    <button onclick="deploy()">deploy</button>
+    <button onclick="deploy()">deploy own contract</button>
     <br /><br />
     Показать встречу на время <input id="time_show" /><button onclick="showMeeting()">showMeeting</button><br />
     Пасспорт: <span id="passport_show"></span><br />
     Детали: <span id="info_show"></span>
     <br /><br />
-
-
-
-
-
-<button onclick="showName()">showName</button>
- <button onclick="showMeeting()">showMeeting</button>
-   <button onclick="addMeeting()">addMeeting</button>
-
-
-
+    Добавить встречу:<br />
+    время встречи <input id="time_add" /><br />
+    Пасспорт <input id="passport_add" /><br />
+    Детали <input id="info_add" /><br />
+    Симетричный ключ для вашего аккаунта <input id="key_add" size="30"  readonly /><button onclick="createSymKey()">refresh</button><br />
+    <button onclick="addMeeting()">addMeeting</button>
+    <br /><br />
 
     <br />
 
-<button onclick="cleanCookies()">cleanCookies</button>
-    <button onclick="sign()">sign</button>
-    <button onclick="signByKeys()">signByKeys</button>
-
-
-
-
+    <button onclick="cleanCookies()">cleanCookies</button>
 
     <script>
         //for cookie
@@ -100,13 +89,12 @@
             function  cleanCookies() {
                 $.cookie("contract_adress", "");
             }
-        </script>
+     </script>
 
 
     <script>
         $(document).ready(function(){
-            {#alert($.cookie("info"))#}
-                    $("#contract_adress").val($.cookie("contract_adress"))
+            setTimeout(()=>$("#contract_adress").val($.cookie("contract_adress")),1000)
         });
 
         function checkContract(){
@@ -122,11 +110,7 @@
         var tokenABI = [{"constant":false,"inputs":[{"name":"time","type":"string"},{"name":"passport","type":"string"},{"name":"info","type":"string"}],"name":"addMeeting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"contract_name","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":true,"inputs":[{"name":"time","type":"string"}],"name":"getMeetingInfo","outputs":[{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"}]
 
 
-        tokenAddress = "0xf28dcbd135effaab0307851313c5c429aba7a796"
-
-        var wallet = '0x45ca230b2684D10bE2F8a749CA2F60828A2576f4' ;
-
-
+        {#tokenAddress = "0xf28dcbd135effaab0307851313c5c429aba7a796"#}
 
         function deploy() {
              const contract = new web3.eth.Contract(tokenABI);
@@ -139,12 +123,11 @@
                     arguments: ['My contract']
                 })
                 .send({ from: acc[0] }).then(
-                    {#console.log#}
                     (res) => {
                         console.log("res", res)
                         console.log("res._address", res._address)
-                        $("#contract_adress").val($.cookie("info"))
-                        $.cookie("contract_adress", res[0])
+                        $("#contract_adress").val(res._address)
+                        $.cookie("contract_adress", res._address)
                     }
                 ).catch(console.log);
             });
@@ -162,14 +145,14 @@
                 return false;
             }
 
-            window.TreasureContractNew1.methods.getMeetingInfo(time).call().then(
+            window.Contract.methods.getMeetingInfo(time).call().then(
                 (res)=> {
                     console.log("res", res[0])
                     if(res[0] == ""){
                         alert("нету встречи!!!")
                         return;
                     }
-                    $("#passport_show").text(res[0])
+                    $("#passport_show").text(decrypt(res[0]))
                     $("#info_show").text(res[1])
 
                 }
@@ -179,191 +162,85 @@
 
 
 
-
-
-
-
-
-
-         function showName(){
-                    if(!checkContract()){
-                        return;
-                    }
-            window.TreasureContractNew1.methods.name().call().then(console.log);
-        }
-
-
-
-
-
         function addMeeting(){
-             var time = "3"
-             var passport = "p3"
-            var info = "info3/"
+           if(!checkContract()){
+                return;
+           }
+           var time = $("#time_add").val()
+           var passport = $("#passport_add").val()
+           var info = $("#info_add").val()
+           var key = $("#key_add").val()
+
+            if(time == "" || passport == "" || info == "" || key == ""){
+                alert("you need add data of meeting!!!")
+                return false;
+            }
+
+            passport = encrypt(passport)
 
             web3.eth.getAccounts((err, acc)=> {
                 console.log("acc", acc)
-                window.TreasureContractNew1.methods.addMeeting(time, passport, info).send({ from: acc[0] }).then(console.log).catch(console.log);
+                window.Contract.methods.addMeeting(time, passport, info).send({ from: acc[0] }).then(
+                    (res) => {
+                        console.log(res)
+                        alert("встреча добавлена!!!")
+
+                    }
+                ).catch(console.log);
             });
 
         }
 
-
-
-
-        function showBalance(){
-             console.log("web3", web3)
-           window.TreasureContractNew1.methods.balanceOf(wallet).call().then(function(result){
-            // if(!error) {
-                console.log("getBalance ", result)
-                balance = result.toString(10) ;
-                // setBalance(balance) ;
-                let wei = balance
-                   let eth = wei / 1000000000000000000 ;
-                  // let eth = wei(wei, 'ether') ;
-                  alert("eth" + eth)
-            });
-        }
-
-
-
-
-        function transfer(){
-             //get active account in metamask
-            console.log("web3", web3)
-             var userAccount = web3.eth.accounts[0]
-
-            {#web3.eth.getAccounts().then((err, acc)=> console.log("acc", acc))#}
-            {#web3.eth.getAccounts((err, acc)=> console.log("acc1", acc))#}
-            {#web3.eth.getAccounts(console.log);#}
-            //contractData = contractInstance.transfer.getData(address, amount)
-            var toAddress = "0xc62A97B240644C5a5a8A99c0F9Eb4aa74a754dE1"
-            var amount = web3.utils.toHex(3e18)
-            console.log("window.TreasureContractNew1", window.TreasureContractNew1)
-            console.log("userAccount", userAccount)
-            {#var transaction = window.TreasureContractNew1.methods.transfer.call(toAddress, amount)#}
-            {#var transaction = window.TreasureContractNew1.methods.transfer(toAddress, amount)#}
-            var transaction = window.TreasureContractNew1.methods.transfer(toAddress, amount)
-            .send({ from: userAccount })
-
-
-
-
-            console.log("transaction", transaction)
-        }
-
-        function sign(){
-                         console.log("web3", web3)
-             var userAccount = web3.eth.accounts[0]
-            console.log("userAccount", userAccount)
-
-
-            web3.eth.getAccounts((err, acc)=> {
-                console.log("acc1", acc)
-                 {#console.log(web3.eth.getEncryptionPublicKey(acc))#}
-                {#web3.eth.accounts.encrypt(privateKey, password);#}
-                {#var signature = web3.eth.sign(acc, ()=> console.log,'0x' + web3.utils.toHex("hjhgjghjh"))#}
-                {#web3.eth.sign("zxczxc", acc) //.then(console.log)#}
-
+        function createSymKey(){
+           web3.eth.getAccounts((err, acc)=> {
+               web3.eth.personal.sign("TODO pass phrase and solt here from BD or ......", acc[0]).then(
+                   (res) => {
+                       console.log(res)
+                       $("#key_add").val(res)
+                       createContract()
+                   }
+               ).catch(console.log);
          })
 
+        }
+           function createContract(){
+                window.Contract = new web3.eth.Contract(tokenABI, $("#contract_adress").val());
+            }
 
+        function encrypt(passport){
+            var encryptedAES = CryptoJS.AES.encrypt(passport, $("#key_add").val()).toString();
+            console.log(encryptedAES)
+            return encryptedAES;
+        }
 
-
-            var encryptedAES = CryptoJS.AES.encrypt("Message", "My Secret Passphrase");
-            var decryptedBytes = CryptoJS.AES.decrypt(encryptedAES, "My Secret Passphrase");
+        function decrypt(message){
+            var decryptedBytes = CryptoJS.AES.decrypt(message, $("#key_add").val());
             var plaintext = decryptedBytes.toString(CryptoJS.enc.Utf8);
             console.log(plaintext)
-
+            return plaintext;
         }
-
-        function signByKeys(){
-                                      console.log("web3", web3)
-            {# var userAccount = web3.eth.accounts[0]#}
-            {#console.log("userAccount", userAccount)#}
-
-
-            web3.eth.getAccounts((err, acc)=> {
-                console.log("acc1", acc)
-                 {#console.log(web3.eth.getEncryptionPublicKey(acc))#}
-                {#web3.eth.accounts.encrypt(privateKey, password);#}
-                {#var signature = web3.eth.sign(acc, ()=> console.log,'0x' + web3.utils.toHex("hjhgjghjh"))#}
-                sigObj = web3.eth.accounts.sign("zxczxc", acc[0]) //.then(console.log).catch(console.log);
-                msgHash2 = sigObj.messageHash;
-                sig2 = sigObj.signature;
-                console.log("msgHash2", msgHash2)
-                console.log("sig2", sig2)
-
-
-                whoSigned2 = web3.eth.accounts.recover(sigObj)
-                console.log("whoSigned2", whoSigned2)
-
-
-                messageHash1= web3.eth.accounts.hashMessage("vasya");
-                console.log("messageHash1", messageHash1)
-                recover_1 = web3.eth.accounts.recover({
-                    messageHash: messageHash1 });
-                console.log("recover_1", recover_1)
-
-
-         })
-
-        }
-
 
         document.addEventListener('DOMContentLoaded', function() {
-
-
-
-
-            var MAINET_RPC_URL = 'https://mainnet.infura.io/metamask' ;
-            var ROPSTEN_RPC_URL = 'https://ropsten.infura.io/metamask' ;
-            var KOVAN_RPC_URL = 'https://kovan.infura.io/metamask' ;
-            var RINKEBY_RPC_URL = 'https://rinkeby.infura.io/metamask' ;
-
-            var CURRENT_URL = RINKEBY_RPC_URL ;
-
 
             // Checking if Web3 has been injected by the browser (Mist/MetaMask)
               if (typeof web3 !== 'undefined') {
                 // Use Mist/MetaMask's provider
                 web3 = new Web3(web3.currentProvider);
                 web3.currentProvider.enable()
-                console.log("currentProvider")
               } else {
-                // Handle the case where the user doesn't have web3. Probably
-                // show them a message telling them to install Metamask in
-                // order to use our app.
-                // For example
-                  console.log("CURRENT_URL")
-                 web3 = new Web3(new Web3.providers.HttpProvider(CURRENT_URL));
-              }  // Now you can start your app & access web3js freely:
-              {#startApp()#}
+                  alert("you need to use Metamask plugin!!!!")
+              }
 
+            createSymKey()
 
+            $("#contract_adress").change(
+                ()=>{
+                    createContract()
+                    $.cookie("contract_adress", $("#contract_adress").val())
 
-
-
-        window.TreasureContractNew1 = new web3.eth.Contract(tokenABI, tokenAddress, {from: wallet});
-
-
-         {#var web3 = new Web3(new Web3.providers.HttpProvider(CURRENT_URL));#}
-         {#var tokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_value","type":"uint256"}],"name":"burnFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDecimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"}]#}
-         {# var tokenAddress = "0xab20a3630f943831a57c767ee94b90801b88787c"#}
-         {##}
-         {# let TreasureContract = web3.eth.contract(tokenABI).at(tokenAddress)#}
-
-
-        {#window.TreasureContractNew = new web3.eth.Contract(tokenABI, tokenAddress);#}
-        {#console.log(" TreasureContractNew oooo",  TreasureContractNew)#}
+                }
+            )
 
         });
-
-
-
-
-            {#$.cookie("test", 1);#}
-            {#var cookieValue = $.cookie("test");#}
-            {#alert(cookieValue)#}
 
     </script>
