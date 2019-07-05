@@ -1,0 +1,188 @@
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ethereumjs/browser-builds/dist/ethereumjs-tx/ethereumjs-tx-1.3.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+
+    <!--
+    Андрей, добрый день!
+Информация по тестовому заданию для АФТ ниже. Напишите, пожалуйста, обратным письмом, в какие сроки сможете его выполнить.
+Если есть вопросы по заданию - можете написать, я передам в Ассоциацию ФинТех.
+
+Разработать минимальный читабельный HTML-файл, который содержит исходный код смарт-контракта (на языке Solidity) и функции:
+
+деплоя контракта через MetaMask;
+регистрации (доступна только деплоеру) в контракте произвольного текста в качестве описания встречи;
+регистрации произвольного участника встречи по номеру паспорта, который он не желает афишировать;
+проверки того, что участник зарегистрирован на определённую встречу.
+
+
+Критерии оценки:
+
+в интернете доступна рабочая версия приложения;
+логика работы изложена в комментариях;
+продуманы криптозащита и удобство использования. -->
+
+    <!--0x174af8bc8412f8de1d571cbdc215464d160b4485
+    -->
+
+<button onclick="showBalance()">showBalance</button>
+ <button onclick="transfer()">transfer</button>
+   <button onclick="deploy()">deploy</button>
+    <button onclick="sign()">sign</button>
+
+
+
+    <script>
+
+        var contractSource = "" +
+    "contract test {\n" +
+    "   function multiply(uint a) returns(uint d) {\n" +
+    "       return a * 7;\n" +
+    "   }\n" +
+    "}\n";
+
+
+        {#var privateKey = Buffer.from('1C7A3993B45DFFE6403004AF68AEE24BBA8C6D5C5F31CDDA0B271D27364C4A67', 'hex')#}
+
+
+          var tokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_value","type":"uint256"}],"name":"burnFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDecimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"}]
+        var tokenAddress = "0xab20a3630f943831a57c767ee94b90801b88787c"
+
+        var wallet = '0x45ca230b2684D10bE2F8a749CA2F60828A2576f4' ;
+
+         function start(){
+            alert("shhh")
+        }
+
+        function showBalance(){
+             console.log("web3", web3)
+           window.TreasureContractNew1.methods.balanceOf(wallet).call().then(function(result){
+            // if(!error) {
+                console.log("getBalance ", result)
+                balance = result.toString(10) ;
+                // setBalance(balance) ;
+                let wei = balance
+                   let eth = wei / 1000000000000000000 ;
+                  // let eth = wei(wei, 'ether') ;
+                  alert("eth" + eth)
+            });
+        }
+
+
+        function deploy() {
+            var contractCompiled = web3.eth.compile.solidity(contractSource);
+            console.log("contractCompiled", contractCompiled)
+
+        }
+
+        function transfer(){
+             //get active account in metamask
+            console.log("web3", web3)
+             var userAccount = web3.eth.accounts[0]
+
+            {#web3.eth.getAccounts().then((err, acc)=> console.log("acc", acc))#}
+            {#web3.eth.getAccounts((err, acc)=> console.log("acc1", acc))#}
+            {#web3.eth.getAccounts(console.log);#}
+            //contractData = contractInstance.transfer.getData(address, amount)
+            var toAddress = "0xc62A97B240644C5a5a8A99c0F9Eb4aa74a754dE1"
+            var amount = web3.utils.toHex(3e18)
+            console.log("window.TreasureContractNew1", window.TreasureContractNew1)
+            console.log("userAccount", userAccount)
+            {#var transaction = window.TreasureContractNew1.methods.transfer.call(toAddress, amount)#}
+            {#var transaction = window.TreasureContractNew1.methods.transfer(toAddress, amount)#}
+            var transaction = window.TreasureContractNew1.methods.transfer(toAddress, amount)
+            .send({ from: userAccount })
+
+
+
+
+            console.log("transaction", transaction)
+        }
+
+        function sign(){
+                         console.log("web3", web3)
+             var userAccount = web3.eth.accounts[0]
+            console.log("userAccount", userAccount)
+
+
+            web3.eth.getAccounts((err, acc)=> {
+                console.log("acc1", acc)
+                 {#console.log(web3.eth.getEncryptionPublicKey(acc))#}
+                {#web3.eth.accounts.encrypt(privateKey, password);#}
+                {#var signature = web3.eth.sign(acc, ()=> console.log,'0x' + web3.utils.toHex("hjhgjghjh"))#}
+                {#web3.eth.sign("zxczxc", acc) //.then(console.log)#}
+
+         })
+
+
+
+
+            var encryptedAES = CryptoJS.AES.encrypt("Message", "My Secret Passphrase");
+            var decryptedBytes = CryptoJS.AES.decrypt(encryptedAES, "My Secret Passphrase");
+            var plaintext = decryptedBytes.toString(CryptoJS.enc.Utf8);
+            console.log(plaintext)
+
+
+
+
+
+
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+
+
+
+            var MAINET_RPC_URL = 'https://mainnet.infura.io/metamask' ;
+            var ROPSTEN_RPC_URL = 'https://ropsten.infura.io/metamask' ;
+            var KOVAN_RPC_URL = 'https://kovan.infura.io/metamask' ;
+            var RINKEBY_RPC_URL = 'https://rinkeby.infura.io/metamask' ;
+
+            var CURRENT_URL = RINKEBY_RPC_URL ;
+
+
+            // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+              if (typeof web3 !== 'undefined') {
+                // Use Mist/MetaMask's provider
+                web3 = new Web3(web3.currentProvider);
+                web3.currentProvider.enable()
+                console.log("currentProvider")
+              } else {
+                // Handle the case where the user doesn't have web3. Probably
+                // show them a message telling them to install Metamask in
+                // order to use our app.
+                // For example
+                  console.log("CURRENT_URL")
+                 web3 = new Web3(new Web3.providers.HttpProvider(CURRENT_URL));
+              }  // Now you can start your app & access web3js freely:
+              {#startApp()#}
+
+
+
+
+
+        window.TreasureContractNew1 = new web3.eth.Contract(tokenABI, tokenAddress, {from: wallet});
+
+
+         {#var web3 = new Web3(new Web3.providers.HttpProvider(CURRENT_URL));#}
+         {#var tokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_value","type":"uint256"}],"name":"burn","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_value","type":"uint256"}],"name":"burnFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDecimalKoef","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"initialSupply","type":"uint256"},{"name":"tokenName","type":"string"},{"name":"tokenSymbol","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Burn","type":"event"}]#}
+         {# var tokenAddress = "0xab20a3630f943831a57c767ee94b90801b88787c"#}
+         {##}
+         {# let TreasureContract = web3.eth.contract(tokenABI).at(tokenAddress)#}
+
+
+        {#window.TreasureContractNew = new web3.eth.Contract(tokenABI, tokenAddress);#}
+        {#console.log(" TreasureContractNew oooo",  TreasureContractNew)#}
+
+        });
+
+
+
+
+            {#$.cookie("test", 1);#}
+            {#var cookieValue = $.cookie("test");#}
+            {#alert(cookieValue)#}
+
+    </script>

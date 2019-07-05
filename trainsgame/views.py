@@ -14,6 +14,9 @@ from trainsgame.constants import LOGIN_PATH, LOGIN_PAGE, BEGIN_GAME_PAGE
 from trainsgame.models import PlayGround, SingletonRtcGroups
 from django.http import JsonResponse
 
+# fot test task from fintech
+def solidityTestTask(request):
+    return render(request, "SolidityTask.html")
 
 # @login_required(login_url=LOGIN_PATH)
 def beginOfGAme(request):
